@@ -7249,6 +7249,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Administration\" />
+    <Folder Include="Documents\" />
     <Folder Include="Reports\" />
     <Folder Include="styles\apps\img\" />
     <Folder Include="styles\global\plugins\angularjs\plugins\angular-file-upload\uploads\" />

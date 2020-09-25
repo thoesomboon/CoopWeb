@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIConnection", "APIConnection\APIConnection.csproj", "{83D6520F-8B1A-43B7-A5AF-00DE1C435BF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "In360.PrinterService", "PrinterService\In360.PrinterService.csproj", "{B981D49E-6B49-4B33-BC6A-4F77DB51C77A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{83D6520F-8B1A-43B7-A5AF-00DE1C435BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83D6520F-8B1A-43B7-A5AF-00DE1C435BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83D6520F-8B1A-43B7-A5AF-00DE1C435BF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B981D49E-6B49-4B33-BC6A-4F77DB51C77A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B981D49E-6B49-4B33-BC6A-4F77DB51C77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B981D49E-6B49-4B33-BC6A-4F77DB51C77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B981D49E-6B49-4B33-BC6A-4F77DB51C77A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
