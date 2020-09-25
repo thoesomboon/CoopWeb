@@ -1,0 +1,168 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.tablePre table, .tablePre th, .tablePre td {
+    border: 1px solid #5D8CC9 !important;
+    border-collapse: collapse !important;
+    border-left: 1px solid #5D8CC9 !important;
+    border-right: 1px solid #5D8CC9 !important;
+    border-top: 1px solid #5D8CC9 !important;
+    border-bottom: 1px solid #5D8CC9 !important;
+    border-color: #5D8CC9 !important;
+}
+
+.tablePre th {
+    text-align: center !important;
+}
+
+.tablePre td {
+    text-align: center !important;
+}
+
+.rowPre {
+    background-color: #e8eef4 !important;
+}
+
+
+/******************/
+
+.tableScroller {
+    height: 700px;
+    overflow: auto;
+}
+
+    .tableScroller table {
+        width: 100%;
+    }
+
+    .tableScroller table,
+    .tableScroller th,
+    .tableScroller td {
+        border: 1px solid #5D8CC9 !important;
+        border-collapse: collapse !important;
+        border-left: 1px solid #5D8CC9 !important;
+        border-right: 1px solid #5D8CC9 !important;
+        border-top: 1px solid #5D8CC9 !important;
+        border-bottom: 1px solid #5D8CC9 !important;
+        border-color: #5D8CC9 !important;
+    }
+
+    .tableScroller th {
+        background-color: #E8EEF4;
+        text-align: center !important;
+    }
+
+    .tableScroller td {
+        text-align: center !important;
+    }
+
+    .tableScroller thead {
+        border-left: 2px solid;
+        border-right: 2px solid;
+        border-top: 2px solid;
+        border-bottom: 2px solid;
+    }
+
+    .tableScroller tbody {
+        height: auto;
+        border-left: 2px solid;
+        border-right: 2px solid;
+        border-top: 2px solid;
+        border-bottom: 2px solid;
+    }
+
+/******************/
+/***************** Begin Loading *****************/
+
+#loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #F3F3F3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s;
+}
+
+@-webkit-keyframes animatebottom {
+    from {
+        bottom: -100px;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 0px;
+        opacity: 1;
+    }
+}
+
+@keyframes animatebottom {
+    from {
+        bottom: -100px;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 0px;
+        opacity: 1;
+    }
+}
+
+
+/***************** End Loading *****************/

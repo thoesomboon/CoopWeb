@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+@model Coop.Models.POCO.LoginModel
+<h1><span class="caption-subject font-blue-sharp bold">@Text.ProgramName Login Authentication</span></h1>
+<form action="/Account/LoginAuth" class="login-form" method="post">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "alert alert-danger display-hide" })
+    @*<div class="alert alert-danger display-hide">
+        <button class="close" data-close="alert"></button>
+            <span>Enter any username and password. </span>
+        </div>*@
+    <div class="row">
+        <div class="col-xs-12">
+            <input class="form-control form-control-solid placeholder-no-fix form-group" type="text" autocomplete="off" placeholder="Username" name="UserName" style="text-align:center" value="@Model.UserName" readonly="readonly" required />
+        </div>
+        <div class="col-xs-0">
+            <input class="form-control form-control-solid placeholder-no-fix form-group" type="password" autocomplete="off" placeholder="Password" name="Password" value="@Model.Password" style="visibility:hidden" required />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            @*<div class="rem-password">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" value="1" /> Remember me
+                        <span></span>
+                    </label>
+                </div>*@
+        </div>
+        <div class="col-sm-8 text-right">
+            @*<div class="forgot-password">
+                    <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
+                </div>*@
+            <button class="btn green" type="submit">Sign In</button>
+        </div>
+    </div>
+</form>
+<!-- BEGIN FORGOT PASSWORD FORM -->
+@*<form class="forget-form" action="javascript:;" method="post">
+        <h3 class="font-green">Forgot Password ?</h3>
+        <p> Enter your e-mail address below to reset your password. </p>
+        <div class="form-group">
+            <input class="form-control placeholder-no-fix form-group" type="text" autocomplete="off" placeholder="Email" name="email" />
+        </div>
+        <div class="form-actions">
+            <button type="button" id="back-btn" class="btn green btn-outline">Back</button>
+            <button type="submit" class="btn btn-success uppercase pull-right">Submit</button>
+        </div>
+    </form>*@
+<!-- END FORGOT PASSWORD FORM -->
+
+
+@section Scripts {
+    <script type="text/javascript">
+        var handleLogin = function () {
+
+            $('.login-form').validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                rules: {
+                    username: {
+                        required: true
+                    },
+                    password: {
+                        required: true
+                    }
+                },
+
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                   
+                    var container = $(this).find("[data-valmsg-summary=true]"),
+                                list = container.find("ul");
+
+                    if (list && list.length && validator.errorList.length) {
+                        list.empty();
+                        container.addClass("validation-summary-errors").removeClass("validation-summary-valid");
+                       $("<li />").html("Enter any username and password.").appendTo(list);
+                        
+                    }
+                    $('.alert-danger', $('.login-form')).show();
+                },
+
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                success: function (label) {
+                    label.closest('.form-group').removeClass('has-error');
+                    label.remove();
+                },
+
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.closest('.input-icon'));
+                },
+
+                submitHandler: function (form) {
+                    form.submit(); // form validation success, call ajax form submit
+                }
+            });
+
+            $('.login-form input').keypress(function (e) {
+                if (e.which == 13) {
+                    if ($('.login-form').validate().form()) {
+                        $('.login-form').submit(); //form validation success, call ajax form submit
+                    }
+                    return false;
+                }
+            });
+
+            //$('.forget-form input').keypress(function (e) {
+            //    if (e.which == 13) {
+            //        if ($('.forget-form').validate().form()) {
+            //            $('.forget-form').submit();
+            //        }
+            //        return false;
+            //    }
+            //});
+
+            //$('#forget-password').click(function () {
+            //    $('.login-form').hide();
+            //    $('.forget-form').show();
+            //});
+
+            //$('#back-btn').click(function () {
+            //    $('.login-form').show();
+            //    $('.forget-form').hide();
+            //});
+        };
+
+        $(document).ready(function () {
+
+            // init background slide images
+            $('.login-bg').backstretch([
+                "../../styles/pages/img/login/bg5.jpg",
+                "../../styles/pages/img/login/bg1.jpg",
+                "../../styles/pages/img/login/bg2.jpg",
+                "../../styles/pages/img/login/bg3.jpg"
+            ], {
+                fade: 1000,
+                duration: 8000
+            }
+            );
+
+            $('.forget-form').hide();
+
+            handleLogin();
+
+            $(this).keypress(function (e) {
+                if (e.which == 13) {
+                    $('#form').submit();
+                }
+            });
+            
+            if($(".validation-summary-errors").length > 0)
+            {
+                $('.alert-danger', $('.login-form')).show();
+            }
+        });
+    </script>
+}
+

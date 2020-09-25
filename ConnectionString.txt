@@ -1,0 +1,1 @@
+    <add name="CoopWebEntities" connectionString="metadata=res://*/Entities.Coop.csdl|res://*/Entities.Coop.ssdl|res://*/Entities.Coop.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=LAPTOP-6L4BN0S0;initial catalog=CoopWeb;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />

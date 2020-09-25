@@ -1,0 +1,731 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "ทะเบียนสมาชิก";
+    Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model Coop.Models.POCO.MemberModel
+
+@*
+    Programmer : Suwan T. 01-04-2020 - 30-06-2020
+    Development : 01-04-2020
+    Last update : 30-06-2020
+    Status :
+        Read : Ok
+        Save(create) : Checking
+        Save(update) : Ok
+        Validate : Check
+*@
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "Member", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">@Text.ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">Member</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="flaticon-interface-10"></i>
+                                    <i class="icon-equalizer font-red-sunglo"></i>
+                                </span>
+                                <div class="caption">
+                                    <h3 class="m-portlet__head-text m--font-transform-u m--font-success">
+                                        Member
+                                        <small class="m--font-metal m--font-transform-">Information...</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav"></ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="table-toolbar">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ทะเบียนสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.MemberID, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ระบุทะเบียนสมาชิก" })
+                                        @*@Html.HiddenFor(model => model.MemberID)*@
+                                        @Html.ValidationMessageFor(m => m.MemberID, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">คำนำหน้าชื่อ</label>
+                                        @Html.DropDownListFor(m => m.TitleName, ViewBag.TitleList as SelectList, "-- คำนำหน้าชื่่อ --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                        @*@Html.TextBoxFor(m => m.TitleName, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ระบุคำนำหน้าชื่่อ" })*@
+                                        @*@Html.HiddenFor(model => model.TitleName)*@
+                                        @Html.ValidationMessageFor(m => m.TitleName, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ชื่่อ - นามสกุล</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-inline input-small col-md-8", @placeholder = "ระบุชื่่อ - นามสกุล" })
+                                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วัน เดือน ปีเกิด</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="BirthDateTH" name="BirthDateTH" placeholder="วันเกิด (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.BirthDateTH, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "วัน เดือน ปีเกิด" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">หมายเลขบัตรประชาชน</label>
+                                        @Html.TextBoxFor(m => m.IdCard, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "หมายเลขบัตรประชาชน 13 หลัก" })
+                                        @Html.ValidationMessageFor(m => m.IdCard, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            @*xxx*@
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ที่อยู่ที่ติดต่อได้</label>
+                                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control form-control-inline input-small col-md-8", @placeholder = "บ้านเลขที่ หมู่ที่ หมู่บ้าน ซอย ถนน" })
+                                        @Html.ValidationMessageFor(m => m.Telephone, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รหัสไปรษณีย์</label>
+                                        @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "รหัสไปรษณีย์" })
+                                        @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ตำบล/แขวง</label>
+                                        @Html.DropDownListFor(m => m.SubDistrictName, ViewBag.SubDistrictList as SelectList, "-- ตำบล/แขวง --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                        @*@Html.TextBoxFor(m => m.SubDistrictName, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ตำบล/แขวง" })*@
+                                        @Html.ValidationMessageFor(m => m.SubDistrictName, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">อำเภอ</label>
+                                        @Html.DropDownListFor(m => m.DistrictName, ViewBag.DistrictList as SelectList, "-- อำเภอ --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                        @*@Html.TextBoxFor(m => m.DistrictName, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "อำเภอ" })*@
+                                        @Html.ValidationMessageFor(m => m.DistrictName, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">จังหวัด</label>
+                                        @Html.DropDownListFor(m => m.ProvinceName, ViewBag.ProvinceList as SelectList, "-- จังหวัด --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                        @*@Html.TextBoxFor(m => m.ProvinceName, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "จังหวัด" })*@
+                                        @Html.ValidationMessageFor(m => m.ProvinceName, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">โทรศัพท์ (ที่ทำงาน)</label>
+                                        @Html.TextBoxFor(m => m.Telephone, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "โทรศัพท์ (ที่ทำงาน)" })
+                                        @Html.ValidationMessageFor(m => m.Telephone, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">มือถือ</label>
+                                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "เบอร์โทรศัพท์มือถือ" })
+                                        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">Line ID</label>
+                                        @Html.TextBoxFor(m => m.LineID, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "Line ID" })
+                                        @Html.ValidationMessageFor(m => m.LineID, "", new { @class = "help-block help-block-error" })
+                                        @*@Html.DropDownListFor(m => m.TitleID, ViewBag.TitleList as SelectList, "-- คำนำหน้าชื่อ --", new { @class = "form-control" })*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่เป็นสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.ApplyDateTH, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "วันที่เเป็นสมาชิก" })
+                                        @Html.ValidationMessageFor(m => m.ApplyDateTH, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่ลาออก</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" format="dd/mm/yyyy" data-date-language="th-th" id="ResignDateTH" name="ResignDateTH" placeholder="วันที่ลาออก">*@
+                                        @Html.TextBoxFor(m => m.ResignDateTH, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "วันที่ลาออก" })
+                                        @Html.ValidationMessageFor(m => m.ResignDateTH, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เงินเดือน / รายได้</label>
+                                        @*@Html.NumericTextBoxFor(m => m.Salary).Spinners(false).Format("{0:N2}").Value(0).HtmlAttributes(new { @style = "width:100px;text-align:right;", @Maxlength = "12", @placeholder = "เงินเดือน หรือ รายได้ต่อเดือน" })*@
+                                        @Html.TextBoxFor(m => m.Salary, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เงินเดือน หรือ รายได้ต่อเดือน", DataFormatString = "{0:#,###0}" })
+                                        @Html.ValidationMessageFor(m => m.Salary, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทสมาชิก</label>
+                                        @Html.DropDownListFor(m => m.MemberTypeName, ViewBag.MemberTypeList as SelectList, "-- ประเภทสมาชิก --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                        @Html.ValidationMessageFor(m => m.MemberTypeName, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">กลุ่มสมาชิก</label>
+                                        @Html.DropDownListFor(m => m.MemberGroupName, ViewBag.MemberGroupList as SelectList, "-- กลุ่มสมาชิก --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                        @*@Html.TextBoxFor(m => m.MemberGroupName, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "กลุ่มสมาชิก" })*@
+                                        @Html.ValidationMessageFor(m => m.MemberGroupName, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group m-form__group row">
+                                    <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">สถานะภาพ</label>
+                                    @Html.TextBoxFor(m => m.Filestatus, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "A-ปกติ, R-ลาออก, D-ถูกลบ" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <div class="col-md-6"></div>
+                                        <div class="form-actions">
+                                            <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnSave">บันทึกข้อมูล <i class="fa"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.CoopID)
+    @*@Html.HiddenFor(model => model.MemberID)*@
+}
+
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/styles/v50x/sweetalert2.all.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/CoopWeb/CoopWeb.js"></script>
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    @*<script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#IdCard').mask('9 9999 99999 99 9');
+
+            //$('#ApplyDate').datepicker({
+            //    locale: 'th-th',
+            //    format: 'dd/mm/yyyy',
+            //    //yearOffset:543,  // ใช้ปี พ.ศ. บวก 543 เพิ่มเข้าไปในปี ค.ศ
+            //    inline:true
+            //});
+
+            /* SubDistrict initial DropDownList*/
+            $("#PostalCode").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    //debugger
+                    getSubDistrict(this.value);
+                }
+            });
+            function getSubDistrict(postCodeVal) {
+                //debugger
+                var postCode = postCodeVal;
+                if (postCode != undefined && postCode != '' && postCode != null) {
+                    //debugger
+                    $.ajax({
+                        url: "/Member/GetSubDistrictListByCode?PostCode=" + postCode,
+                        type: 'POST',
+                        contentType: "html",
+                        success: function (response) {
+                            //debugger
+                            $("#SubDistrictName").empty();
+                            $("#SubDistrictName").append(response);
+                        }
+                    });
+                };
+            }
+            /* Read Member*/
+            $("#MemberID").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    //debugger
+                    MemberIDChange(this.value);
+                }
+            });
+
+            function MemberIDChange(memId) {
+                //debugger
+                var memID = memId;
+                if (memID != undefined && memID != '' && memID != null) {
+                    var aData = {
+                        MemberID: $("#MemberID").val(),
+                        MemberID: memID
+                    };
+                    //debugger
+                    $.ajax({
+                        url: '/Member/TransferInMember/',
+                        type: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',
+                        data: JSON.stringify(aData),
+                        async: false,
+                        cache: false,
+                        beforeSend: function (x) {
+                            if (x && x.overrideMimeType) {
+                                x.overrideMimeType('application/json;charset=UTF-8');
+                            }
+                        },
+                        success: function (data, status, xhr) {
+                            if (status == 'success' && data != null && data[0] != null) {
+                                if (data[0].Result && data[0].Message == 'Successful') {
+                                    if (data[1] != null) {
+                                        //debugger
+                                        TransferInMember(data[1]);
+                                    }
+                                } else {
+                                    swal.fire("Warning", data[0].Message, "warning")
+                                    ClearMember();
+                                    return false;
+                                }
+                            } else {
+                                swal.fire("Warning", "Something wrong, please check", "error")
+                                ClearMember();
+                                result = false;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            swal.fire("Error occurred", error, "error")
+                            ClearMember();
+                            result = false;
+                        }
+                    });
+                    //debugger
+                }
+            }
+
+            function TransferInMember(data) {
+                if (data != null) {
+                    debugger
+                    $("#CoopID").val(data.CoopID);
+                    $("#MemberID").val(data.MemberID);
+                    $("#TitleName").val(data.TitleID);
+                    $("#Name").val(data.Name);
+
+                    $("#IdCard").val(data.IdCard);
+                    $("#Address").val(data.Address);
+                    $("#PostalCode").val(data.PostalCode);
+                    $("#SubDistrictName").val(data.SubDistrictID);
+                    $("#DistrictName").val(data.DistrictID);
+                    $("#ProvinceName").val(data.ProvinceID);
+                    $("#Telephone").val(data.Telephone);
+                    $("#Mobile").val(data.Mobile);
+                    $("#LineID").val(data.LineID);
+
+                    $("#BirthDateTH").val(conversion.DateInBE(data.BirthDate));
+                    $("#ApplyDateTH").val(conversion.DateInBE(data.ApplyDate));
+                    $("#ResignDateTH").val(conversion.DateInBE(data.ResignDate));
+
+                    $("#Salary").val(numeric.addCommas(data.Salary));
+                    $("#MemberGroupName").val(data.MemberGroupID);
+                    $("#MemberTypeName").val(data.MemberTypeID);
+                    $("#Filestatus").val(data.Filestatus)
+                }
+            }
+
+            function ClearMember() {
+                $("#MemberID").val();
+                $("#TitleName").val();
+                $("#Name").val();
+                $("#BirthDateTH").val();
+                $("#IDCard").val();
+                $("#Address").val();
+                $("#PostalCode").val();
+                $("#SubDistrictName").val();
+                $("#DistrictName").val();
+                $("#ProvinceName").val();
+                $("#Telephone").val();
+                $("#Mobile").val();
+                $("#LineID").val();
+                $("#ApplyDateTH").val();
+                $("#ResignDateTH").val();
+                $("#Salary").val();
+                $("#MemberGroupName").val();
+                $("#MemberTypeName").val();
+                $("#Filestatus").val();
+            }
+            $('#btnSave').click(function (e) {
+                e.preventDefault();
+                //debugger
+                //alert conversion.DateInCE($("#BirthDateTH").val());
+                var memID = $('#MemberID').val();
+                var Name = $('#Name').val();
+                //var lName = $('#LastNameTH').val();
+                if ((memID == undefined || memID == '' || memID == null)) {
+                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    return false;
+                }
+                if ((Name == undefined || Name == '' || Name == null)) {
+                    swal.fire("โปรดบันทึก", "ชื่อ - นามสกุล", "warning")
+                    return false;
+                }
+                //if ((lName == undefined || lName == '' || lName == null)) {
+                //    swal.fire("Last Name Required", "Please input Last Name", "warning")
+                //    return false;
+                //}
+                //debugger
+                var result = false;
+                //memID = $.trim(memID).toUpmemCase();
+
+                //debugger
+                var aData = {
+                    CoopID: $("#CoopID").val(),
+                    MemberID: $("#MemberID").val(),
+                    TitleID: $("#TitleName").val(),
+                    Name: $("#Name").val(),
+                    IdCard: $("#IdCard").val(),
+                    Address: $("#Address").val(),
+                    SubDistrictID: $("#SubDistrictName").val(),
+                    DistrictID: $("#DistrictName").val(),
+                    ProvinceID: $("#ProvinceName").val(),
+                    PostalCode: $("#PostalCode").val(),
+                    Telephone: $("#Telephone").val(),
+                    Mobile: $("#Mobile").val(),
+                    LineID: $("#LineID").val(),
+                    Salary: numeric.txt2DBL($("#Salary").val()),
+                    MemberGroupID: $("#MemberGroupName").val(),
+                    MemberTypeID: $("#MemberTypeName").val(),
+
+                    BirthDate: conversion.DateInCE($("#BirthDateTH").val()),
+                    ApplyDate: conversion.DateInCE($("#ApplyDateTH").val()),
+                    ResignDate: conversion.DateInCE($("#ResignDateTH").val()),
+
+                    Filestatus: $("#Filestatus").val()
+
+                };
+                //debugger
+                $.ajax({
+                    url: '/Member/TransferOutMember/',
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(aData),
+                    async: false,
+                    cache: false,
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType('application/json;charset=UTF-8');
+                        }
+                    },
+                    success: function (data, status, xhr) {
+                        if (status == 'success' && data != null && data[0] != null) {
+                            if (data[0].Result && data[0].Message == 'Successful') {
+                                if (data[1] != null) {
+                                    $("#MemberID").val(data[1].MemberID);
+                                    swal.fire("ข้อมูลสมาชิก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    result = true;
+                                }
+                            }
+                            else {
+                                swal.fire("Warning", data[0].Message, "warning");
+                                result = false;
+                            }
+                        } else {
+                            swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            result = false;
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        result = false;
+                    }
+                });
+
+                return result;
+            });
+
+            //$("#BirthDateTH").keyup(function (e) {
+            //    //debugger
+            //    if (event.keyCode === 13) {
+            //        e.preventDefault();
+            //        debugger
+            //        validatedate(this.value);
+            //        //debugger
+            //    }
+            //});
+
+            //function validatedate(dateIn) {
+            //    debugger
+            //    alert(dateIn);
+            //    //var dateformat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+            //    // Match the date format through regular expression
+            //    //if (dateIn != null && (dateIn.lenght >= 8 && dateIn.lenght <= 10)) {
+            //    if (dateIn != null) {
+            //        //document.form1.text1.focus();
+            //        //Test which seperator is used '/' or '-'
+            //        dateIn = replace(dateIn, "-", "/");
+
+            //        var dd = = dateTh.split('/')[0];
+            //        debugger
+            //        var mm = dateTh.split('/')[1];
+            //        var yy = dateTh.split('/')[2];
+            //        debugger
+            //        // Create list of days of a month [assume there is no leap year by default]
+            //        if (yy.lenght = 2) {
+            //            var yy = 2500 + yy;
+            //        }
+            //        var leapYear = not (yy % 4);
+            //        if (leapYear == true) {
+            //            var ListofDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            //        }
+            //        else {
+            //            var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            //        }
+            //        if (dd > ListofDays[mm - 1]) {
+            //            alert('วันที่ไม่ถูกต้อง!');
+            //            return false;
+            //        }
+            //        if (mm < 1 && mm > 12) {
+            //            alert('เดือนไม่ถูกต้อง!');
+            //            return false;
+            //        }
+            //        if (yy < 2450 && yy > 2550) {
+            //            alert('เดือนไม่ถูกต้อง!');
+            //            return false;
+            //        }
+            //    }
+            //    else {
+            //        alert("Invalid date format!");
+            //        return false;
+            //    }
+            //    debugger
+            //}
+        });
+    </script>
+}

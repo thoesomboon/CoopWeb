@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SCOOPNET>
+  <ODBCDatabase>ScoopNET</ODBCDatabase>
+  <ODBCUserName></ODBCUserName>
+  <ODBCPassword></ODBCPassword>
+  <QueryTimeout></QueryTimeout>
+  <LoginTimeout></LoginTimeout>
+  <CheckDigit>-1</CheckDigit>
+  <LoadSystemDB>NO</LoadSystemDB>
+  <WorkStationID>WS0001</WorkStationID>
+  <BranchID>R1</BranchID>
+
+</SCOOPNET>

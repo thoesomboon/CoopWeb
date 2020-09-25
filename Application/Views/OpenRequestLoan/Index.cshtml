@@ -1,0 +1,939 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "เปิดคำขอกู้";
+    Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model Coop.Models.POCO.OpenRequestLoanModel
+@*@model IEnumerable<Coop.Models.POCO.LoanDueModel>*@
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "OtxLoan", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">@Text.ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">OtxLoan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="flaticon-interface-10"></i>
+                                    <i class="icon-equalizer font-red-sunglo"></i>
+                                </span>
+                                <div class="caption">
+                                    <h3 class="m-portlet__head-text m--font-transform-u m--font-success">
+                                        รับชำระสัญญาเงินกู้
+                                        <small class="m--font-metal m--font-transform-">Information...</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav"></ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="table-toolbar">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">สัญญาเงินกู้</label>
+                                        @Html.TextBoxFor(m => m.LoanID, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ทะเบียนสัญญาเงินกู้" })
+                                        @Html.HiddenFor(model => model.LoanID)
+                                        @Html.ValidationMessageFor(m => m.LoanID, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทสัญญาเงินกู้</label>
+                                        @Html.DropDownListFor(m => m.LoanTypeName, ViewBag.LoanTypeList as SelectList, "-- ประเภทสัญญา --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันเปิดสัญญา</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LoanDateTH" name="LoanDateTH" placeholder="วันเปิดสัญญา (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LoanDateTH, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "วันเปิดสัญญา (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ทะเบียนสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.MemberID, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ทะเบียนสมาชิก" })
+                                        @Html.HiddenFor(model => model.MemberID)
+                                        @Html.ValidationMessageFor(m => m.MemberID, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ชื่่อ - นามสกุล</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-inline input-small col-md-8", @placeholder = "ระบุชื่่อ - นามสกุล" })
+                                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        @*กลุ่มที่*@
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่ติดต่อครั้งสุดท้าย</label>
+                                        @Html.TextBoxFor(m => m.LastContactTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ติดต่อครั้งสุดท้าย (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วงเงินกู้</label>
+                                        @Html.TextBoxFor(m => m.LoanAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วงเงินกู้" })
+                                        @*@Html.HiddenFor(model => model.LoanAmt)*@
+                                        @Html.ValidationMessageFor(m => m.LoanAmt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">คำนวณ ดบ ครั้งสุดท้าย</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LastCalcIntTH" name="LastCalcIntTH" placeholder="คำนวณ ดบ ครั้งสุดท้าย (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LastCalcIntTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "คำนวณ ดบ ครั้งสุดท้าย (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">คำนวณค่าปรับครั้งสุดท้าย</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LastCalcChargeTH" name="LastCalcChargeTH" placeholder="วันที่คำนวณค่าปรับครั้งสุดท้าย (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LastCalcChargeTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วันที่คำนวณค่าปรับครั้งสุดท้าย (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">หนี้คงเหลือ</label>
+                                        @Html.TextBoxFor(m => m.LoanBal, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "หนี้คงเหลือ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รับชำระเงินกู้</label>
+                                        @Html.TextBoxFor(m => m.PrincipleAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "รับชำระเงินกู้" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">หนี้คงเหลือยกไป</label>
+                                        @Html.TextBoxFor(m => m.CFLoanBal, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "หนี้คงเหลือยกไป" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เงินกู้ค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.UnpayPrinciple, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เงินกู้ค้างรับ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รับชำระเงินกู้ค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.UnpayPrincipleAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เงินกู้ค้างรับ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เงินกู้ค้างรับคงเหลือยกไป</label>
+                                        @Html.TextBoxFor(m => m.CFUnpayPrinciple, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เงินกู้ค้างรับ" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.UnpayInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ดอกเบี้ยค้างรับ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รับชำระดอกเบี้ย</label>
+                                        @Html.TextBoxFor(m => m.IntAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "รับชำระดอกเบี้ย" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยคงเหลือยกไป</label>
+                                        @Html.TextBoxFor(m => m.CFUnpayInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ดอกเบี้ยคงเหลือยกไป" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.UnpayCharge, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับค้างรับ" })
+                                        @Html.ValidationMessageFor(m => m.UnpayInt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รับชำระค่าปรับ</label>
+                                        @Html.TextBoxFor(m => m.ChargeAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "รับชำระค่าปรับ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับคงเหลือยกไป</label>
+                                        @Html.TextBoxFor(m => m.CFUnpayCharge, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับคงเหลือยกไป" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยชดเชยค้าง</label>
+                                            @Html.TextBoxFor(m => m.UnpayDiscInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับค้างรับ" })
+                                            @Html.ValidationMessageFor(m => m.UnpayInt, "", new { @class = "help-block help-block-error required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รับชำระค่าปรับ</label>
+                                            @Html.TextBoxFor(m => m.DiscIntAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "รับชำระค่าปรับ" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยชดเชยคงเหลือยกไป</label>
+                                            @Html.TextBoxFor(m => m.CFUnpayDiscInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับคงเหลือยกไป" })
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @*--- Transaction Detail ---*@
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-2 align-left" style="padding-left: 0px!important;">รหัสรายการ</label>
+                                        @Html.TextBoxFor(m => m.TTxnCode, new { @class = "form-control form-control-inline input-small col-md-2 align-left", @placeholder = "รหัสรายการ" })
+                                        @Html.DropDownListFor(m => m.Descript, ViewBag.TxnCodeList as SelectList, "-- รหัสรายการ --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่ทำรายการ</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="TxnDateTH" name="TxnDateTH" placeholder="วันที่ทำรายการ (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.TxnDateTH, new { @class = "form-control form-control-inline input-small col-md-4 align-left", @type = "Text", @placeholder = "วันที่ทำรายการ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">จำนวนเงิน</label>
+                                        @Html.TextBoxFor(m => m.Amt1, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เงินฝาก" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เลขที่ใบเสร็จ</label>
+                                        @Html.TextBoxFor(m => m.RcptBookNo, new { @class = "form-control form-control-inline input-small col-md-2 align-left" })
+                                        @Html.TextBoxFor(m => m.RcptRunNo, new { @class = "form-control form-control-inline input-small col-md-2 align-left" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <div class="col-md-6"></div>
+                                        <div class="form-actions">
+                                            <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnSave">บันทึกข้อมูล <i class="fa"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.Filestatus)
+    @Html.HiddenFor(model => model.CoopID)
+    @Html.HiddenFor(model => model.IntRate)
+    @Html.HiddenFor(model => model.CDCode)
+    @Html.HiddenFor(model => model.BFBal)
+    @Html.HiddenFor(model => model.BFInt)
+    @Html.HiddenFor(model => model.BFBal)
+    @Html.HiddenFor(model => model.BFUnpayInt)
+    @*@Html.HiddenFor(model => model.UnpayInt)*@
+    @Html.HiddenFor(model => model.BFCharge)
+    @Html.HiddenFor(model => model.BFUnpayCharge)
+    @Html.HiddenFor(model => model.UnpayCharge)
+    @Html.HiddenFor(model => model.ChargeCalc)
+    @Html.HiddenFor(model => model.IntCalc)
+
+    @*@Html.HiddenFor(model => model.CFUnpayInt)
+        @Html.HiddenFor(model => model.CFUnpayDiscInt)*@
+    @Html.HiddenFor(model => model.Amt1)
+    @Html.HiddenFor(model => model.RcptBookNo)
+    @Html.HiddenFor(model => model.RcptRunNo)
+}
+
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/styles/v50x/sweetalert2.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/CoopWeb/CoopWeb.js"></script>
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    @*<script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+}
+
+@section scripts{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        /* Read Loan*/
+        ////debugger
+        $("#LoanID").keyup(function (e) {
+            ////debugger
+            if (event.keyCode === 13) {
+                e.preventDefault();
+                debugger
+                LoanIDChange(this.value);
+            }
+        });
+
+        function LoanIDChange(lonVal) {
+            ////debugger
+            var lonID = lonVal;
+            if (lonID != undefined && lonID != '' && lonID != null) {
+                var aData = {
+                    LoanID: $("#LoanID").val(),
+                    LoanID: lonID
+                };
+                //alert(aData);
+                debugger
+                $.ajax({
+
+                    url: '/OtxLoan/TransferInLoan/',
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(aData),
+                    async: false,
+                    cache: false,
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType("application/json;charset=UTF-8");
+                        }
+                    },
+                    success: function (data, status, xhr) {
+                        if (status == 'success' && data != null && data[0] != null) {
+                            if (data[0].Result && data[0].Message == 'Successful') {
+                                if (data[1] != null) {
+                                    TransferInLoan(data[1]);
+                                    ////debugger
+                                }
+                            } else {
+                                swal.fire("Warning", data[0].Message, "warning")
+                                clearTextBox();
+                                return false;
+                            }
+                        } else {
+                            swal.fire("Warning", "พบข้อผิดพลาด บางประการ", "error")
+                            clearTextBox();
+                            result = false;
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        swal.fire("Error occurred", error, "error")
+                        clearTextBox();
+                        result = false;
+                    }
+                });
+            }
+        }
+
+        function TransferInLoan(data) {
+            //debugger
+            if (data != null) {
+                //debugger
+                $("#CoopID").val(data.CoopID);
+                $("#Filestatus").val(data.Filestatus);
+                $("#LoanID").val(data.LoanID);
+                $("#LoanTypeName").val(data.LoanTypeID);
+                $("#LoanDateTH").val(conversion.DateInBE(data.LoanDate));
+                $("#MemberID").val(data.MemberID);
+                $("#Name").val(data.Name);
+                $("#LastContactTH").val(conversion.DateInBE(data.LastContact));
+
+                $("#LoanAmt").val(numeric.addCommas(data.LoanAmt));
+                $("#LastCalcIntTH").val(conversion.DateInBE(data.LastCalcInt));
+                $("#LastCalcChargeTH").val(conversion.DateInBE(data.LastCalcCharge));
+
+                $("#LoanBal").val(numeric.addCommas(data.LoanBal));
+                $("#PrincipleAmt").val("");
+                $("#CFLoanBal").val(numeric.addCommas(data.LoanBal));
+
+                $("#UnpayPrinciple").val(numeric.addCommas(data.UnpayPrinciple));
+                $("#UnpayPrincipleAmt").val("");
+                $("#CFUnpayPrinciple").val(numeric.addCommas(data.CFUnpayPrinciple));
+
+                $("#UnpayInt").val(numeric.addCommas(data.UnpayInt));
+                $("#IntAmt").val("");
+                $("#CFUnpayInt").val(numeric.addCommas(data.UnpayInt));
+
+                $("#UnpayCharge").val(numeric.addCommas(data.UnpayCharge));
+                $("#ChargeAmt").val("");
+                $("#CFUnpayCharge").val(numeric.addCommas(data.UnpayCharge));
+
+                $("#IntRate").val(data.IntRate);
+
+                $("#BFBal").val(numeric.addCommas(data.BFBal));
+                $("#BFInt").val(numeric.addCommas(data.BFInt));
+                $("#BFUnpayInt").val(numeric.addCommas(data.BFUnpayInt));
+                $("#BFCharge").val(numeric.addCommas(data.BFCharge));
+                $("#BFUnpayCharge").val(numeric.addCommas(data.BFUnpayCharge));
+                $("#IntCalc").val(numeric.addCommas(data.IntCalc));
+                $("#ChargeCalc").val(numeric.addCommas(data.ChargeCalc));
+                $("#CFUnpayInt").val(numeric.addCommas(data.CFUnpayInt));
+                $("#CFUnpayCharge").val(numeric.addCommas(data.CFUnpayCharge));
+
+                $("#TxnDateTH").val(conversion.DateInBE(data.TxnDate));
+
+                //$("#DiscIntFlag").val(data.DiscIntFlag);
+                //$("#BFDiscInt").val(data.BFDiscInt);
+                //$("#DiscInt").val(data.DiscInt);
+                //$("#BFUnpayDiscInt").val(data.BFUnpayDiscInt);
+                //$("#UnpayDiscInt").val(data.UnpayDiscInt);
+                document.getElementById("TTxnCode").focus();
+            }
+        }
+
+        function clearTextBox() {
+            $("#CoopID").val("");
+            $("#Filestatus").val("");
+            $("#LoanID").val("");
+            $("#LoanTypeName").val("");
+            $("#MemberID").val("");
+            $("#Name").val("");
+            $("#LoanDateTH").val("");
+            $("#LastContactTH").val("");
+            $("#LoanAmt").val("");
+            $("#LastCalcIntTH").val("");
+            $("#LastCalcChargeTH").val("");
+            $("#LoanBal").val("");
+            $("#PrincipleAmt").val("");
+            $("#CFLoanBal").val("");
+            $("#UnpayInt").val("");
+            $("#IntAmt").val("");
+            $("#CFUnpayInt").val("");
+            $("#UnpayCharge").val("");
+            $("#ChargeAmt").val("");
+            $("#CFUnpayCharge").val("");
+            $("#BFBal").val("");
+            $("#BFInt").val("");
+            $("#BFCharge").val("");
+            $("#UnpayPrinciple").val("");
+            $("#UnpayPrincipleAmt").val("");
+            $("#CFUnpayPrinciple").val("");
+            $("#BFBal").val("");
+            $("#BFInt").val("");
+            $("#BFUnpayInt").val("");
+            $("#BFCharge").val("");
+            $("#BFUnpayCharge").val("");
+            $("#IntRate").val("");
+            $("#DiscIntFlag").val("");
+            $("#BFDiscInt").val("");
+            $("#DiscInt").val("");
+            $("#BFUnpayDiscInt").val("");
+            $("#UnpayDiscInt").val("");
+            $("#TTxnCode").val("");
+            $("#TxnDateTH").val("");
+            $("#Amt1").val("");
+            $("#RcptBookNo").val("");
+            $("#RcptRunNo").val("");
+            document.getElementById("LoanID").focus();
+        }
+
+        $("#TTxnCode").keyup(function (e) {
+            ////debugger
+            if (event.keyCode === 13) {
+                e.preventDefault();
+                //debugger
+                TxnCodeChange(this.value);
+                //OtxDepositCalcInt(string AccNo, string BackDate)
+            }
+        });
+
+        function TxnCodeChange(tCode) {
+            $.post('@Url.Action("TransferInTxnCode", "TxnCode")', { tType: "LON", tCode: tCode }, function (txndata) {
+                //debugger
+                if (txndata != null) {
+                    //debugger
+                    //alert("รหัสรายการ ( " + txndata[1].TTXnCode + " " + txndata[1].Descript + ")");
+                    TransferInTxnCode(txndata[1]);
+                } else {
+                    //alert("ไม่พบข้อมูลรหัสรายการ ( " + tCode + " )");
+                    alert("ไม่พบรหัสรายการ (" + tCode + ") โปรดตรวจสอบ!")
+                }
+            });
+        }
+
+        function TransferInTxnCode(data) {
+            ////debugger
+            $("#Descript").val(data.TTxnCode);
+            $("#CDCode").val(data.CDCode);
+            $("#OCFlag").val(data.OCFlag);
+            $("#InstrumentType").val(data.InstrumentType);
+            if (data.CDCode == "D") {
+                alert("ไม่สามารถทำรายการนี้ได้ โปรดตรวจสอบ!")
+                document.getElementById("TTxnCode").focus();
+            };
+            document.getElementById("Amt1").focus();
+        }
+
+        $("#Amt1").keyup(function (e) {
+            ////debugger
+            if (event.keyCode === 13) {
+                e.preventDefault();
+                ////debugger
+                if (this.value > 0) {
+                    CalcTxnAmt(this.value);
+                    //Save();
+                }
+                else {
+                    alert("จำนวนเงินไม่ถูกต้อง โปรดตรวจสอบ!")
+                }
+                ////debugger
+                //$("#TTxnCode").focus;
+            }
+        });
+
+        function CalcTxnAmt(TxnAmt) {
+            //debugger
+            var LoanBal = numeric.txt2DBL($("#LoanBal").val());
+            var CDCode = $("#CDCode").val();
+            //var OCFlag = $("#OCFlag").val();
+            var Filestatus = "A";
+            var AvailAmt = TxnAmt;
+            var PrincipleAmt = 0;
+            var UnpayPrinciple = numeric.txt2DBL($("#UnpayPrinciple").val());
+            //รับชำระ
+            if (CDCode == "C") {
+                // คำนวณค่าปรับ
+                //debugger
+                var ChargeCalc = numeric.txt2DBL($("#ChargeCalc").val());
+                var ChargeAmt = 0;
+                var UnpayCharge = numeric.txt2DBL($("#UnpayCharge").val());
+                //UnpayCharge = UnpayCharge + ChargeCalc;
+                //debugger
+                if (AvailAmt <= UnpayCharge) {
+                    ChargeAmt = AvailAmt;
+                    CFUnpayCharge = UnpayCharge - AvailAmt;
+                    AvailAmt = 0;
+                }
+                else {
+                    //debugger
+                    ChargeAmt = UnpayCharge;
+                    CFUnpayCharge = 0;
+                    AvailAmt = AvailAmt - ChargeAmt;
+                }
+                if (BFCharge != null) {
+                    if (BFCharge > 0 && BFCharge > ChargeAmt) {
+                        BFCharge = BFCharge - ChargeAmt;
+                    }
+                    else {
+                        BFCharge = 0;
+                    }
+                }
+                //debugger
+                // คำนวณดอกเบี้ย
+                var IntCalc = numeric.txt2DBL($("#IntCalc").val());
+                var IntAmt = 0;
+                var UnpayInt = numeric.txt2DBL($("#UnpayInt").val());
+                //UnpayInt = UnpayInt + IntCalc;
+                //debugger
+                if (AvailAmt <= UnpayInt) {
+                    IntAmt = AvailAmt;
+                    CFUnpayInt = UnpayInt - AvailAmt;
+                    AvailAmt = 0;
+                }
+                else {
+                    //debugger
+                    IntAmt = UnpayInt;
+                    CFUnpayInt = 0;
+                    AvailAmt = AvailAmt - IntAmt;
+                }
+                if (BFInt != null) {
+                    if (BFInt > 0 && BFInt > IntAmt) {
+                        BFInt = BFInt - IntAmt;
+                    }
+                    else {
+                        BFInt = 0;
+                    }
+                }
+                // คำนวณเงินกู้ค้างรับ
+                //debugger
+                var UnpayPrinciple = numeric.txt2DBL($("#UnpayPrinciple").val());
+                var UnpayPrincipleAmt = 0;
+                var CFUnpayPrinciple = numeric.txt2DBL($("#UnpayPrinciple").val());
+                //debugger
+                if (AvailAmt <= UnpayPrinciple) {
+                    UnpayPrincipleAmt = AvailAmt;
+                    CFUnpayPrinciple = UnpayPrinciple - UnpayPrincipleAmt;
+                    //AvailAmt = 0;
+                }
+                else {
+                    //debugger
+                    UnpayPrincipleAmt = UnpayPrinciple;
+                    CFUnpayPrinciple = 0;
+                }
+                //debugger
+                // คำนวณหนี้คงเหลือ
+                //var LoanBal = numeric.txt2DBL($("#LoanBal").val());
+                var PrincipleAmt = 0;
+                var CFLoanBal = numeric.txt2DBL($("#LoanBal").val());
+                //debugger
+                if (AvailAmt <= LoanBal) {
+                    PrincipleAmt = AvailAmt;
+                    CFLoanBal = LoanBal - PrincipleAmt;
+                    AvailAmt = 0;
+                }
+                else {
+                    //debugger
+                    PrincipleAmt = LoanBal;
+                    CFLoanBal = 0;
+                    Amt1 = ChargeAmt + IntAmt + LoanBal;
+                    Filestatus = "P";
+                }
+            }
+            //debugger
+            $("#BFCharge").val(BFCharge);
+            $("#ChargeAmt").val(ChargeAmt);
+            $("#CFUnpayCharge").val(CFUnpayCharge);
+
+            $("#BFInt").val(BFInt);
+            $("#IntAmt").val(IntAmt);
+            $("#CFUnpayInt").val(numeric.addCommas(CFUnpayInt));
+            //debugger
+            $("#UnpayPrincipleAmt").val(UnpayPrincipleAmt);
+            $("#PrincipleAmt").val(PrincipleAmt);
+            $("#CFUnpayPrinciple").val(numeric.addCommas(CFUnpayPrinciple));
+
+            //debugger
+            //$("#LoanBal").val(numeric.addCommas(data.LoanBal));
+            $("#PrincipleAmt").val(PrincipleAmt);
+            $("#CFLoanBal").val(numeric.addCommas(CFLoanBal));
+
+            $("#Filestatus").val(Filestatus);
+            //debugger
+        }
+
+        $("#btnSave").click(function (e) {
+            e.preventDefault();
+            if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
+                debugger
+                var msg = "";
+                var lonID = $("#LoanID").val();
+                var MemID = $("#MemberID").val();
+                var TCode = $("#TTxnCode").val();
+                var Amt = $("#Amt1").val();
+                if (lonID == undefined || lonID == '' || lonID == null) {
+                    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                    msg = "สัญญาเงินกู้";
+                }
+                if (MemID == undefined || MemID == '' || MemID == null) {
+                    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                    msg = "สัญญาเงินกู้";
+                }
+                if (TCode == undefined || TCode == '' || TCode == null) {
+                    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                    msg = "รหัสรายการ";
+                }
+                if (Amt == undefined || Amt == '' || Amt == null) {
+                    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                    msg = "จำนวนเงินชำระ";
+                }
+                if (msg.length > 0) {
+                    alert(" โปรดตรวจสอบ! \n" + msg);
+                    return;
+                }
+                debugger
+                var result = false;
+                var aData = {
+                    CoopID: $("#CoopID").val(),
+                    Filestatus: $("#Filestatus").val(),
+                    LoanID: $("#LoanID").val(),
+                    MemberID: $("#MemberID").val(),
+
+                    LoanBal: numeric.txt2DBL($("#LoanBal").val()),
+                    PrincipleAmt: numeric.txt2DBL($("#PrincipleAmt").val()),
+                    CFLoanBal: numeric.txt2DBL($("#CFLoanBal").val()),
+
+                    UnpayPrinciple: numeric.txt2DBL($("#UnpayPrinciple").val()),
+                    UnpayPrincipleAmt: numeric.txt2DBL($("#UnpayPrincipleAmt").val()),
+                    CFUnpayPrinciple: numeric.txt2DBL($("#CFUnpayPrinciple").val()),
+
+                    BFInt: numeric.txt2DBL($("#BFInt").val()),
+                    IntCalc: numeric.txt2DBL($("#IntCalc").val()),
+                    IntAmt: numeric.txt2DBL($("#IntAmt").val()),
+                    CFUnpayInt: numeric.txt2DBL($("#CFUnpayInt").val()),
+
+                    BFCharge: numeric.txt2DBL($("#BFCharge").val()),
+                    ChargeCalc: numeric.txt2DBL($("#ChargeCalc").val()),
+                    ChargeAmt: numeric.txt2DBL($("#ChargeAmt").val()),
+                    CFUnpayCharge: numeric.txt2DBL($("#CFUnpayCharge").val()),
+
+                    BFDiscInt: numeric.txt2DBL($("#BFDiscInt").val()),
+                    DiscInt: numeric.txt2DBL($("#DiscInt").val()),
+                    BFUnpayDiscInt: numeric.txt2DBL($("#BFUnpayDiscInt").val()),
+                    UnpayDiscInt: numeric.txt2DBL($("#UnpayDiscInt").val()),
+
+                    TTxnCode: $("#TTxnCode").val(),
+                    CDCode: $("#CDCode").val(),
+                    TxnDateTH: $("#TxnDateTH").val(),
+                    Amt1: numeric.txt2DBL($("#Amt1").val())
+                };
+                debugger
+                $.ajax({
+                    url: '/OtxLoan/TransferOutOtxLoan/',
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(aData),
+                    async: false,
+                    cache: false,
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType('application/json;charset=UTF-8');
+                        }
+                    },
+                    success: function (data, status, xhr) {
+                        if (status == 'success' && data != null && data[0] != null) {
+                            if (data[0].Result && data[0].Message == 'Successful') {
+                                if (data[1] != null) {
+                                    debugger
+                                    //swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    alert("บันทึกข้อมูลสำเร็จแล้ว");
+                                    clearTextBox();
+                                    result = true;
+                                }
+                            }
+                            else {
+                                //swal.fire("Warning", data[0].Message, "warning");
+                                alert("warning");
+                                result = false;
+                            }
+                        } else {
+                            //debugger
+                            //swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            alert("ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ");
+                            result = false;
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        //debugger
+                        //swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        alert("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)");
+                        result = false;
+                    }
+                });
+
+            };
+        });
+    });
+    </script>
+}

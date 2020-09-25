@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Coop.Models.POCO.LoanDueModel>
+
+@{
+
+    ViewBag.Title = "How to use grid in mvc using GridMvc";
+}
+
+@using GridMvc.Html
+
+<h2>Index</h2>
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+<script src="~/bootstrap/js/bootstrap.min.js"></script>
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div style="margin-top: 10px"></div>
+
+    <div class="logo col-sm-12 text-center col-md-12 ">
+
+    </div>
+
+    <div class="clearfix"></div>
+
+    <fieldset>
+        <legend class="legend">All Customers Detail</legend>
+        <div style="margin-top: 5px"></div>
+        <div class="test" style="overflow: scroll; height: 500px; width: 1000px">
+            <div style="width: 1000px">
+                <div class="panel">
+                    <div class="panel-body">
+                        @Html.Grid(Model).Columns(columns =>
+                    {
+                        columns.Add(c => c.LoanID).Titled("LoanID");
+
+                        columns.Add(c => c.Seq).Titled("Seq");
+
+                        columns.Add(c => c.DueDate).Titled("DueDate").Format("{0:dd/MM/yyyy}");
+
+                        columns.Add(c => c.LoanDueAmt).Titled("LoanDueAmt").Format("{0:0.0}");
+
+                    }).WithPaging(10);
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</div>

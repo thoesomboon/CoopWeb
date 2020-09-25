@@ -1,0 +1,100 @@
+﻿@model Coop.Models.POCO.TitleModel
+@{
+    //ViewBag.Title = @Text.ProgramName + "คำนำหน้าชื่อ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">Title</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <table class="display" id="TitleTable">
+                            <thead>
+                                <tr>
+                                    <th>TitleID</th>
+                                    <th>TitleName</th>
+                                    <th>TitleNameEng</th>
+                                    <th>Gender</th>
+                                    <th>IsActive</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*@Html.HiddenFor(model => model.LoanID)*@
+}
+
+@section StylesAndScript{
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/Content/autoFill.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+    <script src="~/styles/v50x/sweetalert2.js"></script>
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+                debugger
+                $('#TitleTable').DataTable({
+                    "ajax": {
+                        "url": "@Url.Action("GetTitleList",  "Title")", // action method URL
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    columns: [
+                        { data: 'TitleID' },
+                        { data: 'TitleName' },
+                        { data: 'TitleNameEng' },
+                        { data: 'Gender' },
+                        { data: 'IsActive' }
+                    ],
+                    // other settings
+                });
+                debugger
+            }
+        }
+    </script>
+}

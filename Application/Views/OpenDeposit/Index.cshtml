@@ -1,0 +1,659 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "เปิดบัญชีบัญชีเงินฝาก";
+    Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model Coop.Models.POCO.OpenDepositModel
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "OpenDeposit", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">@Text.ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">Deposit</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="flaticon-interface-10"></i>
+                                    <i class="icon-equalizer font-red-sunglo"></i>
+                                </span>
+                                <div class="caption">
+                                    <h3 class="m-portlet__head-text m--font-transform-u m--font-success">
+                                        เปิดบัญชีบัญชีเงินฝาก
+                                        <small class="m--font-metal m--font-transform-">Information...</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav"></ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="table-toolbar">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทบัญชี</label>
+                                        @Html.DropDownListFor(m => m.DepositTypeName, ViewBag.DepositTypeList as SelectList, "-- ประเภทบัญชี --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ทะเบียนสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.MemberID, new { @class = "form-control form-control-inline input-small col-md-4 align-left", @placeholder = "ทะเบียนสมาชิก" })
+                                        @*@Html.HiddenFor(model => model.MemberID)*@
+                                        @Html.ValidationMessageFor(m => m.MemberID, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ชื่อบัญชี</label>
+                                        @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control form-control-inline input-small col-md-8 align-left", @placeholder = "ชื่อบัญชี" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ชื่่อสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-inline input-small col-md-8 align-left", @placeholder = "ชื่่อสมาชิก" })
+                                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วัน เดือน ปีเกิด</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="BirthDateTH" name="BirthDateTH" placeholder="วันเกิด (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.BirthDateTH, new { @class = "form-control form-control-inline input-small col-md-4 align-left", @placeholder = "วัน เดือน ปีเกิด" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่เป็นสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.ApplyDateTH, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "วันที่เป็นสมาชิก" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เลขประจำตัวปชช.</label>
+                                        @Html.TextBoxFor(m => m.IdCard, new { @class = "form-control form-control-inline input-small col-md-4 align-left", @placeholder = "เลขประจำตัวปชช." })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เบอร์โทรศัพท์</label>
+                                        @Html.TextBoxFor(m => m.Telephone, new { @class = "form-control form-control-inline input-small col-md-4 align-left color:blue", @placeholder = "เบอร์โทรศัพท์" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">มือถือ</label>
+                                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control form-control-inline input-small col-md-4 align-left color:blue", @placeholder = "มือถือ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            @*-- Transaction detail --*@
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-2 align-left" style="padding-left: 0px!important;">รหัสรายการ</label>
+                                        @Html.TextBoxFor(m => m.TTxnCode, new { @class = "form-control form-control-inline input-small col-md-2 align-left", @placeholder = "รหัสรายการ" })
+                                        @Html.DropDownListFor(m => m.Descript, ViewBag.TxnCodeList as SelectList, "-- รหัสรายการ --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่ทำรายการ</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="TxnDateTH" name="TxnDateTH" placeholder="วันที่ทำรายการ (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.TxnDateTH, new { @class = "form-control form-control-inline input-small col-md-4 align-left", @type = "Text", @placeholder = "วันที่ทำรายการ" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เลขที่บัญชี</label>
+                                        @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control form-control-inline input-small col-md-4 align-left", @placeholder = "เลขที่บัญชี" })
+                                        @Html.ValidationMessageFor(m => m.AccountNo, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">จำนวนเงิน</label>
+                                        @Html.TextBoxFor(m => m.Amt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เงินฝาก" })
+                                        @*@Html.HiddenFor(model => model.Amt)*@
+                                        @*@Html.ValidationMessageFor(m => m.Amt, "", new { @class = "help-block help-block-error required" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รหัสดอกเบี้ย</label>
+                                        @Html.TextBoxFor(m => m.IntType, new { @class = "form-control form-control-inline input-small col-md-2 align-left", @placeholder = "รหัสดอกเบี้ย" })
+                                        @Html.ValidationMessageFor(m => m.IntType, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <div class="col-md-6"></div>
+                                        <div class="form-actions">
+                                            <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnSave">บันทึกข้อมูล <i class="fa"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.CoopID)
+    @Html.HiddenFor(model => model.CDCode)
+    @Html.HiddenFor(model => model.OCFlag)
+    @Html.HiddenFor(model => model.InstrumentType)
+    @Html.HiddenFor(model => model.AbbCode)
+    @Html.HiddenFor(model => model.MinOpenAmt)
+    @Html.HiddenFor(model => model.MaxOpenAmt)
+    @Html.HiddenFor(model => model.BookNo)
+    @Html.HiddenFor(model => model.ItemNo)
+}
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/styles/v50x/sweetalert2.all.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/CoopWeb/CoopWeb.js"></script>
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    @*<script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+        //jquery(function ($) {
+        //    $('#AccountNo').mask("A-9999/9999");
+        //});
+        $(document).ready(function () {
+            /* Read Deposit*/
+            //debugger
+            $("#DepositTypeName").click(function (e) {
+                //debugger
+                document.getElementById("MemberID").focus();
+            });
+
+            $("#MemberID").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    //debugger
+                    MemberIDChange(this.value);
+                }
+            });
+
+            function MemberIDChange(memId) {
+                //debugger
+                var memID = memId;
+                if (memID != undefined && memID != '' && memID != null) {
+                    var aData = {
+                        MemberID: $("#MemberID").val(),
+                        DepositTypeID: $("#DepositTypeName").val()
+                    };
+                    //debugger
+                    $.ajax({
+                        url: '/OpenDeposit/TransferInMemberOpen/',
+                        type: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',
+                        data: JSON.stringify(aData),
+                        async: false,
+                        cache: false,
+                        beforeSend: function (x) {
+                            if (x && x.overrideMimeType) {
+                                x.overrideMimeType('application/json;charset=UTF-8');
+                            }
+                        },
+                        success: function (data, status, xhr) {
+                            if (status == 'success' && data != null && data[0] != null) {
+                                if (data[0].Result && data[0].Message == 'Successful') {
+                                    if (data[1] != null) {
+                                        //debugger
+                                        TransferInMember(data[1]);
+                                    }
+                                } else {
+                                    //debugger
+                                    swal.fire("Warning", data[0].Message, "warning")
+                                    ClearMember();
+                                    return false;
+                                }
+                            } else {
+                                //debugger
+                                swal.fire("Warning", "Something wrong, please check", "error")
+                                ClearMember();
+                                result = false;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            swal.fire("Error occurred", error, "error")
+                            ClearMember();
+                            result = false;
+                        }
+                    });
+                    //debugger
+                }
+            }
+
+            function TransferInMember(data) {
+                if (data != null) {
+                    //debugger
+                    $("#CoopID").val(data.CoopID);
+                    $("#MemberID").val(data.MemberID);
+                    $("#Name").val(data.Name);
+                    $("#AccountName").val(data.Name);
+
+                    $("#IdCard").val(data.IdCard);
+                    $("#Telephone").val(data.Telephone);
+                    $("#Mobile").val(data.Mobile);
+
+                    $("#BirthDateTH").val(conversion.DateInBE(data.BirthDate));
+                    $("#ApplyDateTH").val(conversion.DateInBE(data.ApplyDate));
+
+                    $("#Filestatus").val(data.Filestatus)
+                    //debugger
+                    $("#MinOpenAmt").val(data.MinOpenAmt)
+                    $("#MaxOpenAmt").val(data.MaxOpenAmt)
+                    $("#IntType").val("01");
+                    $("#ItemNo").val("0");
+                    document.getElementById("TTxnCode").focus();
+                }
+            }
+
+            function ClearMember() {
+                $("#CoopID").val();
+                $("#MemberID").val();
+                $("#Name").val();
+                $("#AccountName").val();
+                $("#IDCard").val();
+                $("#Telephone").val();
+                $("#Mobile").val();
+
+                $("#BirthDateTH").val();
+                $("#ApplyDateTH").val();
+
+                $("#Filestatus").val();
+                $("#IntType").val();
+                $("#ItemNo").val();
+            }
+
+            function ClearScreen() {
+                ClearMember();
+                $("#TTxnCode").val();
+                $("#Descript").val();
+                $("#TxnDateTH").val();
+                $("#AccountNo").val();
+                $("#Amt").val();
+                $("#IntType").val();
+                document.getElementById("DepositTypeName").focus();
+            }
+
+            $("#TTxnCode").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    //debugger
+                    TxnCodeChange(this.value);
+                    //OtxDepositCalcInt(string AccNo, string BackDate)
+                }
+            });
+
+            function TxnCodeChange(tCode) {
+                //debugger
+               $.post('@Url.Action("TransferInTxnCodeDEP", "TxnCode")', { tCode }, function (txndata) {
+                    if (txndata != null) {
+                        //debugger
+                        //alert("รหัสรายการ ( " + txndata[1].TTXnCode + " " + txndata[1].Descript + ")");
+                        TransferInTxnCode(txndata[1]);
+                    } else {
+                        //alert("ไม่พบข้อมูลรหัสรายการ ( " + tCode + " )");
+                        alert("ไม่พบรหัสรายการ (" + tCode + ") โปรดตรวจสอบ!")
+                    }
+                });
+                $.post('@Url.Action("ReadCoop", "Coop")', { tCode }, function (data) {
+                    //debugger
+                    if (data != null) {
+                        //debugger
+                        //alert("รหัสรายการ ( " + txndata[1].TTXnCode + " " + txndata[1].Descript + ")");
+                        $("#TxnDateTH").val(conversion.DateInBE(data[1].SystemDate));
+                    }
+                });
+            }
+
+            function TransferInTxnCode(data) {
+                //debugger
+                $("#Descript").val(data.TTxnCode);
+                $("#CDCode").val(data.CDCode);
+                $("#OCFlag").val(data.OCFlag);
+                $("#InstrumentType").val(data.InstrumentType);
+                $("#AbbCode").val(data.AbbCode);
+                document.getElementById("Amt").focus();
+            }
+
+            $("#Descript").click(function (e) {
+                //debugger
+                $("#TTxnCode").val($("#Descript").val());
+                document.getElementById("Amt").focus();
+            });
+
+            $("#btnSave").click(function (e) {
+                e.preventDefault();
+                //debugger
+                var MemID = $("#MemberID").val();
+                var Name = $("#Name").val();
+                var TxnCode = $("#TTxnCode").val();
+                var Amt = numeric.txt2DBL($("#Amt").val());
+                var MinOpenAmt = numeric.txt2DBL($("#MinOpenAmt").val());
+                var MaxOpenAmt = numeric.txt2DBL($("#MaxOpenAmt").val());
+                if ((MemID == undefined || MemID == '' || MemID == null)) {
+                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    return false;
+                }
+                if ((Name == undefined || Name == '' || Name == null)) {
+                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    return false;
+                }
+                if ((TxnCode == undefined || TxnCode == '' || TxnCode == null)) {
+                    swal.fire("โปรดบันทึก", "รหัสรายการ", "warning")
+                    return false;
+                }
+                if ((Amt == undefined || Amt == '' || Amt == null || Amt == 0)) {
+                    swal.fire("โปรดบันทึก", "รหัสรายการ", "warning")
+                    return false;
+                }
+                else {
+                    //debugger
+                    if (Amt <= MinOpenAmt) {
+                        swal.fire("จำนวนเงินฝาก", "จำนวนเงินฝาก น้อยกว่า เงินเปิดบัญชีขั้นต่ำสุด", "warning")
+                        return false;
+                    }
+                    //debugger
+                    if (Amt >= MaxOpenAmt) {
+                        swal.fire("จำนวนเงินฝาก", "จำนวนเงินฝาก มากกว่า เงินเปิดบัญชีขั้นสูงสุด", "warning")
+                        return false;
+                    }
+                }
+                //debugger
+                var result = false;
+                //debugger
+                var aData = {
+                    CoopID: $("#CoopID").val(),
+                    MemberID: $("#MemberID").val(),
+                    AccountName: $("#AccountName").val(),
+                    DepositTypeID: $("#DepositTypeName").val(),
+                    IntType: $("#IntType").val(),
+                    ItemNo: $("#ItemNo").val(),
+                    Amt: numeric.txt2DBL($("#Amt").val()),
+                    TxnDateTH: $("#TxnDateTH").val(),
+                    TTxnCode: $("#TTxnCode").val(),
+                    CDCode: $("#CDCode").val(),
+                    InstrumentType: $("#InstrumentType").val(),
+                    AbbCode: $("#AbbCode").val()
+                };
+                //debugger
+                $.ajax({
+                    url: '/OpenDeposit/TransferOutOpenDeposit/',
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(aData),
+                    async: false,
+                    cache: false,
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType('application/json;charset=UTF-8');
+                        }
+                    },
+                    success: function (data, status, xhr) {
+                        if (status == 'success' && data != null && data[0] != null) {
+                            if (data[0].Result && data[0].Message == 'Successful') {
+                                if (data[1] != null) {
+                                    //debugger
+                                    $("#AccountNo").val(data[1].AccountNo);
+                                    $("#BookNo").val(data[1].BookNo);
+                                    //debugger
+                                    swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    ClearScreen();
+                                    result = true;
+                                }
+                            }
+                            else {
+                                swal.fire("Warning", data[0].Message, "warning");
+                                result = false;
+                            }
+                        } else {
+                            //debugger
+                            swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            result = false;
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        //debugger
+                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        result = false;
+                    }
+                });
+            });
+        });
+    </script>
+}

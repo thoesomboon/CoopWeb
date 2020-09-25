@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "สอบถามสมาชิก";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model Coop.Models.POCO.MemberModel
+
+@using (Html.BeginForm("Index", "Loan", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+<div class="col-md-9">
+    <table class="display" id="ReasonTable">
+        <thead>
+            <tr>
+                <th>ReasonID</th>
+                <th>ReasonName</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>1</th>
+                <th>Name 1</th>
+            </tr>
+            <tr>
+                <th>2</th>
+                <th>Name 2</th>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>ReasonID</th>
+                <th>ReasonName</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+}
+@section StylesAndScript{
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/DataTables/extensions/AutoFill/css/autoFill.bootstrap4.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />
+
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/Scripts/js/bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/popper.min.js"></script>
+
+<script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+}
+
+@section scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger
+        $("#ReasonTable").DataTable();
+        //$('#ReasonTable').DataTable({
+        //    "ajax": {
+        //        url: '/Reason/GridReasonList/',
+        //        type: 'GET',
+        //        dataType: 'json'
+        //    },
+        //    "columns": [
+        //        { "data": "ReasonID" },
+        //        { "data": "ReasonName" }
+        //    ]
+        //})
+    }
+</script>
+}

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Coop.Models.POCO.ReasonModel>
+@{
+    ViewBag.Title = @Text.ProgramName + "Reason ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Index", "Reason", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    @section scripts {
+        <script src="~/Scripts/jquery-1.11.1.js"></script>
+        <script src="~/Scripts/JqxWidgets/jqx-all.js"></script>
+
+        <link href="~/Content/JqxWidgets/jqx.base.css" rel="stylesheet" />
+
+        <script type="text/javascript">
+            debugger
+            $(document).ready(function () {
+                // prepare the data
+                debugger
+                var source =
+                {
+                    datatype: "json",
+                    datafields: [
+                        { name: 'ReasonID', type: 'int' },
+                        { name: 'ReasonName', type: 'string' }
+                    ],
+                    url: 'Reason/GetReasonList'
+                };
+                var dataAdapter = new $.jqx.dataAdapter(source);
+                // initialize jqxGrid
+                //debugger
+                $("#grid").jqxGrid(
+                    {
+                        width: 1000,
+                        source: dataAdapter,
+                        pageable: true,
+                        autoheight: true,
+                        sortable: true,
+                        altrows: true,
+                        enabletooltips: true,
+                        //editable: true,
+                        columns: [
+                            { text: "รหัส", datafield: "ReasonID", columntype: 'textbox', filtertype: 'textbox', width: 8 },
+                            { text: "รายละเอียด", datafield: "ReasonName", columntype: 'textbox', filtertype: 'textbox', width: 200 }
+                        ]
+                    });
+            });
+        </script>
+    }
+    <h2>วัตถุประสงค์</h2>
+    <div id="grid"></div>
+}

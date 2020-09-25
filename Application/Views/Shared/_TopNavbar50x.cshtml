@@ -1,0 +1,99 @@
+﻿<style>
+    .m-header-menu .m-menu__nav > .m-menu__item .m-menu__link .m-menu__link-textThCul {
+        display: table-cell;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        vertical-align: middle;
+    }
+
+    .m-header-menu .m-menu__nav > .m-menu__item > .m-menu__link > .m-menu__link-textThCul {
+        width: auto;
+    }
+
+    .m-header-menu.m-header-menu--skin-light .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__link-textThCul {
+        color: #676c7b;
+        font-family: Poppins, "Open Sans", sans-serif !important;
+        font-weight: bold;
+    }
+
+    .m-header-menu--submenu-skin-light.m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item > .m-menu__link .m-menu__link-textThCul {
+        color: #676c7b;
+        font-family: Poppins, "Open Sans", sans-serif !important;
+    }
+
+    .m-header-menu .m-menu__nav--submenu-arrow.m-menu__nav > .m-menu__item--hover.m-menu__item--submenu.m-menu__item > .m-menu__submenu {
+        padding-top: 0px !important;
+    }
+
+        .m-header-menu .m-menu__nav--submenu-arrow.m-menu__nav > .m-menu__item--hover.m-menu__item--submenu.m-menu__item > .m-menu__submenu a:hover {
+            font-weight: bold;
+        }
+</style>
+
+<!-- BEGIN: Horizontal Menu -->
+<button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark " id="m_aside_header_menu_mobile_close_btn">
+    <i class="la la-close"></i>
+</button>
+<div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
+    <ul class="m-menu__nav m-menu__nav--submenu-arrow">
+        @foreach (var m in AuthorizeHelper.Current.ModuleMenuCategorylist())
+        {
+            var cul = Request.Cookies["_culture"] == null ? System.Globalization.CultureInfo.CurrentCulture.ToString() : Request.Cookies["_culture"].Value;
+            <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" m-menu-link-redirect="1" aria-haspopup="true">
+                @if (@m.ModuleCategoryName.Equals("home", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    <a href="/" class="m-menu__link " title=@m.ModuleDescription>
+                        <i class="m-menu__link-icon @m.IconUrl"></i>
+                        <span class="m-menu__link-text">@m.ModuleCategoryName</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="javascript:;" class="m-menu__link m-menu__toggle" title=@m.ModuleDescription>
+                        <i class="m-menu__link-icon @m.IconUrl"></i>
+                        <span class="m-menu__link-text">@m.ModuleCategoryName</span>
+                        <i class="m-menu__hor-arrow la la-angle-down"></i>
+                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                    </a>
+                }
+
+
+                <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                    <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                    <ul class="m-menu__subnav">
+                        @foreach (var subMenu in AuthorizeHelper.Current.ModuleMenulist())
+                        {
+                            if (subMenu.ModuleCategoryID == @m.ModuleCategoryID && !subMenu.ModuleName.Equals(m.ModuleCategoryName, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                if (subMenu.ModuleURL == (string)Html.ViewContext.RouteData.Values["controller"])
+                                {
+                                    <li class="m-menu__item " aria-haspopup="true">
+                                        <a href="/@subMenu.ModuleURL" class="m-menu__link ">
+                                            <i class="m-menu__link-icon @subMenu.IconUrl"></i>
+                                            <span class="m-menu__link-text">
+                                                @subMenu.ModuleName
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="m-menu__item " aria-haspopup="true">
+                                        <a href="/@subMenu.ModuleURL" class="m-menu__link ">
+                                            <i class="m-menu__link-icon @subMenu.IconUrl"></i>
+                                            <span class="m-menu__link-text">
+                                                @subMenu.ModuleName
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<!-- END: Horizontal Menu -->
