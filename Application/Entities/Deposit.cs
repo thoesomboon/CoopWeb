@@ -20,7 +20,6 @@ namespace Coop.Entities
             this.Item = new HashSet<Item>();
             this.NoBook = new HashSet<NoBook>();
             this.NoCard = new HashSet<NoCard>();
-            this.TtlfDeposit = new HashSet<TtlfDeposit>();
         }
     
         public Nullable<int> CreatedBy { get; set; }
@@ -60,14 +59,11 @@ namespace Coop.Entities
         public Nullable<decimal> Amt2 { get; set; }
         public Nullable<decimal> Amt3 { get; set; }
     
-        public virtual DepositType DepositType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Item> Item { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NoBook> NoBook { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NoCard> NoCard { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TtlfDeposit> TtlfDeposit { get; set; }
     }
 }

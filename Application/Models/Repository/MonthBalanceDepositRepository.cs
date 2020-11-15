@@ -15,6 +15,8 @@ namespace Coop.Models.Repository
         IQueryable<MonthBalanceDepositModel> ReadDetail();
         IQueryable<MonthBalanceDepositModel> ReadDetail(String AccNo, String yr, int mthNo);
         TransactionResultModel sp_BatMthDepositBal(int coopId, string depTypeID, int userID, string budgetYear, int period);
+        TransactionResultModel sp_BatTrfMilk2Deposit(int copId, DateTime calcDate, int userID, string workID);
+        TransactionResultModel sp_BatTrfMilkPayment(int copId, DateTime calcDate, int userID, string workID);
     }
 
     public class MonthBalanceDepositRepository : Repository<MonthBalanceDeposit>, IMonthBalanceDepositRepository
@@ -49,7 +51,6 @@ namespace Coop.Models.Repository
             var MonthBalanceDeposit = ReadDetail().Where(m => m.AccountNo == AccNo && m.BudgetYear == yr && m.Period == mthNo);
             return MonthBalanceDeposit;
         }
-
         public TransactionResultModel sp_BatMthDepositBal(int coopId, string depTypeID, int userID, string budgetYear, int period)
         {
             //var stDate = 
@@ -78,9 +79,29 @@ namespace Coop.Models.Repository
         //    _context.BatDayClose(coopId, userId, nextdate);
         //}
 
-        //public void BatMthDepositBalX(int coopId, string depTypeID, int userID, string budgetYear, int period)
-        //{
-        //    _context.BatMthDepositBal(coopId, depTypeID, userID, budgetYear, period);
-        //}
+        public TransactionResultModel sp_BatTrfMilk2Deposit(int copId, DateTime calcDate, int userID, string workID)
+        {
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)this._context).ObjectContext.CommandTimeout = 600;
+
+            TransactionResultModel transactionResult = _context.Database
+                .SqlQuery<TransactionResultModel>(@"EXECUTE [dbo].[BatTrfMilk2Deposit] @copId, @calcDate, @userID, @workID"
+                    , new SqlParameter("@CoopID", copId)
+                    , new SqlParameter("@CalcDate", calcDate)
+                    , new SqlParameter("@UserID", userID)
+                    , new SqlParameter("@WorkStationId", workID)).FirstOrDefault();
+            return transactionResult;
+        }
+        public TransactionResultModel sp_BatTrfMilkPayment(int copId, DateTime calcDate, int userID, string workID)
+        {
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)this._context).ObjectContext.CommandTimeout = 600;
+
+            TransactionResultModel transactionResult = _context.Database
+                .SqlQuery<TransactionResultModel>(@"EXECUTE [dbo].[BatTrfMilkPayment] @copId, @calcDate, @userID, @workID"
+                    , new SqlParameter("@CoopID", copId)
+                    , new SqlParameter("@CalcDate", calcDate)
+                    , new SqlParameter("@UserID", userID)
+                    , new SqlParameter("@WorkStationId", workID)).FirstOrDefault();
+            return transactionResult;
+        }    
     }
 }

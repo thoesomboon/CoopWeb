@@ -14,13 +14,6 @@ namespace Coop.Entities
     
     public partial class DepositType
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DepositType()
-        {
-            this.Deposit = new HashSet<Deposit>();
-            this.TtlfDeposit = new HashSet<TtlfDeposit>();
-        }
-    
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
@@ -37,9 +30,9 @@ namespace Coop.Entities
         public Nullable<decimal> MinWithdrawAmt { get; set; }
         public Nullable<decimal> MaxWithdrawAmt { get; set; }
         public Nullable<decimal> MinLedgerBal { get; set; }
-        public Nullable<bool> ItemStatus { get; set; }
-        public Nullable<bool> MonthDepAmtStatus { get; set; }
-        public Nullable<bool> WithdrawApplyStatus { get; set; }
+        public bool ItemStatus { get; set; }
+        public bool MonthDepAmtStatus { get; set; }
+        public bool WithdrawApplyStatus { get; set; }
         public Nullable<decimal> MonthMaxWithdrawAmt { get; set; }
         public Nullable<int> MonthMaxWithdrawTimes { get; set; }
         public Nullable<decimal> MaxChargeAmt { get; set; }
@@ -78,10 +71,5 @@ namespace Coop.Entities
         public Nullable<System.DateTime> BatchIntDueDate2 { get; set; }
         public Nullable<System.DateTime> BatchIntDueDate3 { get; set; }
         public Nullable<System.DateTime> BatchIntDueDate4 { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Deposit> Deposit { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TtlfDeposit> TtlfDeposit { get; set; }
     }
 }

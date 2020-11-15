@@ -1,0 +1,669 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "ประเภทบัญชีเงินฝาก";
+    Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model Coop.Models.POCO.DepositTypeModel
+@*DepositType ประเภทบัญชีเงินฝาก
+    Programmer : Suwan T. 10-10-2020 - 10-10-2020
+    Development : 10-10-2020
+    Last update : 10-10-2020
+    Status :
+        Screen :
+        "DepositType", "TransferInDepositType" : Testing
+        "DepositType", "TransferOutDepositType" : Testing
+    สิ่งที่ต้องปรับปรุง
+    2020-9-18
+    1. None
+*@
+
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "DepositType", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">@Text.ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">Deposit</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="flaticon-interface-10"></i>
+                                    <i class="icon-equalizer font-red-sunglo"></i>
+                                </span>
+                                <div class="caption">
+                                    <h3 class="m-portlet__head-text m--font-transform-u m--font-success">
+                                        บัญชีเงินฝาก
+                                        <small class="m--font-metal m--font-transform-">Information...</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav"></ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="table-toolbar">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทบัญชี</label>
+                                        @Html.TextBoxFor(m => m.DepositTypeID, new { @class = "form-control form-control-inline input-small col-md-2", @placeholder = "ประเภทบัญชี" })
+                                        @Html.DropDownListFor(m => m.DepositTypeName, ViewBag.DepositTypeList as SelectList, "-- ประเภทบัญชี --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">กลุ่มประเภทบัญชี</label>
+                                    @Html.TextBoxFor(m => m.TypeOfDeposit, new { @class = "form-control form-control-inline input-small col-md-2", @placeholder = "กลุ่มประเภทบัญชี" })
+                                    @*@Html.ValidationMessageFor(m => m.TypeOfDeposit, "", new { @class = "help-block help-block-error required" })*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เปิดบัญชีต่ำสุด</label>
+                                        @Html.TextBoxFor(m => m.MinOpenAmt, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "เปิดบัญชีต่ำสุด" })
+                                        @Html.ValidationMessageFor(m => m.MinOpenAmt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เปิดบัญชีสูงสุด</label>
+                                        @Html.TextBoxFor(m => m.MaxOpenAmt, new { @class = "form-control form-control-inline input-small col-md-8", @placeholder = "เปิดบัญชีสูงสุด" })
+                                        @Html.ValidationMessageFor(m => m.MaxOpenAmt, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">มียอดฝาก</label>
+                                        @Html.CheckBoxFor(m => m.ItemStatus, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ฝากต่ำสุด" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ฝากต่ำสุด</label>
+                                        @Html.TextBoxFor(m => m.MinDepAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ฝากต่ำสุด" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ฝากสูงสุด</label>
+                                        @Html.TextBoxFor(m => m.MaxDepAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ฝากสูงสุด" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ยอดคงเหลือต่ำสุด ลงรับดบ.</label>
+                                        @Html.TextBoxFor(m => m.MinBalCalcInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ยอดคงเหลือต่ำสุด ลงรับดบ." })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ถอนต่ำสุด</label>
+                                        @Html.TextBoxFor(m => m.MinWithdrawAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ถอนต่ำสุด" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ถอนสูงสุด</label>
+                                        @Html.TextBoxFor(m => m.MaxWithdrawAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ถอนสูงสุด" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ยอดคงเหลือต่ำสุด</label>
+                                        @Html.TextBoxFor(m => m.MinLedgerBal, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ยอดคงเหลือต่ำสุด" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ถอนได้ไม่เกิน (บ/เดือน)</label>
+                                        @Html.TextBoxFor(m => m.MonthMaxWithdrawAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ถอนได้ไม่เกิน (บ/เดือน)" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ถอนได้ไม่เกิน (ครั้ง/เดือน)</label>
+                                        @Html.TextBoxFor(m => m.MonthMaxWithdrawTimes, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ถอนได้ไม่เกิน (ครั้ง/เดือน)" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับ (%)</label>
+                                        @Html.TextBoxFor(m => m.WithdrawChargePercent, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ถอนได้ไม่เกิน (บ/เดือน)" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับต่ำสุด</label>
+                                        @Html.TextBoxFor(m => m.MinChargeAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ถอนได้ไม่เกิน (ครั้ง/เดือน)" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับสูงสุด</label>
+                                        @Html.TextBoxFor(m => m.MaxChargeAmt, new { @class = "form-control form-control-inline input-small col-md-2 align-left" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เลขที่บัญชีสุดท้าย</label>
+                                        @Html.TextBoxFor(m => m.LastAccountNo, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เลขที่บัญชีสุดท้าย" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เลขที่สมุดสุดท้าย</label>
+                                        @Html.TextBoxFor(m => m.LastBookNo, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เลขที่สมุดสุดท้าย" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าธรรมเนียมปิดบัญชี</label>
+                                        @Html.TextBoxFor(m => m.CloseAccountFee, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:blue", @placeholder = "ค่าธรรมเนียมปิดบัญชี" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">จำนวนเดือนครบดบ.</label>
+                                        @Html.TextBoxFor(m => m.MonthIntDue, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:blue", @placeholder = "#เดือนครบดอกเบี้ย" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วิธีการคำนวณดอกเบี้ย (D/d)</label>
+                                        @Html.TextBoxFor(m => m.CalcIntType, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วิธีการคำนวณดบ." })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">อัตราดอกเบี้ย</label>
+                                        @Html.TextBoxFor(m => m.CalcIntRate, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "อัตราดอกเบี้ย" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">สถานะภาพ</label>
+                                        @Html.TextBoxFor(m => m.Filestatus, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วิธีการคำนวณดบ." })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <div class="col-md-6"></div>
+                                        <div class="form-actions">
+                                            <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnSave">บันทึกข้อมูล <i class="fa"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.CoopID)
+    @*@Html.HiddenFor(model => model.AccountNo)*@
+}
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/styles/v50x/sweetalert2.all.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/CoopWeb/CoopWeb.js"></script>
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    @*<script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /* Read Deposit*/
+            //debugger
+            $("#DepositTypeID").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    //debugger
+                    DepositTypeIDChange(this.value);
+                }
+            });
+            $("#DepositTypeName").click(function (e) {
+                //debugger
+                DepositTypeIDChange($("#DepositTypeName").val());
+            });
+            function DepositTypeIDChange(DepTypeID) {
+                //debugger
+                //var DepTypeID = AcctNo;
+                if (DepTypeID != undefined && DepTypeID != '' && DepTypeID != null) {
+                    var aData = {
+                        DepositTypeID: $("#DepositTypeID").val(),
+                        DepositTypeID: DepTypeID
+                    };
+                    //alert(aData);
+                    //debugger
+                    $.ajax({
+                        url: '/DepositType/TransferInDepositType/',
+                        type: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',
+                        data: JSON.stringify(aData),
+                        async: false,
+                        cache: false,
+                        beforeSend: function (x) {
+                            if (x && x.overrideMimeType) {
+                                x.overrideMimeType("application/json;charset=UTF-8");
+                            }
+                        },
+                        success: function (data, status, xhr) {
+                            if (status == 'success' && data != null && data[0] != null) {
+                                if (data[0].Result && data[0].Message == 'Successful') {
+                                    if (data[1] != null) {
+                                        TransferInDepositType(data[1]);
+                                    }
+                                } else {
+                                    //swal.fire("Warning", data[0].Message, "warning")
+                                    Alert(data[0].Message)
+                                    clearTextBox();
+                                    return false;
+                                }
+                            } else {
+                                //swal.fire("Warning", "Something wrong, please check", "error")
+                                Alert("Something wrong, please check error")
+                                clearTextBox();
+                                result = false;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            //swal.fire("Error occurred", error, "error")
+                            Alert("Error occurred")
+                            clearTextBox();
+                            result = false;
+                        }
+                    });
+                }
+            }
+
+            function TransferInDepositType(data) {
+                if (data != null) {
+                    //debugger
+                    $("#Filestatus").val(data.Filestatus);
+                    $("#CoopID").val(data.CoopID);
+                    $("#DepositTypeID").val(data.DepositTypeID);
+                    $("#DepositTypeName").val(data.DepositTypeID);
+                    $("#TypeOfDeposit").val(data.TypeOfDeposit);
+
+                    $("#MinOpenAmt").val(numeric.addCommas(data.MinOpenAmt));
+                    $("#MaxOpenAmt").val(numeric.addCommas(data.MaxOpenAmt));
+                    $("#ItemStatus").val(data.ItemStatus);
+
+                    $("#MinDepAmt").val(numeric.addCommas(data.MinDepAmt));
+                    $("#MaxDepAmt").val(numeric.addCommas(data.MaxDepAmt));
+                    $("#MinBalCalcInt").val(numeric.addCommas(data.MinBalCalcInt));
+
+                    $("#MinWithdrawAmt").val(numeric.addCommas(data.MinWithdrawAmt));
+                    $("#MaxWithdrawAmt").val(numeric.addCommas(data.MaxWithdrawAmt));
+                    $("#MinLedgerBal").val(numeric.addCommas(data.MinLedgerBal));
+
+                    $("#MonthMaxWithdrawAmt").val(numeric.addCommas(data.MonthMaxWithdrawAmt));
+                    $("#MonthMaxWithdrawTimes").val(data.MonthMaxWithdrawTimes);
+
+                    $("#WithdrawChargePercent").val(numeric.addCommas(data.WithdrawChargePercent));
+                    $("#MaxChargeAmt").val(numeric.addCommas(data.MaxChargeAmt));
+                    $("#MinChargeAmt").val(numeric.addCommas(data.MinChargeAmt));
+
+                    $("#LastAccountNo").val(data.LastAccountNo);
+                    $("#LastBookNo").val(data.LastBookNo);
+
+                    $("#CloseAccountFee").val(data.CloseAccountFee);
+                    $("#MonthIntDue").val(data.MonthIntDue);
+
+                    $("#CalcIntRate").val(data.CalcIntRate);
+                    $("#CalcIntType").val(data.CalcIntType);
+
+                    $("#Filestatus").val(data.Filestatus);
+                }
+            }
+
+        function clearTextBox() {
+            $("#Filestatus").val("");
+            $("#CoopID").val("");
+            $("#DepositTypeID").val("");
+            $("#DepositTypeName").val("");
+            $("#TypeOfDeposit").val("");
+
+            $("#MinOpenAmt").val("");
+            $("#MaxOpenAmt").val("");
+            $("#ItemStatus").val("");
+
+            $("#MinDepAmt").val("");
+            $("#MaxDepAmt").val("");
+            $("#MinBalCalcInt").val("");
+
+            $("#MinWithdrawAmt").val("");
+            $("#MaxWithdrawAmt").val("");
+            $("#MinLedgerBal").val("");
+
+            $("#MonthMaxWithdrawAmt").val("");
+            $("#MonthMaxWithdrawTimes").val("");
+
+            $("#WithdrawChargePercent").val("");
+            $("#MaxChargeAmt").val("");
+            $("#MinChargeAmt").val("");
+
+            $("#LastAccountNo").val("");
+            $("#LastBookNo").val("");
+
+            $("#CloseAccountFee").val("");
+            $("#MonthIntDue").val("");
+
+            $("#CalcIntRate").val("");
+            $("#CalcIntType").val("");
+        }
+
+        $("#btnSave").click(function (e) {
+            e.preventDefault();
+            //debugger
+            var DepTypeID = $("#DepositTypeID").val();
+            var DepTypeName = $("#DepositTypeName").val();
+            if ((DepTypeID == undefined || DepTypeID == '' || DepTypeID == null)) {
+                //swal.fire("โปรดบันทึก", "ประเภทเงินฝาก", "warning")
+                Alert("โปรดบันทึกประเภทเงินฝาก")
+                return false;
+            }
+            if ((DepTypeName == undefined || DepTypeName == '' || DepTypeName == null)) {
+                //swal.fire("โปรดบันทึก", "ชื่อประเภทเงินฝาก", "warning")
+                Alert("โปรดบันทึกชื่อประเภทเงินฝาก")
+                return false;
+            }
+            //debugger
+            var result = false;
+            //memCode = $.trim(memCode).toUpmemCase();
+
+            //debugger
+            var aData = {
+                Filestatus: $("#Filestatus").val(),
+                CoopID: $("#CoopID").val(),
+                DepositTypeID: $("#DepositTypeID").val(),
+                DepositTypeName: $("#DepositTypeName").val(),
+                TypeOfDeposit: $("#TypeOfDeposit").val(),
+                MinOpenAmt: $("#MinOpenAmt").val(),
+                MaxOpenAmt: $("#MaxOpenAmt").val(),
+                ItemStatus: $("#ItemStatus").val(),
+                MinDepAmt: $("#MinDepAmt").val(),
+                MaxDepAmt: $("#MaxDepAmt").val(),
+                MinBalCalcInt: $("#MinBalCalcInt").val(),
+                MinWithdrawAmt: $("#MinWithdrawAmt").val(),
+                MaxWithdrawAmt: $("#MaxWithdrawAmt").val(),
+                MinLedgerBal: $("#MinLedgerBal").val(),
+                MonthMaxWithdrawAmt: $("#MonthMaxWithdrawAmt").val(),
+                MonthMaxWithdrawTimes: $("#MonthMaxWithdrawTimes").val(),
+                WithdrawChargePercent: $("#WithdrawChargePercent").val(),
+                MaxChargeAmt: $("#MaxChargeAmt").val(),
+                MinChargeAmt: $("#MinChargeAmt").val(),
+                LastAccountNo: $("#LastAccountNo").val(),
+                LastBookNo: $("#LastBookNo").val(),
+                CloseAccountFee: $("#CloseAccountFee").val(),
+                MonthIntDue: $("#MonthIntDue").val(),
+                CloseAccountFee: $("#CloseAccountFee").val(),
+                CalcIntType: $("#CalcIntType").val()
+            };
+            //debugger
+            $.ajax({
+                url: '/DepositType/TransferOutDepositType/',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: JSON.stringify(aData),
+                async: false,
+                cache: false,
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType('application/json;charset=UTF-8');
+                    }
+                },
+                success: function (data, status, xhr) {
+                    if (status == 'success' && data != null && data[0] != null) {
+                        if (data[0].Result && data[0].Message == 'Successful') {
+                            if (data[1] != null) {
+                                $("#DepositTypeID").val(data[1].DepositTypeID);
+                                //swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                Alter("บันทึกข้อมูลสำเร็จแล้ว");
+                                result = true;
+                            }
+                        }
+                        else {
+                            //swal.fire("Warning", data[0].Message, "warning");
+                            Alter(data[0].Message);
+                            result = false;
+                        }
+                    } else {
+                        //swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                        Alter("ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ");
+                        result = false;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    //swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                    Alter("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)");
+                    result = false;
+                }
+            });
+        });
+                });
+    </script>
+}

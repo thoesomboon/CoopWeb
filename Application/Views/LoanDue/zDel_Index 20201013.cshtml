@@ -1,0 +1,763 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "สัญญาเงินกู้ (LoanDue)";
+    Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model Coop.Models.POCO.LoanModel
+
+@*
+    Programmer : Suwan T. 01-04-2020 - 30-06-2020
+    Development : 01-04-2020
+    Last update : 30-06-2020
+    Status :
+        Read : Ok
+        Save(create) : Checking
+        Save(update) : Ok
+        Validate : Check
+        ต้องเพิ่ม field ?
+*@
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "Loan", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        <!-- BEGIN: Subheader -->
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">@Text.ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">Loan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="flaticon-interface-10"></i>
+                                    <i class="icon-equalizer font-red-sunglo"></i>
+                                </span>
+                                <div class="caption">
+                                    <h3 class="m-portlet__head-text m--font-transform-u m--font-success">
+                                        สัญญาเงินกู้
+                                        <small class="m--font-metal m--font-transform-">Information...</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav"></ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="table-toolbar">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">สัญญาเงินกู้</label>
+                                        @Html.TextBoxFor(m => m.LoanID, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ทะเบียนสัญญาเงินกู้" })
+                                        @Html.HiddenFor(model => model.LoanID)
+                                        @Html.ValidationMessageFor(m => m.LoanID, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทสัญญาเงินกู้</label>
+                                        @Html.DropDownListFor(m => m.LoanTypeName, ViewBag.LoanTypeList as SelectList, "-- ประเภทสัญญา --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันเปิดสัญญา</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LoanDateTH" name="LoanDateTH" placeholder="วันเปิดสัญญา (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LoanDateTH, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "วันเปิดสัญญา (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ทะเบียนสมาชิก</label>
+                                        @Html.TextBoxFor(m => m.MemberID, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "ทะเบียนสมาชิก" })
+                                        @Html.HiddenFor(model => model.MemberID)
+                                        @Html.ValidationMessageFor(m => m.MemberID, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ชื่่อ - นามสกุล</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-inline input-small col-md-8", @placeholder = "ระบุชื่่อ - นามสกุล" })
+                                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่ติดต่อครั้งสุดท้าย</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LastContactTH" name="LastContactTH" placeholder="ติดต่อครั้งสุดท้าย (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LastContactTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ติดต่อครั้งสุดท้าย (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วงเงินกู้</label>
+                                        @Html.TextBoxFor(m => m.LoanAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วงเงินกู้" })
+                                        @*@Html.HiddenFor(model => model.LoanAmt)*@
+                                        @Html.ValidationMessageFor(m => m.LoanAmt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">หนี้คงเหลือ</label>
+                                        @Html.TextBoxFor(m => m.LoanBal, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "หนี้คงเหลือ" })
+                                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">หนี้ยกมาต้นปี</label>
+                                        @Html.TextBoxFor(m => m.BFBal, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "หนี้ยกมาต้นปี" })
+                                        @*@Html.HiddenFor(model => model.BFBal)*@
+                                        @Html.ValidationMessageFor(m => m.BFBal, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยยกมา</label>
+                                        @Html.TextBoxFor(m => m.BFInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ดอกเบี้ยยกมา" })
+                                        @*@Html.HiddenFor(model => model.BFInt)*@
+                                        @Html.ValidationMessageFor(m => m.BFInt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับยกมา</label>
+                                        @Html.TextBoxFor(m => m.BFCharge, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับยกมา" })
+                                        @Html.ValidationMessageFor(m => m.BFCharge, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เงินต้น</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="StartCalcIntTH" name="StartCalcIntTH" placeholder="วันที่เริ่มคำนวณ (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.StartCalcIntTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วันที่เริ่มคำนวณ (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ย ย/ม ค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.BFUnpayInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ดอกเบี้ย ย/ม ค้างรับ" })
+                                        @*@Html.HiddenFor(model => model.BFUnpayInt)*@
+                                        @Html.ValidationMessageFor(m => m.BFUnpayInt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับ ย/ม ค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.BFUnpayCharge, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับ ย/ม ค้างรับ" })
+                                        @Html.ValidationMessageFor(m => m.BFUnpayCharge, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">คำนวณ ดบ ครั้งสุดท้าย</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LastCalcIntTH" name="LastCalcIntTH" placeholder="คำนวณ ดบ ครั้งสุดท้าย (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LastCalcIntTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "คำนวณ ดบ ครั้งสุดท้าย (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.UnpayInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ดอกเบี้ยค้างรับ" })
+                                        @*@Html.HiddenFor(model => model.UnpayInt)*@
+                                        @Html.ValidationMessageFor(m => m.UnpayInt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค่าปรับค้างรับ</label>
+                                        @Html.TextBoxFor(m => m.UnpayCharge, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ค่าปรับค้างรับ" })
+                                        @Html.ValidationMessageFor(m => m.UnpayCharge, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">คำนวณค่าปรับครั้งสุดท้าย</label>
+                                        @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="LastCalcChargeTH" name="LastCalcChargeTH" placeholder="วันที่คำนวณค่าปรับครั้งสุดท้าย (พ.ศ. 4 หลัก)">*@
+                                        @Html.TextBoxFor(m => m.LastCalcChargeTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วันที่คำนวณค่าปรับครั้งสุดท้าย (พ.ศ. 4 หลัก)" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">อัตราดอกเบี้ย</label>
+                                        @Html.TextBoxFor(m => m.IntRate, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:blue", @placeholder = "อัตราดอกเบี้ย" })
+                                        @Html.TextBoxFor(m => m.IntType, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:blue", @placeholder = "อัตราดอกเบี้ย" })
+                                        @*@Html.HiddenFor(model => model.BFUIntRatenpayInt)*@
+                                        @Html.ValidationMessageFor(m => m.IntRate, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยสะสม</label>
+                                        @Html.TextBoxFor(m => m.AccInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:blue", @placeholder = "ดอกเบี้ยสะสม" })
+                                        @Html.ValidationMessageFor(m => m.AccInt, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ดอกเบี้ยสะสมปีนี้</label>
+                                        @Html.TextBoxFor(m => m.YTDAccInt, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:blue", @placeholder = "ดอกเบี้ยสะสมปีนี้" })
+                                        @Html.ValidationMessageFor(m => m.YTDAccInt, "", new { @class = "help-block help-block-error" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">หักค่านม (ค่างวด)</label>
+                                        @Html.TextBoxFor(m => m.InstallAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:pink", @placeholder = "เงินงวดหักค่านม" })
+                                        @*@Html.HiddenFor(model => model.InstallAmt)*@
+                                        @Html.ValidationMessageFor(m => m.InstallAmt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">การหักเงินค่านม</label>
+                                        @Html.DropDownListFor(m => m.InstallMethodName, ViewBag.InstallMethodList as SelectList, "-- การหักเงินค่านม --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วัตถุประสงค์ในการกู้เงิน</label>
+                                        @Html.DropDownListFor(m => m.ReasonName, ViewBag.ReasonList as SelectList, "-- วัตถุประสงค์ --", new { @class = "form-control form-control-inline input-small col-md-6 color:pink" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ค้างรับยกมา</label>
+                                        @Html.TextBoxFor(m => m.InstallAmt, new { @class = "form-control form-control-inline input-small col-md-4 align-right color:pink", @placeholder = "ค้างรับยกมา" })
+                                        @*@Html.HiddenFor(model => model.UnpayPrinciple)*@
+                                        @Html.ValidationMessageFor(m => m.InstallAmt, "", new { @class = "help-block help-block-error required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">สถานะภาพ</label>
+                                        @Html.TextBoxFor(m => m.Filestatus, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "A-ปกติ, C-ปิดบัญชี, D-ถูกลบ" })
+                                        @*@Html.ValidationMessageFor(m => m.MonthDepAmt, "", new { @class = "help-block help-block-error" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <h2>รายการครบกำหนด jqGrid</h2>
+                                <div id="grid"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group m-form__group row">
+                                        <div class="col-md-6"></div>
+                                        <div class="form-actions">
+                                            <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnSave">บันทึกข้อมูล <i class="fa"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*@Html.HiddenFor(model => model.CoopID)
+        @Html.HiddenFor(model => model.LoanID)
+        @Html.HiddenFor(model => model.PayFlag)*@
+    @*@Html.HiddenFor(model => model.FirstInstallDateTH)*@
+}
+
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/styles/v50x/sweetalert2.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/CoopWeb/CoopWeb.js"></script>
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-1.11.1.js"></script>
+    <script src="~/Scripts/JqxWidgets/jqx-all.js"></script>
+    <link href="~/Content/JqxWidgets/jqx.base.css" rel="stylesheet" />
+    @*<script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /* Read Loan*/
+            //debugger
+            $("#LoanID").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    //debugger
+                    LoanIDChange(this.value);
+                    //debugger
+                    TransferInLoanDue(this.value);
+                }
+            });
+
+            function LoanIDChange(lonVal) {
+                //debugger
+                var lonID = lonVal;
+                if (lonID != undefined && lonID != '' && lonID != null) {
+                    var aData = {
+                        LoanID: $("#LoanID").val(),
+                        LoanID: lonID
+                    };
+                    //alert(aData);
+                    //debugger
+                    $.ajax({
+                        url: '/Loan/TransferInLoan/',
+                        type: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',
+                        data: JSON.stringify(aData),
+                        async: false,
+                        cache: false,
+                        beforeSend: function (x) {
+                            if (x && x.overrideMimeType) {
+                                x.overrideMimeType("application/json;charset=UTF-8");
+                            }
+                        },
+                        success: function (data, status, xhr) {
+                            if (status == 'success' && data != null && data[0] != null) {
+                                if (data[0].Result && data[0].Message == 'Successful') {
+                                    if (data[1] != null) {
+                                        //debugger
+                                        TransferInLoan(data[1]);
+                                    }
+                                } else {
+                                    swal.fire("Warning", data[0].Message, "warning")
+                                    clearTextBox();
+                                    return false;
+                                }
+                            } else {
+                                swal.fire("Warning", "พบข้อผิดพลาด บางประการ", "error")
+                                clearTextBox();
+                                result = false;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            swal.fire("Error occurred", error, "error")
+                            clearTextBox();
+                            result = false;
+                        }
+                    });
+                }
+            }
+
+            function TransferInLoan(data) {
+                if (data != null) {
+                    $("#CoopID").val(data.CoopID);
+                    $("#Filestatus").val(data.Filestatus);
+                    $("#LoanID").val(data.LoanID);
+                    $("#LoanTypeName").val(data.LoanTypeID);
+                    $("#MemberID").val(data.MemberID);
+                    $("#Name").val(data.Name);
+
+                    $("#LoanDateTH").val(conversion.DateInBE(data.LoanDate));
+                    //$("#FirstInstallDateTH").val(conversion.DateInBE(data.FirstInstallDate));
+                    $("#StartCalcIntTH").val(conversion.DateInBE(data.StartCalcInt));
+                    $("#LastCalcIntTH").val(conversion.DateInBE(data.LastCalcInt));
+                    $("#LastCalcChargeTH").val(conversion.DateInBE(data.LastCalcCharge));
+                    $("#LastContactTH").val(conversion.DateInBE(data.LastContact));
+
+                    //$("#Amt3").val(numeric.addCommas(data.Amt3));
+                    $("#LoanAmt").val(numeric.addCommas(data.LoanAmt));
+                    $("#LoanBal").val(numeric.addCommas(data.LoanBal));
+                    $("#BFBal").val(numeric.addCommas(data.BFBal));
+                    $("#BFInt").val(numeric.addCommas(data.BFInt));
+                    $("#BFCharge").val(numeric.addCommas(data.BFCharge));
+                    $("#AccInt").val(numeric.addCommas(data.AccInt));
+                    $("#YTDAccInt").val(numeric.addCommas(data.YTDAccInt));
+                    $("#UnpayPrinciple").val(numeric.addCommas(data.UnpayPrinciple));
+                    $("#BFUnpayInt").val(numeric.addCommas(data.BFUnpayInt));
+                    $("#UnpayInt").val(numeric.addCommas(data.UnpayInt));
+                    $("#BFUnpayCharge").val(numeric.addCommas(data.BFUnpayCharge));
+                    $("#UnpayCharge").val(numeric.addCommas(data.UnpayCharge));
+
+                    $("#IntType").val(data.IntType);
+                    $("#IntRate").val(data.IntRate);
+                    $("#ReasonName").val(data.ReasonID);
+                    $("#PayFlag").val(data.PayFlag);
+                    $("#InstallAmt").val(numeric.addCommas(data.InstallAmt));
+                    $("#InstallMethodName").val(data.InstallMethodID);
+                    $("#DiscIntFlag").val(data.DiscIntFlag);
+                    $("#BFDiscInt").val(data.BFDiscInt);
+                    $("#DiscInt").val(data.DiscInt);
+                    $("#BFUnpayDiscInt").val(data.BFUnpayDiscInt);
+                    $("#UnpayDiscInt").val(data.UnpayDiscInt);
+                }
+            }
+
+            function clearTextBox() {
+                $("#CoopID").val("");
+                $("#Filestatus").val("");
+                $("#LoanID").val("");
+                $("#LoanTypeName").val("");
+                $("#MemberID").val("");
+                $("#Name").val("");
+
+                $("#LoanDateTH").val("");
+                //$("#FirstInstallDateTH").val("");
+                $("#StartCalcIntTH").val("");
+                $("#LastCalcIntTH").val("");
+                $("#LastCalcChargeTH").val("");
+                $("#LastContactTH").val("");
+
+                $("#LoanAmt").val("");
+                $("#LoanBal").val("");
+                $("#BFBal").val("");
+                $("#BFInt").val("");
+                $("#BFCharge").val("");
+                $("#AccInt").val("");
+                $("#YTDAccInt").val("");
+                $("#UnpayPrinciple").val("");
+                $("#BFUnpayInt").val("");
+                $("#UnpayInt").val("");
+                $("#BFUnpayCharge").val("");
+                $("#UnpayCharge").val("");
+
+                $("#IntType").val("");
+                $("#IntRate").val("");
+                $("#ReasonName").val("");
+                $("#PayFlag").val("");
+                $("#InstallAmt").val("");
+                $("#InstallMethodName").val("");
+                $("#DiscIntFlag").val("");
+                $("#BFDiscInt").val("");
+                $("#DiscInt").val("");
+                $("#BFUnpayDiscInt").val("");
+                $("#UnpayDiscInt").val("");
+            }
+
+            $("#btnSave").click(function (e) {
+                e.preventDefault();
+                //debugger
+                var lonID = $("#LoanID").val();
+                //var lName = $("#LastNameTH").val();
+                if ((lonID == undefined || lonID == '' || lonID == null)) {
+                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    return false;
+                }
+                //debugger
+                var result = false;
+                //memCode = $.trim(memCode).toUpmemCase();
+
+                //debugger
+                var aData = {
+                    CoopID: $("#CoopID").val(),
+                    Filestatus: $("#Filestatus").val(),
+                    LoanID: $("#LoanID").val(),
+                    LoanTypeID: $("#LoanTypeName").val(),
+                    MemberID: $("#MemberID").val(),
+                    Name: $("#Name").val(),
+
+                    LoanDateTH: $("#LoanDateTH").val(),
+                    //FirstInstallDateTH: $("#FirstInstallDateTH").val(),
+                    StartCalcIntTH: $("StartCalcIntTH").val(),
+                    LastCalcIntTH: $("#LastCalcIntTH").val(),
+                    LastCalcChargeTH: $("#LastCalcChargeTH").val(),
+                    LastContactTH: $("#LastContactTH").val(),
+
+                    LoanAmt: numeric.txt2DBL($("#LoanAmt").val()),
+                    LoanBal: numeric.txt2DBL($("#LoanBal").val()),
+                    BFBal: numeric.txt2DBL($("#BFBal").val()),
+                    BFInt: numeric.txt2DBL($("#BFInt").val()),
+                    BFCharge: numeric.txt2DBL($("#BFCharge").val()),
+                    AccInt: numeric.txt2DBL($("#AccInt").val()),
+                    YTDAccInt: $("#YTDAccInt").val(),
+                    UnpayPrinciple: $("#UnpayPrinciple").val(),
+                    BFUnpayInt: $("#BFUnpayInt").val(),
+                    UnpayInt: $("#UnpayInt").val(),
+                    BFUnpayCharge: $("#BFUnpayCharge").val(),
+                    UnpayCharge: $("#UnpayCharge").val(),
+
+                    IntType: $("#IntType").val(),
+                    IntRate: $("#IntRate").val(),
+                    ReasonID: $("#ReasonName").val(),
+                    PayFlag: $("#PayFlag").val(),
+                    InstallAmt: numeric.txt2DBL($("#InstallAmt").val()),
+                    InstallMethodID: $("#InstallMethodName").val(),
+                    DiscIntFlag: $("#DiscIntFlag").val(),
+                    BFDiscInt: $("#BFDiscInt").val(),
+                    DiscInt: $("#DiscInt").val(),
+                    BFUnpayDiscInt: numeric.txt2DBL($("#BFUnpayDiscInt").val()),
+                    UnpayDiscInt: numeric.txt2DBL($("#UnpayDiscInt").val())
+                };
+                //debugger
+                $.ajax({
+                    url: '/Loan/TransferOutLoan/',
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(aData),
+                    async: false,
+                    cache: false,
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType('application/json;charset=UTF-8');
+                        }
+                    },
+                    success: function (data, status, xhr) {
+                        if (status == 'success' && data != null && data[0] != null) {
+                            if (data[0].Result && data[0].Message == 'Successful') {
+                                //debugger
+                                if (data[1] != null) {
+                                    $("#LoanID").val(data[1].LoanID);
+                                    swal.fire("ข้อมูลสัญญาเงินกู้", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    result = true;
+                                }
+                            }
+                            else {
+                                swal.fire("Warning", data[0].Message, "warning");
+                                result = false;
+                            }
+                        } else {
+                            swal.fire("สัญญาเงินกู้", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            result = false;
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        result = false;
+                    }
+                });
+            });
+
+            function TransferInLoanDue(lonID) {
+                //debugger
+                var source =
+                {
+                    datafields: [
+                        { name: 'LoanID', type: 'string' },
+                        { name: 'Seq', type: 'int' },
+                        { name: 'DueDate', type: 'date' },
+                        { name: 'LoanDueAmt', type: 'float' }
+                    ],
+                    url: "LoanDue/TransferInLoanDue?lonID=" + lonID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                };
+                var dataAdapter = new $.jqx.dataAdapter(source);
+                //debugger
+                $("#grid").jqxGrid(
+                    {
+                        width: 1000,
+                        source: dataAdapter,
+                        pageable: true,
+                        autoheight: true,
+                        sortable: true,
+                        altrows: true,
+                        enabletooltips: true,
+                        //editable: true,
+                        columns: [
+                            { text: "เลขที่สัญญา", datafield: "LoanID", columntype: 'textbox', filtertype: 'textbox', width: 150 },
+                            { text: "ลำดับที่", datafield: "Seq", columntype: 'int', filtertype: 'int', width: 100 },
+                            { text: "วันที่ครบกำหนด", datafield: "DueDate", columntype: 'datetimeinput', filtertype: 'date', width: 100 },
+                            { text: "หนี้ครบกำหนด", datafield: "LoanDueAmt", columntype: 'numberinput', filtertype: 'float', align: 'right', cellsalign: 'right', cellsformat: 'c2', width: 120 }
+                        ]
+                    });
+            };
+        });
+    </script>
+}

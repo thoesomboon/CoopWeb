@@ -12,8 +12,8 @@ namespace Coop.Models.Repository
         IQueryable<DepositTypeModel> ReadDetail();
         IQueryable<DepositTypeModel> ReadDetail(String depositTypeID);
         bool Update(DepositTypeModel model);
+        DepositTypeModel Create(DepositTypeModel model);
         bool UpdateIssueAccNo(DepositTypeModel model);
-        //DepositTypeModel Create(DepositTypeModel mModel);
     }
     public class DepositTypeRepository : Repository<DepositType>, IDepositTypeRepository
     {
@@ -35,7 +35,7 @@ namespace Coop.Models.Repository
                         MinWithdrawAmt = d.MinWithdrawAmt,
                         MaxWithdrawAmt = d.MaxWithdrawAmt,
                         MinLedgerBal = d.MinLedgerBal,
-                        ItemStatus = d.ItemStatus,
+                        //ItemStatus = d.ItemStatus,
                         //MonthDepAmtStatus = d.MonthDepAmtStatus,
                         WithdrawApplyStatus = d.WithdrawApplyStatus,
                         MonthMaxWithdrawAmt = d.MonthMaxWithdrawAmt,
@@ -82,6 +82,44 @@ namespace Coop.Models.Repository
             var depositType = ReadDetail().Where(d=>d.DepositTypeID == depTypeID);
             return depositType;
         }
+        public DepositTypeModel Create(DepositTypeModel model)
+        {
+            DepositTypeModel cModel = new DepositTypeModel
+            {
+                Filestatus = model.Filestatus,
+                CoopID = model.CoopID,
+                DepositTypeID = model.DepositTypeID,
+                DepositTypeName = model.DepositTypeName,
+                TypeOfDeposit = model.TypeOfDeposit,
+                MinOpenAmt = model.MinOpenAmt,
+                MaxOpenAmt = model.MaxOpenAmt,
+                ItemStatus = model.ItemStatus,
+                MinDepAmt = model.MinDepAmt,
+                MaxDepAmt = model.MaxDepAmt,
+                MinBalCalcInt = model.MinBalCalcInt,
+                MinWithdrawAmt = model.MinWithdrawAmt,
+                MaxWithdrawAmt = model.MaxWithdrawAmt,
+                MinLedgerBal = model.MinLedgerBal,
+                MonthMaxWithdrawAmt = model.MonthMaxWithdrawAmt,
+                MonthMaxWithdrawTimes = model.MonthMaxWithdrawTimes,
+                WithdrawChargePercent = model.WithdrawChargePercent,
+                MaxChargeAmt = model.MaxChargeAmt,
+                MinChargeAmt = model.MinChargeAmt,
+                LastAccountNo = model.LastAccountNo,
+                LastBookNo = model.LastBookNo,
+                CloseAccountFee = model.CloseAccountFee,
+                MonthIntDue = model.MonthIntDue,
+                CalcIntRate = model.CalcIntRate,
+                CalcIntType = model.CalcIntType,
+
+                CreatedBy = AuthorizeHelper.Current.UserAccount().UserID,
+                CreatedDate = DateTime.Now,
+                ModifiedBy = AuthorizeHelper.Current.UserAccount().UserID,
+                ModifiedDate = DateTime.Now
+            };
+            var cDeposit = ModelHelper<DepositType>.Apply(cModel);
+            return ModelHelper<DepositTypeModel>.Apply(ReadByCreate(cDeposit));
+        }
         public bool Update(DepositTypeModel model)
         {
             var c = ModelHelper<DepositType>.Apply(model);
@@ -106,7 +144,6 @@ namespace Coop.Models.Repository
 
             int returnVal = 0;
             bool result = false;
-
             try
             {
                 returnVal = _context.SaveChanges();
@@ -117,11 +154,6 @@ namespace Coop.Models.Repository
                 throw ex;
             }
             return result;
-        }
-        public IQueryable<DepositTypeModel> ReadByID(String depositTypeID)
-        {
-            var depositType = ReadDetail().Where(d => d.DepositTypeID == depositTypeID);
-            return depositType;
         }
     }
 }

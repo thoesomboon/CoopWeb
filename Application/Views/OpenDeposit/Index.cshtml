@@ -394,7 +394,6 @@
                 //debugger
                 document.getElementById("MemberID").focus();
             });
-
             $("#MemberID").keyup(function (e) {
                 if (event.keyCode === 13) {
                     e.preventDefault();
@@ -402,7 +401,6 @@
                     MemberIDChange(this.value);
                 }
             });
-
             function MemberIDChange(memId) {
                 //debugger
                 var memID = memId;
@@ -434,19 +432,22 @@
                                     }
                                 } else {
                                     //debugger
-                                    swal.fire("Warning", data[0].Message, "warning")
+                                    //swal.fire("Warning", data[0].Message, "warning")
+                                    alert(data[0].Message)
                                     ClearMember();
                                     return false;
                                 }
                             } else {
                                 //debugger
-                                swal.fire("Warning", "Something wrong, please check", "error")
+                                //swal.fire("Warning", "Something wrong, please check", "error")
+                                alert("Something wrong, please check")
                                 ClearMember();
                                 result = false;
                             }
                         },
                         error: function (xhr, status, error) {
-                            swal.fire("Error occurred", error, "error")
+                            //swal.fire("Error occurred", error, "error")
+                            alert("Error occurred")
                             ClearMember();
                             result = false;
                         }
@@ -454,7 +455,6 @@
                     //debugger
                 }
             }
-
             function TransferInMember(data) {
                 if (data != null) {
                     //debugger
@@ -476,38 +476,37 @@
                     $("#MaxOpenAmt").val(data.MaxOpenAmt)
                     $("#IntType").val("01");
                     $("#ItemNo").val("0");
+                    $("#TxnDateTH").val(conversion.DateInBE(data.TxnDate));
                     document.getElementById("TTxnCode").focus();
                 }
             }
-
             function ClearMember() {
-                $("#CoopID").val();
-                $("#MemberID").val();
-                $("#Name").val();
-                $("#AccountName").val();
-                $("#IDCard").val();
-                $("#Telephone").val();
-                $("#Mobile").val();
+                //debugger
+                $("#CoopID").val("");
+                $("#MemberID").val("");
+                $("#Name").val("");
+                $("#AccountName").val("");
+                $("#IDCard").val("");
+                $("#Telephone").val("");
+                $("#Mobile").val("");
 
-                $("#BirthDateTH").val();
-                $("#ApplyDateTH").val();
+                $("#BirthDateTH").val("");
+                $("#ApplyDateTH").val("");
 
-                $("#Filestatus").val();
-                $("#IntType").val();
-                $("#ItemNo").val();
+                $("#Filestatus").val("");
+                $("#IntType").val("");
+                $("#ItemNo").val("");
+                $("#TxnDateTH").val("");
             }
-
-            function ClearScreen() {
-                ClearMember();
-                $("#TTxnCode").val();
-                $("#Descript").val();
-                $("#TxnDateTH").val();
-                $("#AccountNo").val();
-                $("#Amt").val();
-                $("#IntType").val();
+            function ClearTxn() {
+                //ClearMember();
+                $("#TTxnCode").val("");
+                $("#Descript").val("");
+                $("#AccountNo").val("");
+                $("#Amt").val("");
+                $("#IntType").val("");
                 document.getElementById("DepositTypeName").focus();
             }
-
             $("#TTxnCode").keyup(function (e) {
                 //debugger
                 if (event.keyCode === 13) {
@@ -517,10 +516,10 @@
                     //OtxDepositCalcInt(string AccNo, string BackDate)
                 }
             });
-
             function TxnCodeChange(tCode) {
                 //debugger
-               $.post('@Url.Action("TransferInTxnCodeDEP", "TxnCode")', { tCode }, function (txndata) {
+                var proName = "OpenDeposit";
+                $.post('@Url.Action("TransferInTxnCodeDEPOpen", "TxnCode")', { txnCode: tCode, progName: proName }, function (txndata) {
                     if (txndata != null) {
                         //debugger
                         //alert("รหัสรายการ ( " + txndata[1].TTXnCode + " " + txndata[1].Descript + ")");
@@ -530,16 +529,15 @@
                         alert("ไม่พบรหัสรายการ (" + tCode + ") โปรดตรวจสอบ!")
                     }
                 });
-                $.post('@Url.Action("ReadCoop", "Coop")', { tCode }, function (data) {
+                @*$.post('@Url.Action("ReadCoop", "Coop")', { tCode }, function (data) {
                     //debugger
                     if (data != null) {
                         //debugger
                         //alert("รหัสรายการ ( " + txndata[1].TTXnCode + " " + txndata[1].Descript + ")");
                         $("#TxnDateTH").val(conversion.DateInBE(data[1].SystemDate));
                     }
-                });
+                });*@
             }
-
             function TransferInTxnCode(data) {
                 //debugger
                 $("#Descript").val(data.TTxnCode);
@@ -549,49 +547,59 @@
                 $("#AbbCode").val(data.AbbCode);
                 document.getElementById("Amt").focus();
             }
-
             $("#Descript").click(function (e) {
                 //debugger
                 $("#TTxnCode").val($("#Descript").val());
                 document.getElementById("Amt").focus();
             });
-
             $("#btnSave").click(function (e) {
                 e.preventDefault();
                 //debugger
                 var MemID = $("#MemberID").val();
                 var Name = $("#Name").val();
                 var TxnCode = $("#TTxnCode").val();
+                var OCFlag = $("#OCFlag").val();
                 var Amt = numeric.txt2DBL($("#Amt").val());
                 var MinOpenAmt = numeric.txt2DBL($("#MinOpenAmt").val());
                 var MaxOpenAmt = numeric.txt2DBL($("#MaxOpenAmt").val());
+                var msg = "";
                 if ((MemID == undefined || MemID == '' || MemID == null)) {
-                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    msg = "ทะเบียนสมาชิก";
                     return false;
                 }
                 if ((Name == undefined || Name == '' || Name == null)) {
-                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    msg = "ชื่อสมาชิก";
                     return false;
                 }
                 if ((TxnCode == undefined || TxnCode == '' || TxnCode == null)) {
-                    swal.fire("โปรดบันทึก", "รหัสรายการ", "warning")
+                    msg = "รหัสรายการ";
+                    return false;
+                }
+                if ((OCFlag == undefined || OCFlag == '' || OCFlag == null)) {
+                    msg = "รหัสรายการ";
                     return false;
                 }
                 if ((Amt == undefined || Amt == '' || Amt == null || Amt == 0)) {
-                    swal.fire("โปรดบันทึก", "รหัสรายการ", "warning")
+                    msg = "จำนวนเงินเปิดบัญชี";
                     return false;
                 }
                 else {
                     //debugger
                     if (Amt <= MinOpenAmt) {
-                        swal.fire("จำนวนเงินฝาก", "จำนวนเงินฝาก น้อยกว่า เงินเปิดบัญชีขั้นต่ำสุด", "warning")
+                        //swal.fire("จำนวนเงินฝาก", "จำนวนเงินฝาก น้อยกว่า เงินเปิดบัญชีขั้นต่ำสุด", "warning");
+                        alert("จำนวนเงินฝาก น้อยกว่า เงินเปิดบัญชีขั้นต่ำสุด");
                         return false;
                     }
                     //debugger
                     if (Amt >= MaxOpenAmt) {
-                        swal.fire("จำนวนเงินฝาก", "จำนวนเงินฝาก มากกว่า เงินเปิดบัญชีขั้นสูงสุด", "warning")
+                        //swal.fire("จำนวนเงินฝาก", "จำนวนเงินฝาก มากกว่า เงินเปิดบัญชีขั้นสูงสุด", "warning")
+                        alert("จำนวนเงินฝาก มากกว่า เงินเปิดบัญชีขั้นสูงสุด");
                         return false;
                     }
+                }
+                if (msg.length > 0) {
+                    alert(" โปรดตรวจสอบ! \n" + msg);
+                    return;
                 }
                 //debugger
                 var result = false;
@@ -632,24 +640,29 @@
                                     $("#AccountNo").val(data[1].AccountNo);
                                     $("#BookNo").val(data[1].BookNo);
                                     //debugger
-                                    swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
-                                    ClearScreen();
+                                    //swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    alert("บันทึกข้อมูลสำเร็จแล้ว");
+                                    ClearMember();
+                                    ClearTxn();
                                     result = true;
                                 }
                             }
                             else {
-                                swal.fire("Warning", data[0].Message, "warning");
+                                //swal.fire("Warning", data[0].Message, "warning");
+                                alert(data[0].Message);
                                 result = false;
                             }
                         } else {
                             //debugger
-                            swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            //swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            alert("ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ");
                             result = false;
                         }
                     },
                     error: function (xhr, status, error) {
                         //debugger
-                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        //swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        alert("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)");
                         result = false;
                     }
                 });

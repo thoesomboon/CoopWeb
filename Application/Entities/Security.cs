@@ -28,7 +28,5 @@ namespace Coop.Entities
         public string OwnerName { get; set; }
         public string Area { get; set; }
         public Nullable<decimal> Value { get; set; }
-    
-        public virtual Loan Loan { get; set; }
     }
 }

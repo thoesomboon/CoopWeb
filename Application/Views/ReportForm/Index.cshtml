@@ -1,0 +1,306 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "รายงานบัญชีเงินฝาก";
+    //Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model IEnumerable<Coop.Entities.Deposit>
+
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@*@using (Html.BeginForm("Index", "LoanType", FormMethod.Post, new { @class = "form-horizontal" }))*@
+
+@using (Html.BeginForm("Index", "ReportDaily", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+<div class="m-grid__item m-grid__item--fluid m-wrapmem">
+    @*BEGIN: Subheader*@
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                    <li class="m-nav__item m-nav__item--home">
+                        <a href="#" class="m-nav__link m-nav__link--icon">
+                            <i class="m-nav__link-icon la la-home"></i>
+                        </a>
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="#" class="m-nav__link">
+                            <span class="m-nav__link-text">@Text.ProgramName</span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">></li>
+                    <li class="m-nav__item">
+                        <a href="#" class="m-nav__link">
+                            <span class="m-nav__link-text">BatMthLoan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END: Subheader -->
+    @*<table>
+        <tr>
+            <th>
+                @html.DisplayNameFor(model => model.AccountNo)
+            </th>
+            <th>
+                @html.DisplayNameFor(model => model.MemberID)
+            </th>
+            <th>
+                @html.DisplayNameFor(model => model.AccountName)
+            </th>
+            <th>
+                @html.DisplayNameFor(model => model.OpenDate)
+            </th>
+            <th>
+                @html.DisplayNameFor(model => model.LedgerBal)
+            </th>
+        </tr>*@
+    @*@foreach (var item in model)
+            {
+                <tr>
+                    <td>
+                        @html.DisplayNameFor(modelItem => item.AccountNo)
+                    </td>
+                    <td>
+                        @html.DisplayNameFor(modelItem => item.MemberID)
+                    </td>
+                    <td>
+                        @html.DisplayNameFor(modelItem => item.AccountName)
+                    </td>
+                    <td>
+                        @html.DisplayNameFor(modelItem => item.OpenDate)
+                    </td>
+                    <td>
+                        @html.DisplayNameFor(modelItem => item.LedgerBal)
+                    </td>
+                </tr>
+            }
+        </table>*@
+    @*<div style="padding:10px; border:1px solid black">
+        <div><a href="@url.Action(" Report",new {id="PDF" })">Report to PDF</a></div>
+        <div><a href="@url.Action(" Report",new {id="Excel" })">Report to Excel</a></div>
+    </div>*@
+    <div class="" style="text-align:center">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group m-form__group row">
+                    <div class="col-md-6"></div>
+                    <div class="form-actions">
+                        <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnProcess">รายงาน<i class="fa"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    @*
+        <script src="~/styles/v50x/sweetalert2.all.js"></script>*@
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @*
+        <script src="~/Scripts/inputmask.min.js"></script>*@
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    @*
+        <script src="~/Scripts/CoopWeb/CoopWeb.js"></script>*@
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    @*
+        <script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*
+        <script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //debugger
+            $("#btnProcess").click(function (e) {
+                e.preventDefault();
+                if (confirm("กรูณายืนยันการออกรายงาน")) {
+                    debugger
+                    ReportManage.GenerateReport();
+                }
+            });
+        });
+        var ReportManage = {
+            GenerateReport: function () {
+                debugger
+                var jsonParam = "";
+                var serviceUrl = "../ReportDaily/GetDepositReport";
+                ReportManage.GetReport(serviceUrl, jsonParam, onfailed);
+
+                function onfailed(error) {
+                    alert(error);
+                }
+            },
+            GetReport(serviceUrl, jsonParams, errorCalback) {
+                debugger
+                jQuery.ajax({
+                    url: serviceUrl,
+                    async: false,
+                    type: "POST",
+                    data: "{" + jsonParams + "}",
+                    contentType: "application/json; charset=utf-8",
+                    success: function () {
+                        window.open('../Reports/ReportViewer.aspx', '_newtab');
+                    },
+                    error: errorCalback
+                });
+            }
+        }
+    </script>
+}

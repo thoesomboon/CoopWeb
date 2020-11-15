@@ -345,7 +345,7 @@
     $(document).ready(function () {
         //debugger
         $("#DepositTypeName").click(function (e) {
-            debugger
+            //debugger
             var depTypeID = $("#DepositTypeName").val();
             $.post('@Url.Action( "GetParam", "BatMthDeposit")', { DepositTypeID : depTypeID }, function (data) {
                 //debugger

@@ -24,7 +24,10 @@ namespace Coop.Models.Repository
         OtxDepositModel ReadOtxDeposit(string AccNo);
         bool UpdateOtxDeposit(DepositModel model);
         bool UpdateOtxDepositPrintBook(DepositModel model);
-        TransactionResultModel sp_BatPeriodDepositIntDue(int coopId, string depTypeID, DateTime calcDate, int userID, string branchID, string ProgName, string WorkId);
+        TransactionResultModel Sp_BatPeriodDepositIntDue(int coopId, string depTypeID, DateTime calcDate, int userID, string branchID, string ProgName, string WorkId);
+        TransactionResultModel Sp_BatTrfMilk2Deposit(int coopId, DateTime calcDate, string branchID, int userID, string WorkId);
+        TransactionResultModel sp_BatPeriodSpecialClearTimeWDL(int CoopId, int userID);
+        TransactionResultModel Sp_BatYrDepositUnpayInt(int copId, DateTime calcDate);
     }
     public class DepositRepository : Repository<Deposit>, IDepositRepository
     {
@@ -344,40 +347,11 @@ namespace Coop.Models.Repository
             }
             return result;
         }
-
-        //public void stored_BatMtnDeposit(string coopId, string userId, int modeId, string StartRoute, string EndRoute, string StartmemberId, string EndmemberId, bool IsApp, bool IsShare, bool IsLoan, bool IsDeposit, bool IsPolicyLoan, bool IsPolicyLife)
-        //{
-        //    SqlConnection conn = APIConnection.APIConnection.ApplicationServicesConnection();
-        //    using (conn)
-        //    {
-        //        string SQLcommand = "EXECUTE [dbo].[BatMthSLD]" + " '" + coopId + "','" + userId + "','" + modeId + "','" + StartRoute + "','" + EndRoute + "','" + StartmemberId + "','" + EndmemberId + "','" + IsApp + "','" + IsShare + "','" + IsLoan + "','" + IsDeposit + "','" + IsPolicyLoan + "','" + IsPolicyLife + "'";
-
-        //        if (conn.State != ConnectionState.Open)
-        //        {
-        //            conn.Open();
-        //        }
-
-        //        SqlDataReader da;
-        //        SqlCommand sqlCommand = new SqlCommand(SQLcommand, conn);
-        //        //sqlCommand.CommandText = SQLcommand;
-        //        //sqlCommand.Connection = conn;
-        //        //sqlCommand.CommandType = System.Data.CommandType.Text;
-        //        sqlCommand.CommandTimeout = 500000;
-        //        da = sqlCommand.ExecuteReader();
-
-
-        //        if (conn.State != ConnectionState.Closed)
-        //        {
-        //            conn.Close();
-        //        }
-        //    }
-        //}
-        public TransactionResultModel sp_BatPeriodDepositIntDue(int coopId, string depTypeID, DateTime calcDate, int userID, string branchID, string ProgName, string WorkId)
+        public TransactionResultModel Sp_BatPeriodDepositIntDue(int coopId, string depTypeID, DateTime calcDate, int userID, string branchID, string ProgName, string WorkId)
         {
             //var stDate = 
             //set TimeOut
             ((System.Data.Entity.Infrastructure.IObjectContextAdapter)this._context).ObjectContext.CommandTimeout = 600;
-
             TransactionResultModel transactionResult = _context.Database
                 .SqlQuery<TransactionResultModel>(@"EXECUTE [dbo].[BatPeriodDepositIntDue] @CoopID, @DepTypeID, @CalcDate, @UserID, @BranchID, @ProgramName, @WorkStationId"
                     , new SqlParameter("@CoopID", coopId)
@@ -387,6 +361,41 @@ namespace Coop.Models.Repository
                     , new SqlParameter("@BranchID", branchID)
                     , new SqlParameter("@ProgramName", ProgName)
                     , new SqlParameter("@WorkStationId", WorkId)).FirstOrDefault();
+            return transactionResult;
+        }
+        public TransactionResultModel Sp_BatTrfMilk2Deposit(int coopId, DateTime calcDate, string branchID, int userID, string WorkId)
+        {
+            //var stDate = 
+            //set TimeOut
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)this._context).ObjectContext.CommandTimeout = 600;
+            TransactionResultModel transactionResult = _context.Database
+                .SqlQuery<TransactionResultModel>(@"EXECUTE [dbo].[BatTrfMilk2Deposit] @CoopID, @CalcDate, @BranchID, @UserID, @WorkStationId"
+                    , new SqlParameter("@CoopID", coopId)
+                    , new SqlParameter("@CalcDate", calcDate)
+                    , new SqlParameter("@UserID", userID)
+                    , new SqlParameter("@BranchID", branchID)
+                    , new SqlParameter("@WorkStationId", WorkId)).FirstOrDefault();
+            return transactionResult;
+        }
+        public TransactionResultModel sp_BatPeriodSpecialClearTimeWDL(int CoopId, int userID)
+        {
+            //var stDate = 
+            //set TimeOut
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)this._context).ObjectContext.CommandTimeout = 600;
+            TransactionResultModel transactionResult = _context.Database
+                .SqlQuery<TransactionResultModel>(@"EXECUTE [dbo].[BatPeriodSpecialClearTimeWDL] @CoopID, @UserID"
+                    , new SqlParameter("@UserID", userID)
+                    , new SqlParameter("@CoopID", CoopId)).FirstOrDefault();
+            return transactionResult;
+        }
+        public TransactionResultModel Sp_BatYrDepositUnpayInt(int copId, DateTime calcDate)
+        {
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)this._context).ObjectContext.CommandTimeout = 600;
+
+            TransactionResultModel transactionResult = _context.Database
+                .SqlQuery<TransactionResultModel>(@"EXECUTE [dbo].[BatYrDepositUnpayInt] @CoopId, @CalcDate"
+                    , new SqlParameter("@CoopID", copId)
+                    , new SqlParameter("@CalcDate", calcDate)).FirstOrDefault();
             return transactionResult;
         }
 

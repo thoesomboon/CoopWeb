@@ -273,6 +273,8 @@ namespace Coop.Controllers
                         TxnTime = DateTime.Now,
                         //WorkstationID = model.WorkstationID,
                         //BranchId = model.BranchId,
+                        UserID = AuthorizeHelper.Current.UserAccount().UserID,
+                        //BudgetYear = AuthorizeHelper.Current.CoopControls().BudgetYear,
                         OriginalProcess = "OtxDeposit",
                         Filestatus = "A",
                         MemberID = model.MemberID,

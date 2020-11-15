@@ -52,6 +52,7 @@ namespace Coop.Controllers
                 CoopID = coopData.CoopID,
                 BudgetYear = coopData.BudgetYear,
                 DueDate = coopData.SystemDate,
+                SystemDate = coopData.SystemDate,
                 UserId = AuthorizeHelper.Current.UserAccount().UserID
             };
             OperationResult oResult = new OperationResult();
@@ -69,16 +70,18 @@ namespace Coop.Controllers
 
             return Json(retObj, "application/json", JsonRequestBehavior.AllowGet);
         }
-        public JsonResult ProcessBatPeriodDepositIntDueBal(int coopId, string DepositTypeID, string budgetYear, DateTime calcDate)
+        public JsonResult ProcessBatPeriodDepositIntDue(int coopId, string DepositTypeID, string calcDateTH)
         {
             var userId = AuthorizeHelper.Current.UserAccount().UserID;
-            var workId = "X";
-            var branchID = "X";
+            var workId = "A001";
+            var branchID = "B01";
             var programName = "BatPeriodSpecialIntDue";
+            //DateTime calcDate = DateLib.DateInCE(calcDateTH);
+            DateTime calcDate = Convert.ToDateTime(calcDateTH);
             if (DepositTypeID == "SAV")
-                branchID = "BatPeriodSavingIntDue";
+                programName = "BatPeriodSavingIntDue";
 
-            _unitOfWork.Deposit.sp_BatPeriodDepositIntDue(coopId, DepositTypeID, calcDate, userId, branchID, programName, workId);
+            _unitOfWork.Deposit.Sp_BatPeriodDepositIntDue(coopId, DepositTypeID, calcDate, userId, branchID, programName, workId);
             //@CoopID, @DepTypeID, @CalcDate, @UserID, @BranchID, @ProgramName, @WorkStationId
             return Json("ประมวณผลเสร็จแล้ว", JsonRequestBehavior.AllowGet);
         }

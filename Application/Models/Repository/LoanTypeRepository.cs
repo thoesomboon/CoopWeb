@@ -14,6 +14,8 @@ namespace Coop.Models.Repository
         IQueryable<LoanTypeModel> ReadDetail();
         IQueryable<LoanTypeModel> ReadDetail(string LonID);
         bool NotActive(String LTypeID);
+        LoanTypeModel Create(LoanTypeModel model);
+        bool Update(LoanTypeModel model);
     }
 
     public class LoanTypeRepository : Repository<LoanType>, ILoanTypeRepository
@@ -82,6 +84,40 @@ namespace Coop.Models.Repository
             }
 
             return result;
+        }
+        public LoanTypeModel Create(LoanTypeModel model)
+        {
+            LoanTypeModel cModel = new LoanTypeModel
+            {
+                Filestatus = model.Filestatus,
+                CoopID = model.CoopID,
+                LoanTypeID = model.LoanTypeID,
+                LoanTypeName = model.LoanTypeName,
+                PrefixLoanID = model.PrefixLoanID,
+                MinLoanAmt = model.MinLoanAmt,
+                MaxLoanAmt = model.MaxLoanAmt,
+                IntType = model.IntType,
+                LastLoanID = model.LastLoanID,
+                LastRequestNo = model.LastRequestNo,
+                ChargeRate = model.ChargeRate,
+                DiscIntRate = model.DiscIntRate,
+
+                CreatedBy = AuthorizeHelper.Current.UserAccount().UserID,
+                CreatedDate = DateTime.Now,
+                ModifiedBy = AuthorizeHelper.Current.UserAccount().UserID,
+                ModifiedDate = DateTime.Now
+            };
+            var cLoan = ModelHelper<LoanType>.Apply(cModel);
+            return ModelHelper<LoanTypeModel>.Apply(ReadByCreate(cLoan));
+        }
+        public bool Update(LoanTypeModel model)
+        {
+            var c = ModelHelper<LoanType>.Apply(model);
+            c.ModifiedBy = AuthorizeHelper.Current.UserAccount().UserID;
+            c.ModifiedDate = System.DateTime.Now;
+            Update(c);
+            var result = _context.SaveChanges();
+            return result > 0;
         }
     }
 }

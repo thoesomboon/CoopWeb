@@ -126,7 +126,6 @@
         padding-top: 7px;
         font-family: Poppins,"Open Sans", sans-serif;
     }
-
     .align-right {
         text-align: right;
     }
@@ -489,18 +488,21 @@
                                         TransferInDeposit(data[1]);
                                     }
                                 } else {
-                                    swal.fire("Warning", data[0].Message, "warning")
+                                    //swal.fire("Warning", data[0].Message, "warning")
+                                    alert(data[0].Message)
                                     clearTextBox();
                                     return false;
                                 }
                             } else {
-                                swal.fire("Warning", "Something wrong, please check", "error")
+                                //swal.fire("Warning", "Something wrong, please check", "error")
+                                alert("มีบางอย่างไม่ถูกต้อง โปรดตรวจสอบ")
                                 clearTextBox();
                                 result = false;
                             }
                         },
                         error: function (xhr, status, error) {
-                            swal.fire("Error occurred", error, "error")
+                            //swal.fire("Error occurred", error, "error")
+                            alert("มี Error โปรดตรวจสอบ")
                             clearTextBox();
                             result = false;
                         }
@@ -592,7 +594,45 @@
                 $("#Amt3").val("");
                 $("#Filestatus").val("");
             }
-
+            $("#OpenDateTH").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (strDate != null) {
+                        if (!validation.isValidDateTH(strDate)) {
+                            alert("วันที่เปิดบัญชีไม่ถูกต้อง โปรดตรวจสอบ");
+                            this.focus();
+                        }
+                    }
+                }
+            })
+            $("#LastContactTH").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (strDate != null) {
+                        if (!validation.isValidDateTH(strDate)) {
+                            alert("วันที่ติดต่อครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                            this.focus();
+                        }
+                    }
+                }
+            })
+            $("#LastCalcIntTH").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (strDate != null) {
+                        if (!validation.isValidDateTH(strDate)) {
+                            alert("วันที่คำนวณดอกเบี้ยไม่ถูกต้อง โปรดตรวจสอบ");
+                            this.focus();
+                        }
+                    }
+                }
+            })
             $("#btnSave").click(function (e) {
                 e.preventDefault();
                 //debugger
@@ -605,6 +645,21 @@
                 }
                 if ((Name == undefined || Name == '' || Name == null)) {
                     swal.fire("โปรดบันทึก", "ชื่อ - นามสกุล", "warning")
+                    return false;
+                }
+                var openDate = $("#OpenDateTH").val();
+                if (!validation.isValidDateTH(openDate)) {
+                    alert("วันที่เปิดบัญชีไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var lastContact = $("#LastContactTH").val();
+                if (!validation.isValidDateTH(lastContact)) {
+                    alert("วันที่ติดต่อครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var lastCalcInt = $("#LastCalcIntTH").val();
+                if (!validation.isValidDateTH(lastCalcInt)) {
+                    alert("วันที่ติดต่อครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
                     return false;
                 }
                 //debugger
@@ -642,7 +697,7 @@
 
                     Filestatus: $("#Filestatus").val()
                 };
-                debugger
+                //debugger
                 $.ajax({
                     url: '/Deposit/TransferOutDeposit/',
                     type: 'POST',
@@ -661,21 +716,25 @@
                             if (data[0].Result && data[0].Message == 'Successful') {
                                 if (data[1] != null) {
                                     $("#AccountNo").val(data[1].AccountNo);
-                                    swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    //swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    alert("บันทึกข้อมูลสำเร็จแล้ว")
                                     result = true;
                                 }
                             }
                             else {
-                                swal.fire("Warning", data[0].Message, "warning");
+                                //swal.fire("Warning", data[0].Message, "warning");
+                                alert(data[0].Message)
                                 result = false;
                             }
                         } else {
-                            swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            //swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            alert("ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ")
                             result = false;
                         }
                     },
                     error: function (xhr, status, error) {
-                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        //swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        alert("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)")
                         result = false;
                     }
                 });

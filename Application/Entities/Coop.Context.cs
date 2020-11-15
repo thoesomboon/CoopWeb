@@ -21,11 +21,7 @@ namespace Coop.Entities
             : base("name=CoopWebEntities")
         {
         }
-
-        public CoopWebEntities(string nameOrConnectionString) : base(nameOrConnectionString)
-        {
-        }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -55,6 +51,7 @@ namespace Coop.Entities
         public virtual DbSet<AccessTransactions> AccessTransactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<MilkPayment> MilkPayment { get; set; }
+        public virtual DbSet<MilkText> MilkText { get; set; }
         public virtual DbSet<TtlfDeposit> TtlfDeposit { get; set; }
         public virtual DbSet<TtlfLoan> TtlfLoan { get; set; }
         public virtual DbSet<AccountPeriod> AccountPeriod { get; set; }
@@ -72,35 +69,6 @@ namespace Coop.Entities
         public virtual DbSet<Title> Title { get; set; }
         public virtual DbSet<UserTypes> UserTypes { get; set; }
         public virtual DbSet<SecurityType> SecurityType { get; set; }
-    
-        public virtual ObjectResult<BatMilk2Deposit_Result> BatMilk2Deposit(string coopID, Nullable<System.DateTime> calcDate, string branchId, string userId, string programName, string workStationId)
-        {
-            var coopIDParameter = coopID != null ?
-                new ObjectParameter("CoopID", coopID) :
-                new ObjectParameter("CoopID", typeof(string));
-    
-            var calcDateParameter = calcDate.HasValue ?
-                new ObjectParameter("CalcDate", calcDate) :
-                new ObjectParameter("CalcDate", typeof(System.DateTime));
-    
-            var branchIdParameter = branchId != null ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(string));
-    
-            var userIdParameter = userId != null ?
-                new ObjectParameter("UserId", userId) :
-                new ObjectParameter("UserId", typeof(string));
-    
-            var programNameParameter = programName != null ?
-                new ObjectParameter("ProgramName", programName) :
-                new ObjectParameter("ProgramName", typeof(string));
-    
-            var workStationIdParameter = workStationId != null ?
-                new ObjectParameter("WorkStationId", workStationId) :
-                new ObjectParameter("WorkStationId", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BatMilk2Deposit_Result>("BatMilk2Deposit", coopIDParameter, calcDateParameter, branchIdParameter, userIdParameter, programNameParameter, workStationIdParameter);
-        }
     
         public virtual ObjectResult<Nullable<System.DateTime>> BatMthDepositBal(Nullable<int> coopID, string depTypeID, Nullable<int> userId, string budgetYear, Nullable<int> period)
         {
@@ -127,15 +95,91 @@ namespace Coop.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("BatMthDepositBal", coopIDParameter, depTypeIDParameter, userIdParameter, budgetYearParameter, periodParameter);
         }
     
-        public virtual ObjectResult<BatPeriodSavingIntDue_Result> BatPeriodSavingIntDue(string coopID, string depTypeID, Nullable<System.DateTime> calcDate, string branchId, string userId, string programName, string workStationId)
+        public virtual ObjectResult<Nullable<System.DateTime>> BatMthLoanBal(Nullable<int> coopID, Nullable<int> userId, string budgetYear, Nullable<int> period)
+        {
+            var coopIDParameter = coopID.HasValue ?
+                new ObjectParameter("CoopID", coopID) :
+                new ObjectParameter("CoopID", typeof(int));
+    
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var budgetYearParameter = budgetYear != null ?
+                new ObjectParameter("BudgetYear", budgetYear) :
+                new ObjectParameter("BudgetYear", typeof(string));
+    
+            var periodParameter = period.HasValue ?
+                new ObjectParameter("Period", period) :
+                new ObjectParameter("Period", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("BatMthLoanBal", coopIDParameter, userIdParameter, budgetYearParameter, periodParameter);
+        }
+    
+        public virtual ObjectResult<BatPeriodCalcChargeAmt_Result> BatPeriodCalcChargeAmt(string coopID, Nullable<System.DateTime> calcDate, string userId, string workStationId)
         {
             var coopIDParameter = coopID != null ?
                 new ObjectParameter("CoopID", coopID) :
                 new ObjectParameter("CoopID", typeof(string));
     
+            var calcDateParameter = calcDate.HasValue ?
+                new ObjectParameter("CalcDate", calcDate) :
+                new ObjectParameter("CalcDate", typeof(System.DateTime));
+    
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
+    
+            var workStationIdParameter = workStationId != null ?
+                new ObjectParameter("WorkStationId", workStationId) :
+                new ObjectParameter("WorkStationId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BatPeriodCalcChargeAmt_Result>("BatPeriodCalcChargeAmt", coopIDParameter, calcDateParameter, userIdParameter, workStationIdParameter);
+        }
+    
+        public virtual ObjectResult<BatPeriodDepositIntDue_Result> BatPeriodDepositIntDue(Nullable<int> coopID, string depTypeID, Nullable<System.DateTime> calcDate, string userId, string branchId, string programName, string workStationId)
+        {
+            var coopIDParameter = coopID.HasValue ?
+                new ObjectParameter("CoopID", coopID) :
+                new ObjectParameter("CoopID", typeof(int));
+    
             var depTypeIDParameter = depTypeID != null ?
                 new ObjectParameter("DepTypeID", depTypeID) :
                 new ObjectParameter("DepTypeID", typeof(string));
+    
+            var calcDateParameter = calcDate.HasValue ?
+                new ObjectParameter("CalcDate", calcDate) :
+                new ObjectParameter("CalcDate", typeof(System.DateTime));
+    
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
+    
+            var branchIdParameter = branchId != null ?
+                new ObjectParameter("BranchId", branchId) :
+                new ObjectParameter("BranchId", typeof(string));
+    
+            var programNameParameter = programName != null ?
+                new ObjectParameter("ProgramName", programName) :
+                new ObjectParameter("ProgramName", typeof(string));
+    
+            var workStationIdParameter = workStationId != null ?
+                new ObjectParameter("WorkStationId", workStationId) :
+                new ObjectParameter("WorkStationId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BatPeriodDepositIntDue_Result>("BatPeriodDepositIntDue", coopIDParameter, depTypeIDParameter, calcDateParameter, userIdParameter, branchIdParameter, programNameParameter, workStationIdParameter);
+        }
+    
+        public virtual int BatPeriodSpecialClearTimeWDL()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BatPeriodSpecialClearTimeWDL");
+        }
+    
+        public virtual ObjectResult<BatTrfMilk2Deposit_Result> BatTrfMilk2Deposit(string coopID, Nullable<System.DateTime> calcDate, string branchId, string userId, string workStationId)
+        {
+            var coopIDParameter = coopID != null ?
+                new ObjectParameter("CoopID", coopID) :
+                new ObjectParameter("CoopID", typeof(string));
     
             var calcDateParameter = calcDate.HasValue ?
                 new ObjectParameter("CalcDate", calcDate) :
@@ -149,20 +193,32 @@ namespace Coop.Entities
                 new ObjectParameter("UserId", userId) :
                 new ObjectParameter("UserId", typeof(string));
     
-            var programNameParameter = programName != null ?
-                new ObjectParameter("ProgramName", programName) :
-                new ObjectParameter("ProgramName", typeof(string));
+            var workStationIdParameter = workStationId != null ?
+                new ObjectParameter("WorkStationId", workStationId) :
+                new ObjectParameter("WorkStationId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BatTrfMilk2Deposit_Result>("BatTrfMilk2Deposit", coopIDParameter, calcDateParameter, branchIdParameter, userIdParameter, workStationIdParameter);
+        }
+    
+        public virtual ObjectResult<BatTrfMilk2Loan_Result> BatTrfMilk2Loan(string coopID, Nullable<System.DateTime> calcDate, string userId, string workStationId)
+        {
+            var coopIDParameter = coopID != null ?
+                new ObjectParameter("CoopID", coopID) :
+                new ObjectParameter("CoopID", typeof(string));
+    
+            var calcDateParameter = calcDate.HasValue ?
+                new ObjectParameter("CalcDate", calcDate) :
+                new ObjectParameter("CalcDate", typeof(System.DateTime));
+    
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
     
             var workStationIdParameter = workStationId != null ?
                 new ObjectParameter("WorkStationId", workStationId) :
                 new ObjectParameter("WorkStationId", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BatPeriodSavingIntDue_Result>("BatPeriodSavingIntDue", coopIDParameter, depTypeIDParameter, calcDateParameter, branchIdParameter, userIdParameter, programNameParameter, workStationIdParameter);
-        }
-    
-        public virtual int BatPeriodSpecialClearTimeWDL()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BatPeriodSpecialClearTimeWDL");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BatTrfMilk2Loan_Result>("BatTrfMilk2Loan", coopIDParameter, calcDateParameter, userIdParameter, workStationIdParameter);
         }
     
         public virtual ObjectResult<Nullable<System.DateTime>> BatYrDepositBal(Nullable<int> coopID, string depTypeID, Nullable<int> userId, string budgetYear, Nullable<int> period1, Nullable<int> period2)

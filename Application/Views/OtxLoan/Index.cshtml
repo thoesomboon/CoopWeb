@@ -484,18 +484,18 @@
     <script type="text/javascript">
     $(document).ready(function () {
         /* Read Loan*/
-        ////debugger
+        //debugger
         $("#LoanID").keyup(function (e) {
-            ////debugger
+            //debugger
             if (event.keyCode === 13) {
                 e.preventDefault();
-                debugger
+                //debugger
                 LoanIDChange(this.value);
             }
         });
 
         function LoanIDChange(lonVal) {
-            ////debugger
+            //debugger
             var lonID = lonVal;
             if (lonID != undefined && lonID != '' && lonID != null) {
                 var aData = {
@@ -503,7 +503,7 @@
                     LoanID: lonID
                 };
                 //alert(aData);
-                debugger
+                //debugger
                 $.ajax({
 
                     url: '/OtxLoan/TransferInLoan/',
@@ -523,21 +523,24 @@
                             if (data[0].Result && data[0].Message == 'Successful') {
                                 if (data[1] != null) {
                                     TransferInLoan(data[1]);
-                                    ////debugger
+                                    //debugger
                                 }
                             } else {
-                                swal.fire("Warning", data[0].Message, "warning")
+                                //swal.fire("Warning", data[0].Message, "warning")
+                                alert(data[0].Message);
                                 clearTextBox();
                                 return false;
                             }
                         } else {
-                            swal.fire("Warning", "พบข้อผิดพลาด บางประการ", "error")
+                            //swal.fire("Warning", "พบข้อผิดพลาด บางประการ", "error")
+                            alert("พบข้อผิดพลาด บางประการ");
                             clearTextBox();
                             result = false;
                         }
                     },
                     error: function (xhr, status, error) {
-                        swal.fire("Error occurred", error, "error")
+                        //swal.fire("Error occurred", error, "error")
+                        alert("พบข้อผิดพลาด บางประการ");
                         clearTextBox();
                         result = false;
                     }
@@ -648,7 +651,7 @@
         }
 
         $("#TTxnCode").keyup(function (e) {
-            ////debugger
+            //debugger
             if (event.keyCode === 13) {
                 e.preventDefault();
                 //debugger
@@ -672,7 +675,7 @@
         }
 
         function TransferInTxnCode(data) {
-            ////debugger
+            //debugger
             $("#Descript").val(data.TTxnCode);
             $("#CDCode").val(data.CDCode);
             $("#OCFlag").val(data.OCFlag);
@@ -684,11 +687,22 @@
             document.getElementById("Amt1").focus();
         }
 
-        $("#Amt1").keyup(function (e) {
-            ////debugger
+        $("#TxnDateTH").keyup(function (e) {
+            //debugger
             if (event.keyCode === 13) {
                 e.preventDefault();
-                ////debugger
+                var strDate = this.value;
+                if (!validation.isValidDateTH(strDate)) {
+                    alert("วันที่ทำรายการไม่ถูกต้อง โปรดตรวจสอบ");
+                    this.focus();
+                }
+            }
+        });
+        $("#Amt1").keyup(function (e) {
+            //debugger
+            if (event.keyCode === 13) {
+                e.preventDefault();
+                //debugger
                 if (this.value > 0) {
                     CalcTxnAmt(this.value);
                     //Save();
@@ -696,7 +710,7 @@
                 else {
                     alert("จำนวนเงินไม่ถูกต้อง โปรดตรวจสอบ!")
                 }
-                ////debugger
+                //debugger
                 //$("#TTxnCode").focus;
             }
         });
@@ -820,9 +834,8 @@
             $("#Filestatus").val(Filestatus);
             //debugger
         }
-
         $("#TxnDateTH").keyup(function (e) {
-            debugger
+            //debugger
             if (event.keyCode === 13) {
                 e.preventDefault();
                 var strDate = this.value;
@@ -836,7 +849,7 @@
         $("#btnSave").click(function (e) {
             e.preventDefault();
             if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
-                debugger
+                //debugger
                 var msg = "";
                 var lonID = $("#LoanID").val();
                 var MemID = $("#MemberID").val();
@@ -862,7 +875,7 @@
                     alert(" โปรดตรวจสอบ! \n" + msg);
                     return;
                 }
-                debugger
+                //debugger
                 var result = false;
                 var aData = {
                     CoopID: $("#CoopID").val(),
@@ -898,7 +911,7 @@
                     TxnDateTH: $("#TxnDateTH").val(),
                     Amt1: numeric.txt2DBL($("#Amt1").val())
                 };
-                debugger
+                //debugger
                 $.ajax({
                     url: '/OtxLoan/TransferOutOtxLoan/',
                     type: 'POST',
@@ -916,7 +929,7 @@
                         if (status == 'success' && data != null && data[0] != null) {
                             if (data[0].Result && data[0].Message == 'Successful') {
                                 if (data[1] != null) {
-                                    debugger
+                                    //debugger
                                     //swal.fire("ข้อมูลบัญชีเงินฝาก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
                                     alert("บันทึกข้อมูลสำเร็จแล้ว");
                                     clearTextBox();

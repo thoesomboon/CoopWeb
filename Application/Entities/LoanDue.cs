@@ -25,9 +25,5 @@ namespace Coop.Entities
         public System.DateTime DueDate { get; set; }
         public Nullable<decimal> LoanDueAmt { get; set; }
         public Nullable<decimal> BFLoanDueAmt { get; set; }
-        public Nullable<decimal> BFLoanDueAmtBeforeUPD { get; set; }
-        public Nullable<decimal> BFLoanDueAmtAfterUPD { get; set; }
-    
-        public virtual Loan Loan { get; set; }
     }
 }

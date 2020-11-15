@@ -82,6 +82,6 @@ namespace Coop.Controllers
             //_unitOfWork.MonthBalanceDeposit.BatMthDepositBal(coopId, dTypeID, (DateTime)sDate, (DateTime)eDate, userId, budgetYear, period);
             _unitOfWork.YearBalanceDeposit.sp_BatYrDepositBal(coopId, DepositTypeID, userId, budgetYear, period1, period2);
             //_unitOfWork.MonthBalanceDeposit.sp_BatMthDepositBal(coopId, userId, budgetYear, period);
-            return Json("ประมวณผลเสร็จแล้ว", JsonRequestBehavior.AllowGet);
+            return Json("** ประมวณผลเสร็จแล้ว **", JsonRequestBehavior.AllowGet);
         }
     }}

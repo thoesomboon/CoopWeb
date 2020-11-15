@@ -90,7 +90,7 @@ namespace Coop.Models.POCO
         public Nullable<decimal> NetAmt { get; set; }
         public Nullable<decimal> CFLedgerBal { get; set; }
         public Nullable<decimal> ChequeAmt { get; set; }
-        public string BookFlag { get; set; }
+        public bool BookFlag { get; set; }
         public string ECFlag { get; set; }        
         public string InstrumentType { get; set; }
         public Nullable<System.DateTime> ChequeDate { get; set; }        

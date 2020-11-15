@@ -17,8 +17,6 @@ namespace Coop.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Member()
         {
-            this.Loan = new HashSet<Loan>();
-            this.MonthBalanceLoan = new HashSet<MonthBalanceLoan>();
             this.RequestLoan = new HashSet<RequestLoan>();
         }
     
@@ -51,14 +49,10 @@ namespace Coop.Entities
         public Nullable<int> DiscIntFlag { get; set; }
         public Nullable<int> MaritalStatus { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Loan> Loan { get; set; }
         public virtual District District { get; set; }
         public virtual Province Province { get; set; }
         public virtual SubDistrict SubDistrict { get; set; }
         public virtual Title Title { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MonthBalanceLoan> MonthBalanceLoan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RequestLoan> RequestLoan { get; set; }
     }

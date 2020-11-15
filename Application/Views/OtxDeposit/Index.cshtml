@@ -329,20 +329,24 @@
                                 </div>
                             </div>
                             @*-- Transaction detail --*@
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group m-form__group row">
-                                        <label class="control-label col-md-2 align-left" style="padding-left: 0px!important;">รหัสรายการ</label>
-                                        @Html.TextBoxFor(m => m.TTxnCode, new { @class = "form-control form-control-inline input-small col-md-2 align-left", @placeholder = "รหัสรายการ" })
-                                        @Html.DropDownListFor(m => m.Descript, ViewBag.TxnCodeList as SelectList, "-- รหัสรายการ --", new { @class = "form-control form-control-inline input-small col-md-6" })
-                                    </div>
-                                    <div class="col-md-4">
-                                    </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group m-form__group row">
+                                    <label class="control-label col-md-2 align-left" style="padding-left: 0px!important;">รหัสรายการ</label>
+                                    @Html.TextBoxFor(m => m.TTxnCode, new { @class = "form-control form-control-inline input-small col-md-2 align-left", @placeholder = "รหัสรายการ" })
+                                    @Html.DropDownListFor(m => m.Descript, ViewBag.TxnCodeList as SelectList, "-- รหัสรายการ --", new { @class = "form-control form-control-inline input-small col-md-4" })
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group m-form__group row">
+                                    <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">รายการมีสมุด</label>
+                                    @Html.CheckBoxFor(m => m.BookFlag, new { @class = "form-control form-control-inline input-small col-md-1 align-left", @checked = "checked" })
+                                </div>
+                            </div>
+                        </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group m-form__group row">
+                                    <div class="form-group m-form__group row">มี
                                         <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">วันที่ทำรายการ</label>
                                         @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="TxnDateTH" name="TxnDateTH" placeholder="วันที่ทำรายการ (พ.ศ. 4 หลัก)">*@
                                         @Html.TextBoxFor(m => m.TxnDateTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @type = "Text", @placeholder = "วันที่ทำรายการ" })
@@ -587,6 +591,7 @@
             $("#TxnDateTH").val("");
             $("#BackDateTH").val("");
             $("#CDCode").val("");
+            $("#BookFlag").val("");
             document.getElementById("AccountNo").focus();
         }
 
@@ -603,7 +608,7 @@
                 //debugger
                 TxnCodeChange(this.value);
                 //OtxDepositCalcInt(string AccNo, string BackDate)
-                document.getElementById("Amt").focus();
+                //document.getElementById("Amt").focus();
             }
         });
 
@@ -615,6 +620,7 @@
                     //alert("รหัสรายการ ( " + txndata[1].TTXnCode + " " + txndata[1].Descript + ")");
                     TransferInTxnCode(txndata[1]);
                 } else {
+                    //debugger
                     //alert("ไม่พบข้อมูลรหัสรายการ ( " + tCode + " )");
                     alert("ไม่พบรหัสรายการ (" + tCode + ") โปรดตรวจสอบ!")
                 }
@@ -622,12 +628,13 @@
         }
 
         function TransferInTxnCode(data) {
-            debugger
+           //debugger
             $("#Descript").val(data.TTxnCode);
             $("#CDCode").val(data.CDCode);
             $("#OCFlag").val(data.OCFlag);
             $("#AbbCode").val(data.AbbCode);
             $("#InstrumentType").val(data.InstrumentType);
+            //$("#BookFlag").val(true);
 
             var HoldAmt = numeric.txt2DBL($("#HoldAmt").val());
             var LedgerBal = numeric.txt2DBL($("#LedgerBal").val());
@@ -635,77 +642,91 @@
             var AccInt = numeric.txt2DBL($("#AccInt").val());
 
             if (data.CDCode == "D" && data.OCFlag == "C") {
-                debugger
+                //debugger
                 if ((HoldAmt = 0) || (LedgerBal != AvailBal)) {
                     //alert("ไม่สามารถปิดบัญชีได้ เพราะมียอดเงินอายัด หรือมีเช็คเคลียริ่งค้าง --! โปรดตรวจสอบ !--");
                     alert("ไม่สามารถปิดบัญชีได้ เพราะมียอดเงินอายัด หรือมีเช็คเคลียริ่งค้าง โปรดตรวจสอบ!")
                     //$("#btnSave").prop("disabled", false);
                 }
                 else {
-                    debugger
+                    //debugger
                     $("#Amt").val(LedgerBal + AccInt)
                 }
             };
+            document.getElementById("Amt").focus();
         }
 
         $("#Amt").keyup(function (e) {
             //debugger
             if (event.keyCode === 13) {
                 e.preventDefault();
-                //debugger
+               //debugger
                 if (this.value > 0) {
-                    debugger
-                    var Charge = CalcChargeAmt(this.value);
-                    $("#ChargeAmt").val(Charge);
+                   //debugger
+                    var cCode = $("#CDCode").val();
+                    if (cCode == "D") {
+                        var chargeAmt = CalcChargeAmt(this.value);
+                        $("#ChargeAmt").val(chargeAmt);
+                    }
+                    else {
+                        $("#ChargeAmt").val("");
+                    }
+                    //$("#ChargeAmt").val(Charge);
                     CalcTxnAmt(this.value);
-                    //Save();
                 }
                 else {
                     alert("จำนวนเงินไม่ถูกต้อง โปรดตรวจสอบ!")
                 }
                 //debugger
                 //$("#TTxnCode").focus;
+                if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
+                    Save();
+                }
             }
         });
 
         function CalcChargeAmt(tAmt) {
-            //debugger
+           //debugger
+            var ChargeAmt = 0;
+            var cCode = $("#CDCode").val();
+            //if (cCode == "C") {
+            //    return ChargeAmt;
+            //}
             var MonthMaxWithdrawAmt = numeric.txt2DBL($("#MonthMaxWithdrawAmt").val());
             var MonthMaxWithdrawTimes = numeric.txt2DBL($("#MonthMaxWithdrawTimes").val());
             var MinChargeAmt = numeric.txt2DBL($("#MinChargeAmt").val());
             var MaxChargeAmt = numeric.txt2DBL($("#MaxChargeAmt").val());
             var WithdrawChargePercent = numeric.txt2DBL($("#WithdrawChargePercent").val());
-
-            //debugger
-            var MonthMaxWithdrawAmt = numeric.txt2DBL($("#MonthMaxWithdrawAmt").val());
-            var MonthMaxWithdrawTimes = numeric.txt2DBL($("#MonthMaxWithdrawTimes").val());
+            var MonthWithdrawAmt = numeric.txt2DBL($("#MonthWithdrawAmt").val());
+            var MonthWithdrawTimes = numeric.txt2DBL($("#MonthWithdrawTimes").val());
 
             //debugger
             var Amt2BeCharged = 0;
-            var ChargeAmt = 0;
             if (WithdrawChargePercent != null) {
-                if (MonthMaxWithdrawAmt != null && MonthMaxWithdrawAmt + tAmt > MonthMaxWithdrawAmt) {
+                if (MonthWithdrawAmt != null && MonthWithdrawAmt + tAmt > MonthMaxWithdrawAmt) {
                     Amt2BeCharged = tAmt;
                 }
-                if (MonthMaxWithdrawTimes != null && MonthMaxWithdrawTimes + 1 > MonthMaxWithdrawTimes) {
+                if (MonthWithdrawTimes != null && MonthWithdrawTimes + 1 > MonthMaxWithdrawTimes) {
                     Amt2BeCharged = tAmt;
                 }
-                ChargeAmt = Amt2BeCharged * WithdrawChargePercent / 100;
-                if (ChargeAmt < MinChargeAmt) {
-                    ChargeAmt = MinChargeAmt;
-                }
-                else {
-                    if (ChargeAmt > MaxChargeAmt) {
-                        ChargeAmt = MaxChargeAmt;
+                if (Amt2BeCharged > 0) {
+                    ChargeAmt = Amt2BeCharged * WithdrawChargePercent / 100;
+                    if (ChargeAmt < MinChargeAmt) {
+                        ChargeAmt = MinChargeAmt;
+                    }
+                    else {
+                        if (ChargeAmt > MaxChargeAmt) {
+                            ChargeAmt = MaxChargeAmt;
+                        }
                     }
                 }
             }
-            //debugger
+           //debugger
             return ChargeAmt;
         };
 
         function CalcTxnAmt(TxnAmt) {
-            //debugger
+           //debugger
             var LedgerBal = numeric.txt2DBL($("#LedgerBal").val());
             var CDCode = $("#CDCode").val();
             var OCFlag = $("#OCFlag").val();
@@ -747,7 +768,11 @@
                 }
                 Debit = Amt;
             }
-            //debugger
+            if (ChargeAmt > 0) {
+                //var str = "ถอนมีค่าปรับ " + ChargeAmt + " โปรดตรวจสอบ";
+                alert("ถอนมีค่าปรับ " + ChargeAmt + " โปรดตรวจสอบ");
+            }
+           //debugger
             $("#Amt").val(Amt);
             $("#IntAmt").val(IntAmt);
             $("#ChargeAmt").val(ChargeAmt);
@@ -758,10 +783,34 @@
             $("#Filestatus").val(Filestatus);
             //debugger
         };
-
+        $("#TxnDateTH").keyup(function (e) {
+            //debugger
+            if (event.keyCode === 13) {
+                e.preventDefault();
+                var strDate = this.value;
+                if (!validation.isValidDateTH(strDate)) {
+                    alert("วันที่ทำรายการไม่ถูกต้อง โปรดตรวจสอบ");
+                    this.focus();
+                }
+            }
+        });
+        $("#BackDateTH").keyup(function (e) {
+            //debugger
+            if (event.keyCode === 13) {
+                e.preventDefault();
+                var strDate = this.value;
+                if (!validation.isValidDateTH(strDate)) {
+                    alert("วันที่ย้อนหลังไม่ถูกต้อง โปรดตรวจสอบ");
+                    this.focus();
+                }
+            }
+        });
         $("#btnSave").click(function (e) {
             e.preventDefault();
-            if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
+            Save();
+        });
+        function Save() {
+            //if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
                 //Save;
                 //debugger
                 var CDCode = $("#CDCode").val();
@@ -789,6 +838,10 @@
                     //error.push("รหัสรายการ ( " + $("#TTxnCode").val() + " ) ไม่ถูกต้อง");
                     msg = ("รหัสรายการ ( " + $("#TTxnCode").val() + " ) ไม่ถูกต้อง")
                 }
+                if ($("#Descript").val().length != 0) {
+                    //error.push("รหัสรายการ ( " + $("#TTxnCode").val() + " ) ไม่ถูกต้อง");
+                    msg = ("รหัสรายการ ( " + $("#TTxnCode").val() + " ) ไม่ถูกต้อง")
+                }
                 //debugger
                 if (CDCode == "C") {
                     if (TxnAmt < MinDepAmt) {
@@ -807,7 +860,7 @@
                             msg = "ไม่สามารถปิดบัญชีได้ เพราะมียอดเงินอายัด หรือมีเช็คเคลียริ่งค้าง โปรดตรวจสอบ!";
                         }
                     }
-                    debugger
+                    //debugger
                     if (OCFlag != "C") {
                         if (TxnAmt < MinWithdrawAmt) {
                             //error.push("จำนวนเงินถอน ( " + addCommas(TxnAmt) + " ) น้อยกว่า ถอนขั้นต่ำที่กำหนด ( " + addCommas(MinWithdrawAmt) + " )");
@@ -852,7 +905,8 @@
                     Filestatus: $("#Filestatus").val(),
                     InstrumentType: $("#InstrumentType").val(),
                     TypeOfDeposit: $("#TypeOfDeposit").val(),
-                    ChargeAmt: numeric.txt2DBL($("#ChargeAmt").val())
+                    ChargeAmt: numeric.txt2DBL($("#ChargeAmt").val()),
+                    BookFlag: $("#BookFlag").val()
                 };
                 //debugger
                 $.ajax({
@@ -880,6 +934,7 @@
                                     alert("บันทึกข้อมูลสำเร็จแล้ว");
                                     //        alert("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)");
                                     ClearTextBox();
+                                    $("#AccountNo").val("");
                                     result = true;
                                 }
                             }
@@ -902,8 +957,8 @@
                         result = false;
                     }
                 });
-            }
-        });
+            //}
+        };
     });
     </script>
 }

@@ -13,6 +13,9 @@ namespace Coop.Models.POCO
         public string DepositTypeName { get; set; }
         public string BudgetYear { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
+        public String DueDateTH { get; set; }
+        public Nullable<System.DateTime> SystemDate { get; set; }
+        public String SystemDateTH { get; set; }
         public int UserId { get; set; }
     }
 }

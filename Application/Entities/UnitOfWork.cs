@@ -62,7 +62,8 @@ namespace Coop.Entities
             //_context = new nDatabaseEntities(connectionString);
 
             string connectionString = ConfigurationManager.ConnectionStrings["CoopWebEntities"].ConnectionString;
-            _context = new CoopWebEntities(connectionString);
+            //_context = new CoopWebEntities(connectionString);
+            _context = new CoopWebEntities();
         }
         #region Generic Method
         public int Save()

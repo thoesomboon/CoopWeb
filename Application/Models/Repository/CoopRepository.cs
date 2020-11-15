@@ -11,7 +11,7 @@ namespace Coop.Models.Repository
     public interface ICoopControlRepository : IRepository<CoopControl>
     {
         IQueryable<CoopControlModel> ReadDetail();
-        //IQueryable<CoopControlModel> ReadDetail(String CopID);
+        IQueryable<CoopControlModel> ReadDetail(int CopID);
         bool Update(CoopControlModel model);
         bool UpdateReceiptNo(CoopControlModel model);
     }
@@ -57,13 +57,40 @@ namespace Coop.Models.Repository
             return CoopControl;
         }
 
-        //public IQueryable<CoopControlModel> ReadDetail(String CopID)
-        //{
-        //    var Coop = ReadDetail().Where(m => m.CoopID == CopID);
+        public IQueryable<CoopControlModel> ReadDetail(int CopID)
+        {
+            var Coop = ReadDetail().Where(m => m.CoopID == CopID);
 
-        //    return Coop;
-        //}
+            return Coop;
+        }
+        public bool DayClose(CoopControlModel model)
+        {
+            var uCoop = (from c in Read()
+                         where c.CoopID == model.CoopID
+                         select c).FirstOrDefault();
+            if (uCoop == null) { return false; }
+            uCoop.PrevSystemDate = model.PrevSystemDate;
+            uCoop.SystemDate = model.SystemDate;
+            uCoop.NextSystemDate = model.NextSystemDate;
 
+            uCoop.ModifiedBy = AuthorizeHelper.Current.UserAccount().UserID;
+            uCoop.ModifiedDate = System.DateTime.Now;
+
+            int returnVal = 0;
+            bool result = false;
+
+            try
+            {
+                returnVal = _context.SaveChanges();
+                result = returnVal > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return result;
+        }
         public bool Update(CoopControlModel model)
         {
             var uCoop = (from c in Read()
@@ -81,7 +108,7 @@ namespace Coop.Models.Repository
                 uCoop.PrevBudgetYear = model.PrevBudgetYear;
                 uCoop.BudgetYear = model.BudgetYear;
                 uCoop.AccountPeriod = model.AccountPeriod;
-                uCoop.SystemLogin = model.SystemLogin;
+                //uCoop.SystemLogin = model.SystemLogin;
                 uCoop.PrevSystemDate = model.PrevSystemDate;
                 uCoop.SystemDate = model.SystemDate;
                 uCoop.NextSystemDate = model.NextSystemDate;
@@ -99,6 +126,7 @@ namespace Coop.Models.Repository
                 uCoop.ManagerName = model.ManagerName;
                 uCoop.LastReceiptBookNo = model.LastReceiptBookNo;
                 uCoop.LastReceiptRunNo = model.LastReceiptRunNo;
+
                 uCoop.ModifiedBy = AuthorizeHelper.Current.UserAccount().UserID;
                 uCoop.ModifiedDate = System.DateTime.Now;
                         

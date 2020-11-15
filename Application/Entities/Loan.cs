@@ -14,15 +14,6 @@ namespace Coop.Entities
     
     public partial class Loan
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Loan()
-        {
-            this.LoanDue = new HashSet<LoanDue>();
-            this.MonthBalanceLoan = new HashSet<MonthBalanceLoan>();
-            this.Security = new HashSet<Security>();
-            this.TtlfLoan = new HashSet<TtlfLoan>();
-        }
-    
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
@@ -39,16 +30,16 @@ namespace Coop.Entities
         public Nullable<System.DateTime> LastCalcCharge { get; set; }
         public string IntType { get; set; }
         public Nullable<decimal> LoanAmt { get; set; }
-        public Nullable<decimal> BFBal { get; set; }
         public Nullable<decimal> LoanBal { get; set; }
+        public Nullable<decimal> BFBal { get; set; }
+        public Nullable<decimal> BFUnpayPrinciple { get; set; }
+        public Nullable<decimal> UnpayPrinciple { get; set; }
         public Nullable<decimal> BFInt { get; set; }
         public Nullable<decimal> BFUnpayInt { get; set; }
         public Nullable<decimal> UnpayInt { get; set; }
         public Nullable<decimal> BFCharge { get; set; }
         public Nullable<decimal> BFUnpayCharge { get; set; }
         public Nullable<decimal> UnpayCharge { get; set; }
-        public Nullable<decimal> BFUnpayPrinciple { get; set; }
-        public Nullable<decimal> UnpayPrinciple { get; set; }
         public Nullable<int> DiscIntFlag { get; set; }
         public Nullable<decimal> BFDiscInt { get; set; }
         public Nullable<decimal> BFUnpayDiscInt { get; set; }
@@ -60,16 +51,5 @@ namespace Coop.Entities
         public Nullable<decimal> YTDAccInt { get; set; }
         public Nullable<decimal> InstallAmt { get; set; }
         public Nullable<int> InstallMethodID { get; set; }
-    
-        public virtual LoanType LoanType { get; set; }
-        public virtual Member Member { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LoanDue> LoanDue { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MonthBalanceLoan> MonthBalanceLoan { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Security> Security { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TtlfLoan> TtlfLoan { get; set; }
     }
 }

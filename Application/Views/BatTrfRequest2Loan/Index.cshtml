@@ -1,0 +1,442 @@
+﻿@{
+    ViewBag.Title = @Text.ProgramName + "คำนวณลงรับดอกเบี้ยบัญชีเงินฝาก";
+    Layout = "~/Views/Shared/_Layout50x.cshtml";
+}
+@model Coop.Models.POCO.BatPeriodDepositIntDueModel
+
+@*BatMthDeposit คำนวณยอดรวมเงินฝากประจำเดือน
+        Programmer : Suwan T. 01-04-2020 - 30-06-2020
+        Development : 01-04-2020
+        Last update : 30-06-2020
+        Status :
+            "GetParam", "BatPeriodDepositIntDue" : Passed Testing
+            "ProcessBatPeriodDepositIntDueBal", "BatPeriodDepositIntDue" : Passed Testing
+            BatPeriodDepositIntDueBal : Passed Testing
+        สิ่งที่ต้องปรับปรุง
+        2020-9-18
+        1. None
+*@
+*@
+<style>
+    .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
+        padding-top: 0.5rem;
+    }
+
+    .m-portlet--head-sm.m-portlet .m-portlet__head {
+        height: 3rem;
+    }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-control {
+        padding: 0px 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        padding: .85rem 1.15rem;
+        line-height: 1.25;
+        font-size: 1rem;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    [readonly].form-control {
+        background-color: transparent;
+        color: blue;
+    }
+
+    .btn.m-btn--custom {
+        /*padding: 5px 5px 5px 5px !important;
+        font-size: 1rem;
+        font-weight: 200;*/
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .btn.m-btn--custom--submit {
+        padding: 5px 5px 5px 15px !important;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .custom-select {
+        display: inline-block;
+        width: 100%;
+        height: calc(2.0rem + 5px); /*customize for page layout*/
+        /*height: calc(2.95rem + 2px);*/
+        padding: .375rem 1.75rem .375rem .75rem;
+        line-height: 1.25;
+        color: #495057;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+        background-size: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /*appearance: none;*/
+    }
+
+    .m-subheader {
+        padding: 5px 5px 5px 5px;
+    }
+
+        .m-subheader .m-subheader__title {
+            display: inline-block;
+            padding: 5px 10px;
+            /*padding-left:;*/
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 1.55rem;
+            font-weight: 500;
+            vertical-align: middle;
+            margin: 0 15px 0px 0;
+            color: #3f4047;
+        }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        height: 30px;
+    }
+
+    .btn-lg.m-btn--icon-only.m-btn--icon, .btn-group-lg > .btn.m-btn--icon-only.m-btn--icon {
+        width: 43px;
+        height: 30px;
+    }
+
+    .m-body .m-content {
+        padding: 5px 5px;
+    }
+
+    .custom-select {
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .input-group-sm > .input-group-btn > select.btn, .input-group-sm > select.form-control, .input-group-sm > select.input-group-addon, select.input-sm {
+        height: 30px;
+    }
+
+    .form-control {
+        padding: 5px 5px;
+    }
+
+    .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0px;
+        padding-top: 7px;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        padding: .45rem .8rem;
+        font-size: 0.87rem;
+        line-height: 0.5;
+        border-radius: .2rem;
+    }
+
+    .m-btn--custom.btn {
+        padding: .75rem 2rem;
+        font-size: 1rem;
+        font-weight: 200;
+        font-family: Poppins,"Open Sans", sans-serif;
+    }
+
+    dt, kbd kbd, label {
+        font-weight: 400;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "BatMthDeposit", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="m-grid__item m-grid__item--fluid m-wrapmem">
+        @*BEGIN: Subheader*@
+        <div class="m-subheader ">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator"></h3>
+                    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                        <li class="m-nav__item m-nav__item--home">
+                            <a href="#" class="m-nav__link m-nav__link--icon">
+                                <i class="m-nav__link-icon la la-home"></i>
+                            </a>
+                        </li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">@Text.ProgramName</span>
+                            </a>
+                        </li>
+                        <li class="m-nav__separator">></li>
+                        <li class="m-nav__item">
+                            <a href="#" class="m-nav__link">
+                                <span class="m-nav__link-text">BatMthDeposit</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END: Subheader -->
+        <div class="m-content">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <span class="m-portlet__head-icon">
+                                    <i class="flaticon-interface-10"></i>
+                                    <i class="icon-equalizer font-red-sunglo"></i>
+                                </span>
+                                <div class="caption">
+                                    <h3 class="m-portlet__head-text m--font-transform-u m--font-success">
+                                        คำนวณยอดรวมเงินฝากประจำเดือน
+                                        <small class="m--font-metal m--font-transform-">Information...</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav"></ul>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-12" style="border: 1px solid lightgray; width: 50%; background-color: #f0fff0">
+                                <br />
+                                @*<label class="control-label col-md-12 align-content-center" style="padding-left: 0px!important;">โปรแกรมจะคำนวณยอดรวมเงินฝากประจำเดือน</label>*@
+                                <br />
+                                <label>           โปรแกรมจะคำนวณลงรับดอกเบี้ยบัญชีเงินฝาก             </label>
+                                <br />
+                                <label>         โปรดเลือกประเภทบัญชีเงินฝาก ปีงบประมาณ และวันที่ลงรับดอกเบี้ย            </label>
+                                <br />
+                                <label>         โปรดสำรองข้อมูล ... ก่อนการคำนวณลงรับดอกเบี้ยบัญชีเงินฝาก            </label>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="" style="text-align:center">
+                                <div class="row">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทบัญชี</label>
+                                            @Html.DropDownListFor(m => m.DepositTypeName, ViewBag.DepositTypeList as SelectList, "-- ประเภทบัญชี --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                </div>
+                            </div>
+                            <div class="" style="text-align:center">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ปีงบประมาณ</label>
+                                            @Html.TextBoxFor(m => m.BudgetYear, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "ปีงบประมาณ" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เดือน</label>
+                                            @Html.TextBoxFor(m => m.Period, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "เดือน" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <div class="col-md-6"></div>
+                                            <div class="form-actions">
+                                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnProcess">ประมวลผล <i class="fa"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="m-portlet__body">
+                            <div class="table-toolbar">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เลขที่ยัญชี</label>
+                                            @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control form-control-inline input-small col-md-4", @placeholder = "เลขที่ยัญชีเงินฝาก" })
+                                            @Html.HiddenFor(model => model.AccountNo)
+                                            @Html.ValidationMessageFor(m => m.AccountNo, "", new { @class = "help-block help-block-error required" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ชื่อบัญชี</label>
+                                            @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control form-control-inline input-small col-md-8", @placeholder = "ชื่อบัญชี" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">ประเภทบัญชี</label>
+                                            @Html.DropDownListFor(m => m.DepositTypeName, ViewBag.DepositTypeList as SelectList, "-- ประเภทบัญชี --", new { @class = "form-control form-control-inline input-small col-md-6" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group m-form__group row">
+                                            <div class="col-md-6"></div>
+                                            <div class="form-actions">
+                                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-info m-btn m-btn--custom--save" id="btnSave">บันทึกข้อมูล <i class="fa"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.CoopID)
+}
+@section StylesAndScript{
+
+    <script src="~/styles/global/plugins/jquery-ui/jquery-ui.min.js"></script>
+    @*<script src="~/styles/v50x/sweetalert2.all.js"></script>*@
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/styles/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @*<script src="~/Scripts/inputmask.min.js"></script>*@
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    @*<script src="~/Scripts/CoopWeb/CoopWeb.js"></script>*@
+
+    <link href="~/styles/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+
+    @*<script src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+    @*<link href="~/Content/jquery.dataTables.css" rel="stylesheet" />*@
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        //debugger
+        $("#DepositTypeName").click(function (e) {
+            //debugger
+            var depTypeID = $("#DepositTypeName").val();
+            $.post('@Url.Action( "GetParam", "BatMthDeposit")', { DepositTypeID : depTypeID }, function (data) {
+                //debugger
+                if (data != null) {
+                    //debugger
+                    TransferInBatMthDeposit(data[1]);
+                } else {
+                    alert("ไม่พบบัญชี (" + accNo + ") โปรดตรวจสอบ!")
+                }
+            });
+        });
+        function TransferInBatMthDeposit(data) {
+            //debugger
+            $("#CoopID").val(data.CoopID);
+            $("#BudgetYear").val(data.BudgetYear);
+            $("#Period").val(data.Period);
+            //$("#StartDate").val(conversion.DateInBE(data.StartDate));
+            //$("#EndDate").val(conversion.DateInBE(data.EndDate));
+        }
+        //$("#StartDate").keyup(function (e) {
+        //    //debugger
+        //    if (event.keyCode === 13) {
+        //        e.preventDefault();
+        //        var strDate = this.value;
+        //        if (!validation.isValidDateTH(strDate)) {
+        //            alert("วันที่เริ่มต้นไม่ถูกต้อง โปรดตรวจสอบ");
+        //            this.focus();
+        //        }
+        //    }
+        //});
+        //$("#EndDate").keyup(function (e) {
+        //    //debugger
+        //    if (event.keyCode === 13) {
+        //        e.preventDefault();
+        //        var strDate = this.value;
+        //        if (!validation.isValidDateTH(strDate)) {
+        //            alert("วันที่เริ่มต้นไม่ถูกต้อง โปรดตรวจสอบ");
+        //            this.focus();
+        //        }
+        //    }
+        //});
+        $("#btnProcess").click(function (e) {
+            e.preventDefault();
+            if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
+                //debugger
+                var copID = $("#CoopID").val();
+                var DepTypeID = $("#DepositTypeName").val();
+                var budgetYear = $("#BudgetYear").val();
+                var Period = $("#Period").val();
+                //var startDate = $("#StartDate").val();
+                //var endDate = $("#EndDate").val();
+                var msg = "";
+                if (DepTypeID == undefined || DepTypeID == '' || DepTypeID == null) {
+                    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                    msg = "ประเภทเงินฝาก";
+                }
+                if (Period == undefined || Period == '' || Period == null) {
+                    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                    msg = "เดือนที่คำนวณ";
+                }
+                //if (startDate == undefined || startDate == '' || startDate == null) {
+                //    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                //    msg = "วันที่เริมต้น";
+                //}
+                //if (endDate == undefined || endDate == '' || endDate == null) {
+                //    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
+                //    msg = "วันที่สิ้นสุด";
+                //}
+                if (msg.length > 0) {
+                    alert(" โปรดตรวจสอบ! \n" + msg);
+                    return;
+                }
+                //debugger
+                $.post('@Url.Action("ProcessBatMthDepositBal", "BatMthDeposit")',
+                    { CoopID: copID, DepositTypeID : DepTypeID, BudgetYear: budgetYear, Period: Period }, function (data) {
+                        if (data != null) {
+                            $("#btnProcess").show();
+                            alert("ประมวลผลเสร็จแล้ว");
+                            //pb.value(100);
+                            //clearInterval(interval);
+                        }
+                    }).fail(function () {
+                        alert("บันทีกข้อมูลผิดพลาด");
+                        $("#btnProcess").prop("disabled", false);
+                        //pb.value(0);
+                        //clearInterval(interval);
+                    });
+            }
+        });
+    });
+    </script>
+}

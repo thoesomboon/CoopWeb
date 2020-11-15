@@ -16,7 +16,7 @@ namespace Coop.Models.Repository
         IQueryable<TtlfDepositModel> ReadDetail(String accNo, System.DateTime startDate);
         TtlfDepositModel LogTtlfDeposit(TtlfDepositModel model);
         bool LogTtlfDesposit(int copID, DateTime sDate, int Seq, string oProcess, string status, string memID, string depTypeID, string AccNo, DateTime bDate,
-            decimal bfBal, decimal cr, decimal dr, decimal cfBal, decimal aInt, decimal chgAmt, int iNo, string bFlag, string refNo, string tCode, string cCode,
+            decimal bfBal, decimal cr, decimal dr, decimal cfBal, decimal aInt, decimal chgAmt, int iNo, bool bFlag, string refNo, string tCode, string cCode,
             string oFlag, string iType);
         IQueryable<TtlfDepositModel> ReadBySeqDesc(System.DateTime startDate);
     }
@@ -97,7 +97,7 @@ namespace Coop.Models.Repository
             return ModelHelper<TtlfDepositModel>.Apply(ReadByCreate(ttlfDeposit));
         }
         public bool LogTtlfDesposit(int copID, DateTime sDate, int Seq, string oProcess, string status, string memID, string depTypeID, string AccNo, DateTime bDate,
-            decimal bfBal, decimal cr, decimal dr, decimal cfBal, decimal aInt, decimal chgAmt, int iNo, string bFlag, string refNo, string tCode, string cCode,
+            decimal bfBal, decimal cr, decimal dr, decimal cfBal, decimal aInt, decimal chgAmt, int iNo, bool bFlag, string refNo, string tCode, string cCode,
             string oFlag, string iType)
         {
             TtlfDepositModel tModel = new TtlfDepositModel

@@ -511,18 +511,22 @@
                                         TransferInMember(data[1]);
                                     }
                                 } else {
-                                    swal.fire("Warning", data[0].Message, "warning")
+                                    //swal.fire("Warning", data[0].Message, "warning")
+                                    alert(data[0].Message)
+                                    //debugger
                                     ClearMember();
                                     return false;
                                 }
                             } else {
-                                swal.fire("Warning", "Something wrong, please check", "error")
+                                //swal.fire("Warning", "Something wrong, please check", "error")
+                                alert("Something wrong, please check")
                                 ClearMember();
                                 result = false;
                             }
                         },
                         error: function (xhr, status, error) {
-                            swal.fire("Error occurred", error, "error")
+                            //swal.fire("Error occurred", error, "error")
+                            alert("Error occurred")
                             ClearMember();
                             result = false;
                         }
@@ -533,7 +537,7 @@
 
             function TransferInMember(data) {
                 if (data != null) {
-                    debugger
+                    //debugger
                     $("#CoopID").val(data.CoopID);
                     $("#MemberID").val(data.MemberID);
                     $("#TitleName").val(data.TitleID);
@@ -561,25 +565,26 @@
             }
 
             function ClearMember() {
-                $("#MemberID").val();
-                $("#TitleName").val();
-                $("#Name").val();
-                $("#BirthDateTH").val();
-                $("#IDCard").val();
-                $("#Address").val();
-                $("#PostalCode").val();
-                $("#SubDistrictName").val();
-                $("#DistrictName").val();
-                $("#ProvinceName").val();
-                $("#Telephone").val();
-                $("#Mobile").val();
-                $("#LineID").val();
-                $("#ApplyDateTH").val();
-                $("#ResignDateTH").val();
-                $("#Salary").val();
-                $("#MemberGroupName").val();
-                $("#MemberTypeName").val();
-                $("#Filestatus").val();
+                //debugger
+                $("#MemberID").val("");
+                $("#TitleName").val("");
+                $("#Name").val("");
+                $("#BirthDateTH").val("");
+                $("#IDCard").val("");
+                $("#Address").val("");
+                $("#PostalCode").val("");
+                $("#SubDistrictName").val("");
+                $("#DistrictName").val("");
+                $("#ProvinceName").val("");
+                $("#Telephone").val("");
+                $("#Mobile").val("");
+                $("#LineID").val("");
+                $("#ApplyDateTH").val("");
+                $("#ResignDateTH").val("");
+                $("#Salary").val("");
+                $("#MemberGroupName").val("");
+                $("#MemberTypeName").val("");
+                $("#Filestatus").val("");
             }
             $('#btnSave').click(function (e) {
                 e.preventDefault();
@@ -589,11 +594,28 @@
                 var Name = $('#Name').val();
                 //var lName = $('#LastNameTH').val();
                 if ((memID == undefined || memID == '' || memID == null)) {
-                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
-                    return false;
+                    //swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    alert("โปรดบันทึกทะเบียนสมาชิก");
+                   return false;
                 }
                 if ((Name == undefined || Name == '' || Name == null)) {
-                    swal.fire("โปรดบันทึก", "ชื่อ - นามสกุล", "warning")
+                    //swal.fire("โปรดบันทึก", "ชื่อ - นามสกุล", "warning")
+                    alert("โปรดบันทึกชื่อ - นามสกุล");
+                    return false;
+                }
+                var birthDate = $("#BirthDateTH").val();
+                if (!validation.isValidDateTH(birthDate)) {
+                    alert("วันเกิดไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var applyDate = $("#ApplyDateTH").val();
+                if (!validation.isValidDateTH(applyDate)) {
+                    alert("วันเข้าเป็นสมาชิกไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var resignDate = $("#ResignDateTH").val();
+                if (!validation.isValidDateTH(resignDate)) {
+                    alert("วันลาออกไม่ถูกต้อง โปรดตรวจสอบ");
                     return false;
                 }
                 //if ((lName == undefined || lName == '' || lName == null)) {
@@ -649,84 +671,62 @@
                             if (data[0].Result && data[0].Message == 'Successful') {
                                 if (data[1] != null) {
                                     $("#MemberID").val(data[1].MemberID);
-                                    swal.fire("ข้อมูลสมาชิก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    //swal.fire("ข้อมูลสมาชิก", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    alert("บันทึกข้อมูลสำเร็จแล้ว")
                                     result = true;
                                 }
                             }
                             else {
-                                swal.fire("Warning", data[0].Message, "warning");
+                                //swal.fire("Warning", data[0].Message, "warning");
+                                alert(data[0].Message)
                                 result = false;
                             }
                         } else {
-                            swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            //swal.fire("Warning", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            alert("ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ")
                             result = false;
                         }
                     },
                     error: function (xhr, status, error) {
-                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        //swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        alert("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)")
                         result = false;
                     }
                 });
 
                 return result;
             });
-
-            //$("#BirthDateTH").keyup(function (e) {
-            //    //debugger
-            //    if (event.keyCode === 13) {
-            //        e.preventDefault();
-            //        debugger
-            //        validatedate(this.value);
-            //        //debugger
-            //    }
-            //});
-
-            //function validatedate(dateIn) {
-            //    debugger
-            //    alert(dateIn);
-            //    //var dateformat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
-            //    // Match the date format through regular expression
-            //    //if (dateIn != null && (dateIn.lenght >= 8 && dateIn.lenght <= 10)) {
-            //    if (dateIn != null) {
-            //        //document.form1.text1.focus();
-            //        //Test which seperator is used '/' or '-'
-            //        dateIn = replace(dateIn, "-", "/");
-
-            //        var dd = = dateTh.split('/')[0];
-            //        debugger
-            //        var mm = dateTh.split('/')[1];
-            //        var yy = dateTh.split('/')[2];
-            //        debugger
-            //        // Create list of days of a month [assume there is no leap year by default]
-            //        if (yy.lenght = 2) {
-            //            var yy = 2500 + yy;
-            //        }
-            //        var leapYear = not (yy % 4);
-            //        if (leapYear == true) {
-            //            var ListofDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            //        }
-            //        else {
-            //            var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            //        }
-            //        if (dd > ListofDays[mm - 1]) {
-            //            alert('วันที่ไม่ถูกต้อง!');
-            //            return false;
-            //        }
-            //        if (mm < 1 && mm > 12) {
-            //            alert('เดือนไม่ถูกต้อง!');
-            //            return false;
-            //        }
-            //        if (yy < 2450 && yy > 2550) {
-            //            alert('เดือนไม่ถูกต้อง!');
-            //            return false;
-            //        }
-            //    }
-            //    else {
-            //        alert("Invalid date format!");
-            //        return false;
-            //    }
-            //    debugger
-            //}
-        });
+            $("#BirthDateTH").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันเกิดไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
+            $("#ApplyDateTH").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันเข้าเป็นสมาชิกไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
+            $("#ResignDateTH").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (strDate != null)
+                        if (!validation.isValidDateTH(strDate)) {
+                            alert("วันที่ลาออกไม่ถูกต้อง โปรดตรวจสอบ");
+                            this.focus();
+                        }
+                    }
+                })
+            });
     </script>
 }

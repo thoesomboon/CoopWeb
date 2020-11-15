@@ -183,6 +183,26 @@ namespace Coop.Controllers
                 currentUserAccount.UserTypeID = usr.UserTypeID;
                 currentUserAccount.UserTypeName = usr.UserTypes.UserTypeName;
                 currentUserAccount.AccessTransactionID = accessTransaction.AccessTransactionID;
+
+                string stringComputerName = "";
+                var CoopMachine = _storage.GetOrAdd("CoopGETMachine", () => new CoopMachineModel());
+                CoopMachine.BranchID = System.Configuration.ConfigurationManager.AppSettings["BranchId"] ?? "";
+                CoopMachine.Server = System.Configuration.ConfigurationManager.AppSettings["Server"] ?? "";
+                try
+                {
+
+                    if (!string.IsNullOrEmpty(Request.ServerVariables["REMOTE_ADDR"].ToString(CultureInfo.InvariantCulture)))
+                    {
+                        stringComputerName = Dns.GetHostEntry(Request.ServerVariables["REMOTE_ADDR"]).HostName.Split('.')[0];
+                        obj.MachineName = stringComputerName;
+                    }
+                    CoopMachine.WorkStationID = stringComputerName;
+                }
+                catch (Exception)
+                {
+
+                    CoopMachine.WorkStationID = "";
+                }
             }
         }
         public string GetVisitorComputerName()

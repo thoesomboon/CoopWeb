@@ -16,18 +16,15 @@ namespace Coop.Entities
     {
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<int> ModifiedBy { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string Filestatus { get; set; }
-        public int CoopID { get; set; }
         public string MemberID { get; set; }
         public System.DateTime FromDate { get; set; }
         public Nullable<System.DateTime> ToDate { get; set; }
+        public Nullable<System.DateTime> PayDate { get; set; }
         public Nullable<decimal> Receive { get; set; }
-        public Nullable<decimal> AccountNo { get; set; }
+        public string AccountNo { get; set; }
         public Nullable<decimal> Balance { get; set; }
         public string LoanID { get; set; }
-        public Nullable<System.DateTime> PayDate { get; set; }
         public Nullable<decimal> LoanAmt { get; set; }
         public Nullable<decimal> LoanInt { get; set; }
         public Nullable<decimal> LoanCharge { get; set; }

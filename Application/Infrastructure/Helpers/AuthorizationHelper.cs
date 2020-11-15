@@ -24,6 +24,7 @@ namespace Coop.Infrastructure.Helpers
         CurrentApplicationVersion ApplicationVersion();
         CurrentUserAccountModel UserAccount();
         CoopControlModel CoopControls();
+        CoopMachineModel CoopGETMachine();
     }
 
     public static class AuthorizeHelper
@@ -62,6 +63,10 @@ namespace Coop.Infrastructure.Helpers
         public CoopControlModel CoopControls()
         {
             return _storage.GetOrAdd("CoopControl", () => new CoopControlModel());
+        }
+        public CoopMachineModel CoopGETMachine()
+        {
+            return _storage.GetOrAdd("CoopGETMachine", () => new CoopMachineModel());
         }
         /// <summary>
         ///   //UserAccount is key of session key for get current user infomation in UserAccountModel class by StatefullStorageHelper class

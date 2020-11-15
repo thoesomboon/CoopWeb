@@ -70,18 +70,35 @@ var validation = {
     },
     isValidDateTH: function (strDate) {
         /// 28/2/2015
-        debugger
+        //debugger
+        var isValidDate = true;
         if (strDate == null || strDate.length < 6) { return false; }
         var splitDate = strDate.split("/");
 
-        var date = splitDate[0] * 1;
-        //var month = (splitDate[1] * 1) - 1;
+        var dd = splitDate[0] * 1;
         var month = (splitDate[1] * 1);
         var year = (splitDate[2] * 1) - 543;
-
-        debugger
-        var isValidDate = Date.validateDay(date, year, month) && Date.validateMonth(month) && Date.validateYear(year);
-
+        var ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if (month == 1 || month > 2) {
+            if (dd > ListofDays[month - 1]) {
+                //alert('Invalid date format!');
+                isValidDate = false;
+            }
+        }
+        if (month == 2) {
+            var lyear = false;
+            if ((!(year % 4) && year % 100) || !(year % 400)) {
+                lyear = true;
+            }
+            if ((lyear == false) && (dd >= 29)) {
+                //alert('Invalid date format!');
+                isValidDate = false;
+            }
+            if ((lyear == true) && (dd > 29)) {
+                //alert('Invalid date format!');
+                isValidDate = false;
+            }
+        }
         return isValidDate;
     }
 };
@@ -205,14 +222,14 @@ var conversion = {
 
     //JsontoDate: function (strDate) {
     //if (strDate == null || strDate == "" || strDate.length < 6) { return ""; }
-    //    debugger
+    //    //debugger
     //var parsedDate = "";
     //if (isNaN(Date.parse(strDate))) { ///if Case: strDate: "/Date(1049821200000)/"
     //    parsedDate = new Date(parseInt(strDate.substr(6)));
-    //    debugger
+    //    //debugger
     //} else {
     //    parsedDate = new Date(strDate);/// Case : 2/28/2015 12:00:00 AM ==> ///Date.parse(strDate) = 1388077200000	Number
-    //    debugger
+    //    //debugger
     //}
     //var chkNaN = Date.parse(parsedDate);
 
@@ -240,13 +257,13 @@ var conversionDate = {
     },
     DateInCE: function (strMaskedDate) {
         /// Get 28/2/2015
-        debugger
+        //debugger
         if (strMaskedDate == null) { return ""; }
         var splitDate = strMaskedDate.split("/");
         var parsedDate = new Date(splitDate[1] + '/' + splitDate[0] + '/' + splitDate[2]);
         var chkNaN = Date.parse(parsedDate);
         if (isNaN(chkNaN)) { return ""; }
-        debugger
+        //debugger
         var returnDate = Number(parsedDate.getMonth() + 1) + '/' + parsedDate.getDate() + '/' + ((parsedDate.getFullYear() * 1) - 543);
         return returnDate;
     }

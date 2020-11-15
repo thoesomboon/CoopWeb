@@ -58,5 +58,32 @@ namespace Coop.Library
             var date = new DateTime(year, month, day);
             return date;
         }
+        public static DateTime WorkingDay(string DateIN)
+        {
+            //if (DateIN != Null)
+            //{
+            //    return AuthorizeHelper.Current.CoopControls().SystemDate ?? DateTime.Now;
+            //}
+            DateTime dateINDate = DateInCE(DateIN);
+
+            DateTime WorkingDate = dateINDate.AddDays(1);
+            {
+                DayOfWeek day = dateINDate.DayOfWeek;
+                //DayOfWeek dayToday = " " + day.ToString();
+                if (day == DayOfWeek.Friday)
+                {
+                    WorkingDate = dateINDate.AddDays(3);
+                }
+                if (day == DayOfWeek.Saturday)
+                {
+                    WorkingDate = dateINDate.AddDays(2);
+                }
+                if (day == DayOfWeek.Sunday)
+                {
+                    WorkingDate = dateINDate.AddDays(1);
+                }
+            }
+            return WorkingDate;
+        }
     }
 }

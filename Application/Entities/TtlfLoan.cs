@@ -49,7 +49,5 @@ namespace Coop.Entities
         public string RcptRunNo { get; set; }
         public string ECFlag { get; set; }
         public Nullable<int> OverrideID { get; set; }
-    
-        public virtual Loan Loan { get; set; }
     }
 }

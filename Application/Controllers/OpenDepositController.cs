@@ -71,11 +71,14 @@ namespace Coop.Controllers
             //var memData = _unitOfWork.Member.ReadDetail(pCode).FirstOrDefault();
             bool result = false;
             string msg = string.Empty;
+            var coopData = _unitOfWork.CoopControl.ReadDetail().FirstOrDefault();
+
             var memData = _unitOfWork.Member.ReadMember(mID);
             /// Account Exist
             if (memData != null && !string.IsNullOrWhiteSpace(memData.MemberID))
             {          
                 result = true;
+                model.CoopID = memData.CoopID;
                 model.Name = memData.TitleName + " " + memData.Name;
                 model.Address = memData.Address + " " + memData.SubDistrictName + " " + memData.DistrictName + " " + memData.ProvinceName + " " + memData.PostalCode;
                 //model.MemberGroupName = memData.MemberGroupID + " " + memData.MemberGroupName;
@@ -88,6 +91,7 @@ namespace Coop.Controllers
                 var depTypeData = _unitOfWork.DepositType.ReadDetail(openModel.DepositTypeID).FirstOrDefault();
                 model.MinOpenAmt = depTypeData.MinOpenAmt;
                 model.MaxOpenAmt = depTypeData.MaxOpenAmt;
+                model.TxnDate = coopData.SystemDate;
             }
             else
             {
@@ -127,7 +131,7 @@ namespace Coop.Controllers
                 depTypeID = "S06";
             }
             var depTypeData = _unitOfWork.DepositType.ReadDetail(depTypeID).FirstOrDefault();
-            var AccNo = Coop.Library.Deposit.IssueAccountNo(depTypeData, 8);
+            var AccNo = Coop.Library.Deposit.IssueAccountNo(depTypeData, 7);
             var BookNo = Coop.Library.Deposit.IssueBookNo(depTypeData, 5);
 
             var coopData = _unitOfWork.CoopControl.ReadDetail().FirstOrDefault();
@@ -238,6 +242,7 @@ namespace Coop.Controllers
                     TxnDate = sysDate,
                     TxnSeq = txnSeq,
                     TxnTime = DateTime.Now,
+                    UserID = AuthorizeHelper.Current.UserAccount().UserID,
                     //WorkstationID = OpenDepModel.WorkstationID,
                     //BranchId = OpenDepModel.BranchId,
                     OriginalProcess = "OpenDeposit",

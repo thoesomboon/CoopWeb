@@ -39,9 +39,9 @@ namespace Coop.Models.Repository
                     LoanID = l.LoanID,
                     DueDate = l.DueDate,
                     LoanDueAmt = l.LoanDueAmt,
-                    BFLoanDueAmt = l.BFLoanDueAmt,
-                    BFLoanDueAmtBeforeUPD = l.BFLoanDueAmtBeforeUPD,
-                    BFLoanDueAmtAfterUPD = l.BFLoanDueAmtAfterUPD
+                    BFLoanDueAmt = l.BFLoanDueAmt
+                    //BFLoanDueAmtBeforeUPD = l.BFLoanDueAmtBeforeUPD,
+                    //BFLoanDueAmtAfterUPD = l.BFLoanDueAmtAfterUPD
                 };
             return loanDue;
         }
@@ -74,8 +74,8 @@ namespace Coop.Models.Repository
             data.DueDate = model.DueDate;
             data.LoanDueAmt = model.LoanDueAmt;
             data.BFLoanDueAmt = model.BFLoanDueAmt;
-            data.BFLoanDueAmtBeforeUPD = model.BFLoanDueAmtBeforeUPD;
-            data.BFLoanDueAmtAfterUPD = model.BFLoanDueAmtAfterUPD;
+            //data.BFLoanDueAmtBeforeUPD = model.BFLoanDueAmtBeforeUPD;
+            //data.BFLoanDueAmtAfterUPD = model.BFLoanDueAmtAfterUPD;
 
             data.ModifiedBy = AuthorizeHelper.Current.UserAccount().UserID;
             data.ModifiedDate = System.DateTime.Now;

@@ -125,7 +125,7 @@ namespace Coop.Controllers
                           }).Where(l => l.LoanID == LId && l.Filestatus =="A").ToList();
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GridLoadDueListX()
+        public JsonResult GridLoadDueList()
         {
             CoopWebEntities db = new CoopWebEntities();
             var result = (from l in db.LoanDue

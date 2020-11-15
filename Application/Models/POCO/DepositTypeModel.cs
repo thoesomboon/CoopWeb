@@ -24,9 +24,9 @@ namespace Coop.Models.POCO
         public Nullable<decimal> MinWithdrawAmt { get; set; }
         public Nullable<decimal> MaxWithdrawAmt { get; set; }
         public Nullable<decimal> MinLedgerBal { get; set; }
-        public Nullable<bool> ItemStatus { get; set; }
-        public Nullable<bool> MdecimalonthDepAmtStatus { get; set; }
-        public Nullable<bool> WithdrawApplyStatus { get; set; }
+        public bool ItemStatus { get; set; }
+        public bool MonthDepAmtStatus { get; set; }
+        public bool WithdrawApplyStatus { get; set; }
         public Nullable<decimal> MonthMaxWithdrawAmt { get; set; }
         public Nullable<int> MonthMaxWithdrawTimes { get; set; }
         public Nullable<decimal> MaxChargeAmt { get; set; }

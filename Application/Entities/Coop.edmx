@@ -63,9 +63,9 @@
           <Property Name="MinWithdrawAmt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="MaxWithdrawAmt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="MinLedgerBal" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="ItemStatus" Type="bit" />
-          <Property Name="MonthDepAmtStatus" Type="bit" />
-          <Property Name="WithdrawApplyStatus" Type="bit" />
+          <Property Name="ItemStatus" Type="bit" Nullable="false" />
+          <Property Name="MonthDepAmtStatus" Type="bit" Nullable="false" />
+          <Property Name="WithdrawApplyStatus" Type="bit" Nullable="false" />
           <Property Name="MonthMaxWithdrawAmt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="MonthMaxWithdrawTimes" Type="int" />
           <Property Name="MaxChargeAmt" Type="decimal" Precision="18" Scale="4" />
@@ -171,7 +171,7 @@
           </Key>
           <Property Name="ModuleID" Type="int" Nullable="false" />
           <Property Name="ModuleCategoryID" Type="int" />
-          <Property Name="ModuleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModuleName" Type="nvarchar" MaxLength="100" />
           <Property Name="ModuleDescription" Type="nvarchar" MaxLength="100" />
           <Property Name="ModuleURL" Type="nvarchar" MaxLength="100" />
           <Property Name="IconUrl" Type="nvarchar" MaxLength="50" />
@@ -310,16 +310,16 @@
           <Property Name="LastCalcCharge" Type="datetime" />
           <Property Name="IntType" Type="nvarchar" MaxLength="2" />
           <Property Name="LoanAmt" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="BFBal" Type="decimal" Precision="18" Scale="4" />
           <Property Name="LoanBal" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="BFBal" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="BFUnpayPrinciple" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="UnpayPrinciple" Type="decimal" Precision="18" Scale="4" />
           <Property Name="BFInt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="BFUnpayInt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="UnpayInt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="BFCharge" Type="decimal" Precision="18" Scale="4" />
           <Property Name="BFUnpayCharge" Type="decimal" Precision="18" Scale="4" />
           <Property Name="UnpayCharge" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="BFUnpayPrinciple" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="UnpayPrinciple" Type="decimal" Precision="18" Scale="4" />
           <Property Name="DiscIntFlag" Type="int" />
           <Property Name="BFDiscInt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="BFUnpayDiscInt" Type="decimal" Precision="18" Scale="4" />
@@ -349,8 +349,6 @@
           <Property Name="DueDate" Type="datetime" Nullable="false" />
           <Property Name="LoanDueAmt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="BFLoanDueAmt" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="BFLoanDueAmtBeforeUPD" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="BFLoanDueAmtAfterUPD" Type="decimal" Precision="18" Scale="4" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -692,29 +690,36 @@
         </EntityType>
         <EntityType Name="MilkPayment">
           <Key>
-            <PropertyRef Name="CoopID" />
             <PropertyRef Name="MemberID" />
             <PropertyRef Name="FromDate" />
           </Key>
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
-          <Property Name="ModifiedBy" Type="int" />
-          <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="Filestatus" Type="nvarchar" MaxLength="1" />
-          <Property Name="CoopID" Type="int" Nullable="false" />
           <Property Name="MemberID" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="FromDate" Type="datetime" Nullable="false" />
           <Property Name="ToDate" Type="datetime" />
-          <Property Name="Receive" Type="money" />
-          <Property Name="AccountNo" Type="decimal" Precision="18" Scale="4" />
-          <Property Name="Balance" Type="money" />
-          <Property Name="LoanID" Type="nvarchar" MaxLength="15" />
           <Property Name="PayDate" Type="datetime" />
+          <Property Name="Receive" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="AccountNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="LoanID" Type="nvarchar" MaxLength="15" />
           <Property Name="LoanAmt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="LoanInt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="LoanCharge" Type="decimal" Precision="18" Scale="4" />
           <Property Name="DiscInt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="DiscInt2" Type="decimal" Precision="18" Scale="4" />
+        </EntityType>
+        <EntityType Name="MilkText">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="FromDate" Type="nvarchar" MaxLength="15" />
+          <Property Name="ToDate" Type="nvarchar" MaxLength="15" />
+          <Property Name="PayDate" Type="nvarchar" MaxLength="15" />
+          <Property Name="AccountNo" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="Receive" Type="money" />
         </EntityType>
         <EntityType Name="TtlfDeposit">
           <Key>
@@ -745,8 +750,8 @@
           <Property Name="IntDueAmt" Type="decimal" Precision="18" Scale="4" />
           <Property Name="Tax" Type="decimal" Precision="18" Scale="4" />
           <Property Name="ItemNo" Type="int" />
-          <Property Name="BookFlag" Type="nvarchar" MaxLength="1" />
           <Property Name="ReferenceNo" Type="nvarchar" MaxLength="12" />
+          <Property Name="BookFlag" Type="bit" Nullable="false" />
           <Property Name="BudgetYear" Type="nvarchar" MaxLength="4" />
           <Property Name="Type" Type="nvarchar" MaxLength="3" />
           <Property Name="TTxnCode" Type="nvarchar" MaxLength="3" />
@@ -1039,18 +1044,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Deposit_DepositType">
-          <End Role="DepositType" Type="Self.DepositType" Multiplicity="1" />
-          <End Role="Deposit" Type="Self.Deposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DepositType">
-              <PropertyRef Name="DepositTypeID" />
-            </Principal>
-            <Dependent Role="Deposit">
-              <PropertyRef Name="DepositTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_District_District">
           <End Role="District" Type="Self.District" Multiplicity="1" />
           <End Role="District1" Type="Self.District" Multiplicity="0..1" />
@@ -1072,42 +1065,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Principal>
             <Dependent Role="Item">
               <PropertyRef Name="AccountNo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Loan_LoanType">
-          <End Role="LoanType" Type="Self.LoanType" Multiplicity="1" />
-          <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LoanType">
-              <PropertyRef Name="LoanTypeID" />
-            </Principal>
-            <Dependent Role="Loan">
-              <PropertyRef Name="LoanTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Loan_Member">
-          <End Role="Member" Type="Self.Member" Multiplicity="1" />
-          <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="Loan">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_LoanDue_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="1" />
-          <End Role="LoanDue" Type="Self.LoanDue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="LoanDue">
-              <PropertyRef Name="LoanID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1189,42 +1146,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MonthBalanceLoan_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="1" />
-          <End Role="MonthBalanceLoan" Type="Self.MonthBalanceLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="MonthBalanceLoan">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MonthBalanceLoan_LoanType">
-          <End Role="LoanType" Type="Self.LoanType" Multiplicity="0..1" />
-          <End Role="MonthBalanceLoan" Type="Self.MonthBalanceLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LoanType">
-              <PropertyRef Name="LoanTypeID" />
-            </Principal>
-            <Dependent Role="MonthBalanceLoan">
-              <PropertyRef Name="LoanTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MonthBalanceLoan_Member">
-          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
-          <End Role="MonthBalanceLoan" Type="Self.MonthBalanceLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="MonthBalanceLoan">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_NoBook_Deposit">
           <End Role="Deposit" Type="Self.Deposit" Multiplicity="1" />
           <End Role="NoBook" Type="Self.NoBook" Multiplicity="*" />
@@ -1285,54 +1206,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Security_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="1" />
-          <End Role="Security" Type="Self.Security" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="Security">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TtlfDeposit_Deposit">
-          <End Role="Deposit" Type="Self.Deposit" Multiplicity="1" />
-          <End Role="TtlfDeposit" Type="Self.TtlfDeposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Deposit">
-              <PropertyRef Name="AccountNo" />
-            </Principal>
-            <Dependent Role="TtlfDeposit">
-              <PropertyRef Name="AccountNo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TtlfDeposit_DepositType">
-          <End Role="DepositType" Type="Self.DepositType" Multiplicity="1" />
-          <End Role="TtlfDeposit" Type="Self.TtlfDeposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DepositType">
-              <PropertyRef Name="DepositTypeID" />
-            </Principal>
-            <Dependent Role="TtlfDeposit">
-              <PropertyRef Name="DepositTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TtlfLoan_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="0..1" />
-          <End Role="TtlfLoan" Type="Self.TtlfLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="TtlfLoan">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Users_UserType">
           <End Role="UserTypes" Type="Self.UserTypes" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -1345,14 +1218,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="BatMilk2Deposit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="CoopID" Type="nvarchar" Mode="In" />
-          <Parameter Name="CalcDate" Type="datetime" Mode="In" />
-          <Parameter Name="BranchId" Type="nvarchar" Mode="In" />
-          <Parameter Name="UserId" Type="nvarchar" Mode="In" />
-          <Parameter Name="ProgramName" Type="nvarchar" Mode="In" />
-          <Parameter Name="WorkStationId" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="BatMthDepositBal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CoopID" Type="int" Mode="In" />
           <Parameter Name="DepTypeID" Type="nvarchar" Mode="In" />
@@ -1360,16 +1225,41 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Parameter Name="BudgetYear" Type="nvarchar" Mode="In" />
           <Parameter Name="Period" Type="int" Mode="In" />
         </Function>
-        <Function Name="BatPeriodSavingIntDue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="BatMthLoanBal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CoopID" Type="int" Mode="In" />
+          <Parameter Name="UserId" Type="int" Mode="In" />
+          <Parameter Name="BudgetYear" Type="nvarchar" Mode="In" />
+          <Parameter Name="Period" Type="int" Mode="In" />
+        </Function>
+        <Function Name="BatPeriodCalcChargeAmt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CoopID" Type="nvarchar" Mode="In" />
+          <Parameter Name="CalcDate" Type="datetime" Mode="In" />
+          <Parameter Name="UserId" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkStationId" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="BatPeriodDepositIntDue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CoopID" Type="int" Mode="In" />
           <Parameter Name="DepTypeID" Type="nvarchar" Mode="In" />
           <Parameter Name="CalcDate" Type="datetime" Mode="In" />
-          <Parameter Name="BranchId" Type="nvarchar" Mode="In" />
           <Parameter Name="UserId" Type="nvarchar" Mode="In" />
+          <Parameter Name="BranchId" Type="nvarchar" Mode="In" />
           <Parameter Name="ProgramName" Type="nvarchar" Mode="In" />
           <Parameter Name="WorkStationId" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="BatPeriodSpecialClearTimeWDL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="BatTrfMilk2Deposit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CoopID" Type="nvarchar" Mode="In" />
+          <Parameter Name="CalcDate" Type="datetime" Mode="In" />
+          <Parameter Name="BranchId" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserId" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkStationId" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="BatTrfMilk2Loan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CoopID" Type="nvarchar" Mode="In" />
+          <Parameter Name="CalcDate" Type="datetime" Mode="In" />
+          <Parameter Name="UserId" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkStationId" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="BatYrDepositBal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CoopID" Type="int" Mode="In" />
           <Parameter Name="DepTypeID" Type="nvarchar" Mode="In" />
@@ -1412,6 +1302,7 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <EntitySet Name="AccessTransactions" EntityType="Self.AccessTransactions" Schema="System" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="System" store:Type="Tables" />
           <EntitySet Name="MilkPayment" EntityType="Self.MilkPayment" Schema="TRF" store:Type="Tables" />
+          <EntitySet Name="MilkText" EntityType="Self.MilkText" Schema="TRF" store:Type="Tables" />
           <EntitySet Name="TtlfDeposit" EntityType="Self.TtlfDeposit" Schema="TXN" store:Type="Tables" />
           <EntitySet Name="TtlfLoan" EntityType="Self.TtlfLoan" Schema="TXN" store:Type="Tables" />
           <EntitySet Name="AccountPeriod" EntityType="Self.AccountPeriod" Schema="UCF" store:Type="Tables" />
@@ -1453,10 +1344,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             <End Role="Users" EntitySet="Users" />
             <End Role="AccessTransactions" EntitySet="AccessTransactions" />
           </AssociationSet>
-          <AssociationSet Name="FK_Deposit_DepositType" Association="Self.FK_Deposit_DepositType">
-            <End Role="DepositType" EntitySet="DepositType" />
-            <End Role="Deposit" EntitySet="Deposit" />
-          </AssociationSet>
           <AssociationSet Name="FK_District_District" Association="Self.FK_District_District">
             <End Role="District" EntitySet="District" />
             <End Role="District1" EntitySet="District" />
@@ -1464,18 +1351,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <AssociationSet Name="FK_Item_Deposit" Association="Self.FK_Item_Deposit">
             <End Role="Deposit" EntitySet="Deposit" />
             <End Role="Item" EntitySet="Item" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Loan_LoanType" Association="Self.FK_Loan_LoanType">
-            <End Role="LoanType" EntitySet="LoanType" />
-            <End Role="Loan" EntitySet="Loan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Loan_Member" Association="Self.FK_Loan_Member">
-            <End Role="Member" EntitySet="Member" />
-            <End Role="Loan" EntitySet="Loan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_LoanDue_Loan" Association="Self.FK_LoanDue_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="LoanDue" EntitySet="LoanDue" />
           </AssociationSet>
           <AssociationSet Name="FK_Member_District" Association="Self.FK_Member_District">
             <End Role="District" EntitySet="District" />
@@ -1501,18 +1376,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             <End Role="MonthBalanceDeposit" EntitySet="MonthBalanceDeposit" />
             <End Role="MonthBalanceDeposit1" EntitySet="MonthBalanceDeposit" />
           </AssociationSet>
-          <AssociationSet Name="FK_MonthBalanceLoan_Loan" Association="Self.FK_MonthBalanceLoan_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="MonthBalanceLoan" EntitySet="MonthBalanceLoan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MonthBalanceLoan_LoanType" Association="Self.FK_MonthBalanceLoan_LoanType">
-            <End Role="LoanType" EntitySet="LoanType" />
-            <End Role="MonthBalanceLoan" EntitySet="MonthBalanceLoan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MonthBalanceLoan_Member" Association="Self.FK_MonthBalanceLoan_Member">
-            <End Role="Member" EntitySet="Member" />
-            <End Role="MonthBalanceLoan" EntitySet="MonthBalanceLoan" />
-          </AssociationSet>
           <AssociationSet Name="FK_NoBook_Deposit" Association="Self.FK_NoBook_Deposit">
             <End Role="Deposit" EntitySet="Deposit" />
             <End Role="NoBook" EntitySet="NoBook" />
@@ -1532,22 +1395,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <AssociationSet Name="FK_ReuestLoan_Member" Association="Self.FK_ReuestLoan_Member">
             <End Role="Member" EntitySet="Member" />
             <End Role="RequestLoan" EntitySet="RequestLoan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Security_Loan" Association="Self.FK_Security_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="Security" EntitySet="Security" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TtlfDeposit_Deposit" Association="Self.FK_TtlfDeposit_Deposit">
-            <End Role="Deposit" EntitySet="Deposit" />
-            <End Role="TtlfDeposit" EntitySet="TtlfDeposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TtlfDeposit_DepositType" Association="Self.FK_TtlfDeposit_DepositType">
-            <End Role="DepositType" EntitySet="DepositType" />
-            <End Role="TtlfDeposit" EntitySet="TtlfDeposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TtlfLoan_Loan" Association="Self.FK_TtlfLoan_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="TtlfLoan" EntitySet="TtlfLoan" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_UserType" Association="Self.FK_Users_UserType">
             <End Role="UserTypes" EntitySet="UserTypes" />
@@ -1617,9 +1464,9 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="MinWithdrawAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="MaxWithdrawAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="MinLedgerBal" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="ItemStatus" Type="Boolean" />
-          <Property Name="MonthDepAmtStatus" Type="Boolean" />
-          <Property Name="WithdrawApplyStatus" Type="Boolean" />
+          <Property Name="ItemStatus" Type="Boolean" Nullable="false" />
+          <Property Name="MonthDepAmtStatus" Type="Boolean" Nullable="false" />
+          <Property Name="WithdrawApplyStatus" Type="Boolean" Nullable="false" />
           <Property Name="MonthMaxWithdrawAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="MonthMaxWithdrawTimes" Type="Int32" />
           <Property Name="MaxChargeAmt" Type="Decimal" Precision="18" Scale="4" />
@@ -1658,8 +1505,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="BatchIntDueDate2" Type="DateTime" Precision="3" />
           <Property Name="BatchIntDueDate3" Type="DateTime" Precision="3" />
           <Property Name="BatchIntDueDate4" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Deposit" Relationship="Self.FK_Deposit_DepositType" FromRole="DepositType" ToRole="Deposit" />
-          <NavigationProperty Name="TtlfDeposit" Relationship="Self.FK_TtlfDeposit_DepositType" FromRole="DepositType" ToRole="TtlfDeposit" />
         </EntityType>
         <EntityType Name="Interest">
           <Key>
@@ -1720,8 +1565,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="ChargeRate" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="DiscIntRate" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="DiscIntFlag" Type="Int32" />
-          <NavigationProperty Name="Loan" Relationship="Self.FK_Loan_LoanType" FromRole="LoanType" ToRole="Loan" />
-          <NavigationProperty Name="MonthBalanceLoan" Relationship="Self.FK_MonthBalanceLoan_LoanType" FromRole="LoanType" ToRole="MonthBalanceLoan" />
           <NavigationProperty Name="RequestLoan" Relationship="Self.FK_ReuestLoan_LoanType" FromRole="LoanType" ToRole="RequestLoan" />
         </EntityType>
         <EntityType Name="Modules">
@@ -1730,7 +1573,7 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           </Key>
           <Property Name="ModuleID" Type="Int32" Nullable="false" />
           <Property Name="ModuleCategoryID" Type="Int32" />
-          <Property Name="ModuleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModuleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ModuleDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ModuleURL" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IconUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1826,11 +1669,9 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="Amt1" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="Amt2" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="Amt3" Type="Decimal" Precision="18" Scale="4" />
-          <NavigationProperty Name="DepositType" Relationship="Self.FK_Deposit_DepositType" FromRole="Deposit" ToRole="DepositType" />
           <NavigationProperty Name="Item" Relationship="Self.FK_Item_Deposit" FromRole="Deposit" ToRole="Item" />
           <NavigationProperty Name="NoBook" Relationship="Self.FK_NoBook_Deposit" FromRole="Deposit" ToRole="NoBook" />
           <NavigationProperty Name="NoCard" Relationship="Self.FK_NoCard_Deposit" FromRole="Deposit" ToRole="NoCard" />
-          <NavigationProperty Name="TtlfDeposit" Relationship="Self.FK_TtlfDeposit_Deposit" FromRole="Deposit" ToRole="TtlfDeposit" />
         </EntityType>
         <EntityType Name="Item">
           <Key>
@@ -1877,16 +1718,16 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="LastCalcCharge" Type="DateTime" Precision="3" />
           <Property Name="IntType" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Name="LoanAmt" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="BFBal" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="LoanBal" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="BFBal" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="BFUnpayPrinciple" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="UnpayPrinciple" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="BFInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="BFUnpayInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="UnpayInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="BFCharge" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="BFUnpayCharge" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="UnpayCharge" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="BFUnpayPrinciple" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="UnpayPrinciple" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="DiscIntFlag" Type="Int32" />
           <Property Name="BFDiscInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="BFUnpayDiscInt" Type="Decimal" Precision="18" Scale="4" />
@@ -1898,12 +1739,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="YTDAccInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="InstallAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="InstallMethodID" Type="Int32" />
-          <NavigationProperty Name="LoanType" Relationship="Self.FK_Loan_LoanType" FromRole="Loan" ToRole="LoanType" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_Loan_Member" FromRole="Loan" ToRole="Member" />
-          <NavigationProperty Name="LoanDue" Relationship="Self.FK_LoanDue_Loan" FromRole="Loan" ToRole="LoanDue" />
-          <NavigationProperty Name="MonthBalanceLoan" Relationship="Self.FK_MonthBalanceLoan_Loan" FromRole="Loan" ToRole="MonthBalanceLoan" />
-          <NavigationProperty Name="Security" Relationship="Self.FK_Security_Loan" FromRole="Loan" ToRole="Security" />
-          <NavigationProperty Name="TtlfLoan" Relationship="Self.FK_TtlfLoan_Loan" FromRole="Loan" ToRole="TtlfLoan" />
         </EntityType>
         <EntityType Name="LoanDue">
           <Key>
@@ -1922,9 +1757,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LoanDueAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="BFLoanDueAmt" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="BFLoanDueAmtBeforeUPD" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="BFLoanDueAmtAfterUPD" Type="Decimal" Precision="18" Scale="4" />
-          <NavigationProperty Name="Loan" Relationship="Self.FK_LoanDue_Loan" FromRole="LoanDue" ToRole="Loan" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -1958,12 +1790,10 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="Sex" Type="Int32" />
           <Property Name="DiscIntFlag" Type="Int32" />
           <Property Name="MaritalStatus" Type="Int32" />
-          <NavigationProperty Name="Loan" Relationship="Self.FK_Loan_Member" FromRole="Member" ToRole="Loan" />
           <NavigationProperty Name="District" Relationship="Self.FK_Member_District" FromRole="Member" ToRole="District" />
           <NavigationProperty Name="Province" Relationship="Self.FK_Member_Province" FromRole="Member" ToRole="Province" />
           <NavigationProperty Name="SubDistrict" Relationship="Self.FK_Member_SubDistrict" FromRole="Member" ToRole="SubDistrict" />
           <NavigationProperty Name="Title" Relationship="Self.FK_Member_Title" FromRole="Member" ToRole="Title" />
-          <NavigationProperty Name="MonthBalanceLoan" Relationship="Self.FK_MonthBalanceLoan_Member" FromRole="Member" ToRole="MonthBalanceLoan" />
           <NavigationProperty Name="RequestLoan" Relationship="Self.FK_ReuestLoan_Member" FromRole="Member" ToRole="RequestLoan" />
         </EntityType>
         <EntityType Name="MonthBalanceDeposit">
@@ -2033,9 +1863,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="DiscIntCalcInYear" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="DiscIntCalcInYearCredit" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="UnpayDiscInt" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="LoanType" Relationship="Self.FK_MonthBalanceLoan_LoanType" FromRole="MonthBalanceLoan" ToRole="LoanType" />
-          <NavigationProperty Name="Loan" Relationship="Self.FK_MonthBalanceLoan_Loan" FromRole="MonthBalanceLoan" ToRole="Loan" />
-          <NavigationProperty Name="Member" Relationship="Self.FK_MonthBalanceLoan_Member" FromRole="MonthBalanceLoan" ToRole="Member" />
         </EntityType>
         <EntityType Name="NoBook">
           <Key>
@@ -2172,7 +1999,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="OwnerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Area" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="Decimal" Precision="18" Scale="4" />
-          <NavigationProperty Name="Loan" Relationship="Self.FK_Security_Loan" FromRole="Security" ToRole="Loan" />
         </EntityType>
         <EntityType Name="YearBalanceDeposit">
           <Key>
@@ -2292,29 +2118,36 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
         </EntityType>
         <EntityType Name="MilkPayment">
           <Key>
-            <PropertyRef Name="CoopID" />
             <PropertyRef Name="MemberID" />
             <PropertyRef Name="FromDate" />
           </Key>
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="Filestatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="CoopID" Type="Int32" Nullable="false" />
           <Property Name="MemberID" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ToDate" Type="DateTime" Precision="3" />
-          <Property Name="Receive" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="AccountNo" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="LoanID" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="PayDate" Type="DateTime" Precision="3" />
+          <Property Name="Receive" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="AccountNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="LoanID" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="LoanAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="LoanInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="LoanCharge" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="DiscInt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="DiscInt2" Type="Decimal" Precision="18" Scale="4" />
+        </EntityType>
+        <EntityType Name="MilkText">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FromDate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ToDate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="PayDate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNo" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="Receive" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="TtlfDeposit">
           <Key>
@@ -2345,8 +2178,8 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="IntDueAmt" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="Tax" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="ItemNo" Type="Int32" />
-          <Property Name="BookFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="ReferenceNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="BookFlag" Type="Boolean" Nullable="false" />
           <Property Name="BudgetYear" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="TTxnCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
@@ -2360,8 +2193,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="ClearingFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="ClearingDate" Type="DateTime" Precision="3" />
           <Property Name="OCFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DepositType" Relationship="Self.FK_TtlfDeposit_DepositType" FromRole="TtlfDeposit" ToRole="DepositType" />
-          <NavigationProperty Name="Deposit" Relationship="Self.FK_TtlfDeposit_Deposit" FromRole="TtlfDeposit" ToRole="Deposit" />
         </EntityType>
         <EntityType Name="TtlfLoan">
           <Key>
@@ -2404,7 +2235,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="RcptRunNo" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="ECFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="OverrideID" Type="Int32" />
-          <NavigationProperty Name="Loan" Relationship="Self.FK_TtlfLoan_Loan" FromRole="TtlfLoan" ToRole="Loan" />
         </EntityType>
         <EntityType Name="AccountPeriod">
           <Key>
@@ -2601,54 +2431,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
         </EntityType>
-        <Association Name="FK_Deposit_DepositType">
-          <End Role="DepositType" Type="Self.DepositType" Multiplicity="1" />
-          <End Role="Deposit" Type="Self.Deposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DepositType">
-              <PropertyRef Name="DepositTypeID" />
-            </Principal>
-            <Dependent Role="Deposit">
-              <PropertyRef Name="DepositTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TtlfDeposit_DepositType">
-          <End Role="DepositType" Type="Self.DepositType" Multiplicity="1" />
-          <End Role="TtlfDeposit" Type="Self.TtlfDeposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DepositType">
-              <PropertyRef Name="DepositTypeID" />
-            </Principal>
-            <Dependent Role="TtlfDeposit">
-              <PropertyRef Name="DepositTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Loan_LoanType">
-          <End Role="LoanType" Type="Self.LoanType" Multiplicity="1" />
-          <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LoanType">
-              <PropertyRef Name="LoanTypeID" />
-            </Principal>
-            <Dependent Role="Loan">
-              <PropertyRef Name="LoanTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MonthBalanceLoan_LoanType">
-          <End Role="LoanType" Type="Self.LoanType" Multiplicity="0..1" />
-          <End Role="MonthBalanceLoan" Type="Self.MonthBalanceLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LoanType">
-              <PropertyRef Name="LoanTypeID" />
-            </Principal>
-            <Dependent Role="MonthBalanceLoan">
-              <PropertyRef Name="LoanTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ReuestLoan_LoanType">
           <End Role="LoanType" Type="Self.LoanType" Multiplicity="1" />
           <End Role="RequestLoan" Type="Self.RequestLoan" Multiplicity="*" />
@@ -2721,78 +2503,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TtlfDeposit_Deposit">
-          <End Role="Deposit" Type="Self.Deposit" Multiplicity="1" />
-          <End Role="TtlfDeposit" Type="Self.TtlfDeposit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Deposit">
-              <PropertyRef Name="AccountNo" />
-            </Principal>
-            <Dependent Role="TtlfDeposit">
-              <PropertyRef Name="AccountNo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Loan_Member">
-          <End Role="Member" Type="Self.Member" Multiplicity="1" />
-          <End Role="Loan" Type="Self.Loan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="Loan">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_LoanDue_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="1" />
-          <End Role="LoanDue" Type="Self.LoanDue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="LoanDue">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MonthBalanceLoan_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="1" />
-          <End Role="MonthBalanceLoan" Type="Self.MonthBalanceLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="MonthBalanceLoan">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Security_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="1" />
-          <End Role="Security" Type="Self.Security" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="Security">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TtlfLoan_Loan">
-          <End Role="Loan" Type="Self.Loan" Multiplicity="0..1" />
-          <End Role="TtlfLoan" Type="Self.TtlfLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Loan">
-              <PropertyRef Name="LoanID" />
-            </Principal>
-            <Dependent Role="TtlfLoan">
-              <PropertyRef Name="LoanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Member_District">
           <End Role="District" Type="Self.District" Multiplicity="0..1" />
           <End Role="Member" Type="Self.Member" Multiplicity="*" />
@@ -2838,18 +2548,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             </Principal>
             <Dependent Role="Member">
               <PropertyRef Name="TitleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MonthBalanceLoan_Member">
-          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
-          <End Role="MonthBalanceLoan" Type="Self.MonthBalanceLoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="MonthBalanceLoan">
-              <PropertyRef Name="MemberID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2980,6 +2678,7 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <EntitySet Name="AccessTransactions" EntityType="Self.AccessTransactions" />
           <EntitySet Name="Users" EntityType="Self.Users" />
           <EntitySet Name="MilkPayment" EntityType="Self.MilkPayment" />
+          <EntitySet Name="MilkText" EntityType="Self.MilkText" />
           <EntitySet Name="TtlfDeposit" EntityType="Self.TtlfDeposit" />
           <EntitySet Name="TtlfLoan" EntityType="Self.TtlfLoan" />
           <EntitySet Name="AccountPeriod" EntityType="Self.AccountPeriod" />
@@ -2997,22 +2696,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <EntitySet Name="Title" EntityType="Self.Title" />
           <EntitySet Name="UserTypes" EntityType="Self.UserTypes" />
           <EntitySet Name="SecurityType" EntityType="Self.SecurityType" />
-          <AssociationSet Name="FK_Deposit_DepositType" Association="Self.FK_Deposit_DepositType">
-            <End Role="DepositType" EntitySet="DepositType" />
-            <End Role="Deposit" EntitySet="Deposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TtlfDeposit_DepositType" Association="Self.FK_TtlfDeposit_DepositType">
-            <End Role="DepositType" EntitySet="DepositType" />
-            <End Role="TtlfDeposit" EntitySet="TtlfDeposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Loan_LoanType" Association="Self.FK_Loan_LoanType">
-            <End Role="LoanType" EntitySet="LoanType" />
-            <End Role="Loan" EntitySet="Loan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MonthBalanceLoan_LoanType" Association="Self.FK_MonthBalanceLoan_LoanType">
-            <End Role="LoanType" EntitySet="LoanType" />
-            <End Role="MonthBalanceLoan" EntitySet="MonthBalanceLoan" />
-          </AssociationSet>
           <AssociationSet Name="FK_ReuestLoan_LoanType" Association="Self.FK_ReuestLoan_LoanType">
             <End Role="LoanType" EntitySet="LoanType" />
             <End Role="RequestLoan" EntitySet="RequestLoan" />
@@ -3037,30 +2720,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             <End Role="Deposit" EntitySet="Deposit" />
             <End Role="NoCard" EntitySet="NoCard" />
           </AssociationSet>
-          <AssociationSet Name="FK_TtlfDeposit_Deposit" Association="Self.FK_TtlfDeposit_Deposit">
-            <End Role="Deposit" EntitySet="Deposit" />
-            <End Role="TtlfDeposit" EntitySet="TtlfDeposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Loan_Member" Association="Self.FK_Loan_Member">
-            <End Role="Member" EntitySet="Member" />
-            <End Role="Loan" EntitySet="Loan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_LoanDue_Loan" Association="Self.FK_LoanDue_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="LoanDue" EntitySet="LoanDue" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MonthBalanceLoan_Loan" Association="Self.FK_MonthBalanceLoan_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="MonthBalanceLoan" EntitySet="MonthBalanceLoan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Security_Loan" Association="Self.FK_Security_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="Security" EntitySet="Security" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TtlfLoan_Loan" Association="Self.FK_TtlfLoan_Loan">
-            <End Role="Loan" EntitySet="Loan" />
-            <End Role="TtlfLoan" EntitySet="TtlfLoan" />
-          </AssociationSet>
           <AssociationSet Name="FK_Member_District" Association="Self.FK_Member_District">
             <End Role="District" EntitySet="District" />
             <End Role="Member" EntitySet="Member" />
@@ -3076,10 +2735,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <AssociationSet Name="FK_Member_Title" Association="Self.FK_Member_Title">
             <End Role="Title" EntitySet="Title" />
             <End Role="Member" EntitySet="Member" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MonthBalanceLoan_Member" Association="Self.FK_MonthBalanceLoan_Member">
-            <End Role="Member" EntitySet="Member" />
-            <End Role="MonthBalanceLoan" EntitySet="MonthBalanceLoan" />
           </AssociationSet>
           <AssociationSet Name="FK_ReuestLoan_Member" Association="Self.FK_ReuestLoan_Member">
             <End Role="Member" EntitySet="Member" />
@@ -3113,14 +2768,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             <End Role="District" EntitySet="District" />
             <End Role="District1" EntitySet="District" />
           </AssociationSet>
-          <FunctionImport Name="BatMilk2Deposit" ReturnType="Collection(CoopWebModel.BatMilk2Deposit_Result)">
-            <Parameter Name="CoopID" Mode="In" Type="String" />
-            <Parameter Name="CalcDate" Mode="In" Type="DateTime" />
-            <Parameter Name="BranchId" Mode="In" Type="String" />
-            <Parameter Name="UserId" Mode="In" Type="String" />
-            <Parameter Name="ProgramName" Mode="In" Type="String" />
-            <Parameter Name="WorkStationId" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="BatMthDepositBal" ReturnType="Collection(DateTime)">
             <Parameter Name="CoopID" Mode="In" Type="Int32" />
             <Parameter Name="DepTypeID" Mode="In" Type="String" />
@@ -3128,16 +2775,41 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             <Parameter Name="BudgetYear" Mode="In" Type="String" />
             <Parameter Name="Period" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="BatPeriodSavingIntDue" ReturnType="Collection(CoopWebModel.BatPeriodSavingIntDue_Result)">
+          <FunctionImport Name="BatMthLoanBal" ReturnType="Collection(DateTime)">
+            <Parameter Name="CoopID" Mode="In" Type="Int32" />
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+            <Parameter Name="BudgetYear" Mode="In" Type="String" />
+            <Parameter Name="Period" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BatPeriodCalcChargeAmt" ReturnType="Collection(CoopWebModel.BatPeriodCalcChargeAmt_Result)">
             <Parameter Name="CoopID" Mode="In" Type="String" />
+            <Parameter Name="CalcDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UserId" Mode="In" Type="String" />
+            <Parameter Name="WorkStationId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="BatPeriodDepositIntDue" ReturnType="Collection(CoopWebModel.BatPeriodDepositIntDue_Result)">
+            <Parameter Name="CoopID" Mode="In" Type="Int32" />
             <Parameter Name="DepTypeID" Mode="In" Type="String" />
             <Parameter Name="CalcDate" Mode="In" Type="DateTime" />
-            <Parameter Name="BranchId" Mode="In" Type="String" />
             <Parameter Name="UserId" Mode="In" Type="String" />
+            <Parameter Name="BranchId" Mode="In" Type="String" />
             <Parameter Name="ProgramName" Mode="In" Type="String" />
             <Parameter Name="WorkStationId" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="BatPeriodSpecialClearTimeWDL" />
+          <FunctionImport Name="BatTrfMilk2Deposit" ReturnType="Collection(CoopWebModel.BatTrfMilk2Deposit_Result)">
+            <Parameter Name="CoopID" Mode="In" Type="String" />
+            <Parameter Name="CalcDate" Mode="In" Type="DateTime" />
+            <Parameter Name="BranchId" Mode="In" Type="String" />
+            <Parameter Name="UserId" Mode="In" Type="String" />
+            <Parameter Name="WorkStationId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="BatTrfMilk2Loan" ReturnType="Collection(CoopWebModel.BatTrfMilk2Loan_Result)">
+            <Parameter Name="CoopID" Mode="In" Type="String" />
+            <Parameter Name="CalcDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UserId" Mode="In" Type="String" />
+            <Parameter Name="WorkStationId" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="BatYrDepositBal" ReturnType="Collection(DateTime)">
             <Parameter Name="CoopID" Mode="In" Type="Int32" />
             <Parameter Name="DepTypeID" Mode="In" Type="String" />
@@ -3156,7 +2828,36 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
             <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="BatMilk2Deposit_Result">
+        <ComplexType Name="BatPeriodCalcChargeAmt_Result">
+          <Property Type="Int32" Name="RowCount" Nullable="true" />
+          <Property Type="Int32" Name="TranCount" Nullable="false" />
+          <Property Type="Int32" Name="ErrorNumber" Nullable="false" />
+          <Property Type="Int32" Name="ErrorSeverity" Nullable="false" />
+          <Property Type="Int32" Name="ErrorState" Nullable="false" />
+          <Property Type="String" Name="ErrorProcedure" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="ErrorLine" Nullable="false" />
+          <Property Type="String" Name="Message" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="BatPeriodDepositIntDue_Result">
+          <Property Type="Int32" Name="IdRow" Nullable="false" />
+          <Property Type="String" Name="Filestatus" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="CoopID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="IntType" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="FirstEffectDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="LastEffectDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Balance1" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Rate1" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Balance2" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Rate2" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Balance3" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Rate3" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Balance4" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Rate4" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Balance5" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Rate5" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="BatTrfMilk2Deposit_Result">
           <Property Type="Int32" Name="IdRow" Nullable="false" />
           <Property Type="String" Name="Filestatus" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="CoopID" Nullable="true" MaxLength="10" />
@@ -3175,23 +2876,23 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
           <Property Type="String" Name="MemberID" Nullable="true" MaxLength="15" />
           <Property Type="Decimal" Name="Balance" Nullable="true" Precision="19" />
         </ComplexType>
-        <ComplexType Name="BatPeriodSavingIntDue_Result">
-          <Property Type="Int32" Name="IdRow" Nullable="false" />
+        <ComplexType Name="BatTrfMilk2Loan_Result">
+          <Property Type="Int32" Name="CreatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="Filestatus" Nullable="true" MaxLength="1" />
-          <Property Type="String" Name="CoopID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="DepositTypeID" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="MemberID" Nullable="false" MaxLength="15" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="ToDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="PayDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Receive" Nullable="true" Precision="18" Scale="4" />
           <Property Type="String" Name="AccountNo" Nullable="true" MaxLength="15" />
-          <Property Type="Double" Name="AvailBal" Nullable="true" />
-          <Property Type="Double" Name="LedgerBal" Nullable="true" />
-          <Property Type="Double" Name="AccInt" Nullable="true" />
-          <Property Type="String" Name="IntType" Nullable="true" MaxLength="2" />
-          <Property Type="DateTime" Name="LastCalcInt" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="FirstEffectDate" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="LastEffectDate" Nullable="true" Precision="23" />
-          <Property Type="Decimal" Name="Rate1" Nullable="true" Precision="19" />
-          <Property Type="Int32" Name="days" Nullable="true" />
-          <Property Type="Decimal" Name="IntCalc" Nullable="true" Precision="19" />
-          <Property Type="String" Name="MemberID" Nullable="true" MaxLength="15" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="String" Name="LoanID" Nullable="true" MaxLength="15" />
+          <Property Type="Decimal" Name="LoanAmt" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="LoanInt" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="LoanCharge" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="DiscInt" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="DiscInt2" Nullable="true" Precision="18" Scale="4" />
         </ComplexType>
         <ComplexType Name="BatYrDepositUnpayInt_Result">
           <Property Type="Int32" Name="IdRow" Nullable="false" />
@@ -3532,16 +3233,16 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
                 <ScalarProperty Name="LastCalcCharge" ColumnName="LastCalcCharge" />
                 <ScalarProperty Name="IntType" ColumnName="IntType" />
                 <ScalarProperty Name="LoanAmt" ColumnName="LoanAmt" />
-                <ScalarProperty Name="BFBal" ColumnName="BFBal" />
                 <ScalarProperty Name="LoanBal" ColumnName="LoanBal" />
+                <ScalarProperty Name="BFBal" ColumnName="BFBal" />
+                <ScalarProperty Name="BFUnpayPrinciple" ColumnName="BFUnpayPrinciple" />
+                <ScalarProperty Name="UnpayPrinciple" ColumnName="UnpayPrinciple" />
                 <ScalarProperty Name="BFInt" ColumnName="BFInt" />
                 <ScalarProperty Name="BFUnpayInt" ColumnName="BFUnpayInt" />
                 <ScalarProperty Name="UnpayInt" ColumnName="UnpayInt" />
                 <ScalarProperty Name="BFCharge" ColumnName="BFCharge" />
                 <ScalarProperty Name="BFUnpayCharge" ColumnName="BFUnpayCharge" />
                 <ScalarProperty Name="UnpayCharge" ColumnName="UnpayCharge" />
-                <ScalarProperty Name="BFUnpayPrinciple" ColumnName="BFUnpayPrinciple" />
-                <ScalarProperty Name="UnpayPrinciple" ColumnName="UnpayPrinciple" />
                 <ScalarProperty Name="DiscIntFlag" ColumnName="DiscIntFlag" />
                 <ScalarProperty Name="BFDiscInt" ColumnName="BFDiscInt" />
                 <ScalarProperty Name="BFUnpayDiscInt" ColumnName="BFUnpayDiscInt" />
@@ -3570,8 +3271,6 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
                 <ScalarProperty Name="LoanDueAmt" ColumnName="LoanDueAmt" />
                 <ScalarProperty Name="BFLoanDueAmt" ColumnName="BFLoanDueAmt" />
-                <ScalarProperty Name="BFLoanDueAmtBeforeUPD" ColumnName="BFLoanDueAmtBeforeUPD" />
-                <ScalarProperty Name="BFLoanDueAmtAfterUPD" ColumnName="BFLoanDueAmtAfterUPD" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3914,23 +3613,32 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
               <MappingFragment StoreEntitySet="MilkPayment">
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="Filestatus" ColumnName="Filestatus" />
-                <ScalarProperty Name="CoopID" ColumnName="CoopID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="FromDate" ColumnName="FromDate" />
                 <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="PayDate" ColumnName="PayDate" />
                 <ScalarProperty Name="Receive" ColumnName="Receive" />
                 <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="LoanID" ColumnName="LoanID" />
-                <ScalarProperty Name="PayDate" ColumnName="PayDate" />
                 <ScalarProperty Name="LoanAmt" ColumnName="LoanAmt" />
                 <ScalarProperty Name="LoanInt" ColumnName="LoanInt" />
                 <ScalarProperty Name="LoanCharge" ColumnName="LoanCharge" />
                 <ScalarProperty Name="DiscInt" ColumnName="DiscInt" />
                 <ScalarProperty Name="DiscInt2" ColumnName="DiscInt2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MilkText">
+            <EntityTypeMapping TypeName="CoopWebModel.MilkText">
+              <MappingFragment StoreEntitySet="MilkText">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="PayDate" ColumnName="PayDate" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="Receive" ColumnName="Receive" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3960,8 +3668,8 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
                 <ScalarProperty Name="IntDueAmt" ColumnName="IntDueAmt" />
                 <ScalarProperty Name="Tax" ColumnName="Tax" />
                 <ScalarProperty Name="ItemNo" ColumnName="ItemNo" />
-                <ScalarProperty Name="BookFlag" ColumnName="BookFlag" />
                 <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
+                <ScalarProperty Name="BookFlag" ColumnName="BookFlag" />
                 <ScalarProperty Name="BudgetYear" ColumnName="BudgetYear" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="TTxnCode" ColumnName="TTxnCode" />
@@ -4218,9 +3926,49 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="BatMilk2Deposit" FunctionName="CoopWebModel.Store.BatMilk2Deposit">
+          <FunctionImportMapping FunctionImportName="BatMthDepositBal" FunctionName="CoopWebModel.Store.BatMthDepositBal" />
+          <FunctionImportMapping FunctionImportName="BatMthLoanBal" FunctionName="CoopWebModel.Store.BatMthLoanBal" />
+          <FunctionImportMapping FunctionImportName="BatPeriodCalcChargeAmt" FunctionName="CoopWebModel.Store.BatPeriodCalcChargeAmt">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="CoopWebModel.BatMilk2Deposit_Result">
+              <ComplexTypeMapping TypeName="CoopWebModel.BatPeriodCalcChargeAmt_Result">
+                <ScalarProperty Name="RowCount" ColumnName="RowCount" />
+                <ScalarProperty Name="TranCount" ColumnName="TranCount" />
+                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
+                <ScalarProperty Name="ErrorSeverity" ColumnName="ErrorSeverity" />
+                <ScalarProperty Name="ErrorState" ColumnName="ErrorState" />
+                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
+                <ScalarProperty Name="ErrorLine" ColumnName="ErrorLine" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BatPeriodDepositIntDue" FunctionName="CoopWebModel.Store.BatPeriodDepositIntDue">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoopWebModel.BatPeriodDepositIntDue_Result">
+                <ScalarProperty Name="IdRow" ColumnName="IdRow" />
+                <ScalarProperty Name="Filestatus" ColumnName="Filestatus" />
+                <ScalarProperty Name="CoopID" ColumnName="CoopID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="IntType" ColumnName="IntType" />
+                <ScalarProperty Name="FirstEffectDate" ColumnName="FirstEffectDate" />
+                <ScalarProperty Name="LastEffectDate" ColumnName="LastEffectDate" />
+                <ScalarProperty Name="Balance1" ColumnName="Balance1" />
+                <ScalarProperty Name="Rate1" ColumnName="Rate1" />
+                <ScalarProperty Name="Balance2" ColumnName="Balance2" />
+                <ScalarProperty Name="Rate2" ColumnName="Rate2" />
+                <ScalarProperty Name="Balance3" ColumnName="Balance3" />
+                <ScalarProperty Name="Rate3" ColumnName="Rate3" />
+                <ScalarProperty Name="Balance4" ColumnName="Balance4" />
+                <ScalarProperty Name="Rate4" ColumnName="Rate4" />
+                <ScalarProperty Name="Balance5" ColumnName="Balance5" />
+                <ScalarProperty Name="Rate5" ColumnName="Rate5" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BatPeriodSpecialClearTimeWDL" FunctionName="CoopWebModel.Store.BatPeriodSpecialClearTimeWDL" />
+          <FunctionImportMapping FunctionImportName="BatTrfMilk2Deposit" FunctionName="CoopWebModel.Store.BatTrfMilk2Deposit">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoopWebModel.BatTrfMilk2Deposit_Result">
                 <ScalarProperty Name="IdRow" ColumnName="IdRow" />
                 <ScalarProperty Name="Filestatus" ColumnName="Filestatus" />
                 <ScalarProperty Name="CoopID" ColumnName="CoopID" />
@@ -4241,30 +3989,28 @@ warning 6002: The table/view 'CoopWeb.UCF.SecurityType' does not have a primary 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="BatMthDepositBal" FunctionName="CoopWebModel.Store.BatMthDepositBal" />
-          <FunctionImportMapping FunctionImportName="BatPeriodSavingIntDue" FunctionName="CoopWebModel.Store.BatPeriodSavingIntDue">
+          <FunctionImportMapping FunctionImportName="BatTrfMilk2Loan" FunctionName="CoopWebModel.Store.BatTrfMilk2Loan">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="CoopWebModel.BatPeriodSavingIntDue_Result">
-                <ScalarProperty Name="IdRow" ColumnName="IdRow" />
+              <ComplexTypeMapping TypeName="CoopWebModel.BatTrfMilk2Loan_Result">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Filestatus" ColumnName="Filestatus" />
-                <ScalarProperty Name="CoopID" ColumnName="CoopID" />
-                <ScalarProperty Name="DepositTypeID" ColumnName="DepositTypeID" />
-                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
-                <ScalarProperty Name="AvailBal" ColumnName="AvailBal" />
-                <ScalarProperty Name="LedgerBal" ColumnName="LedgerBal" />
-                <ScalarProperty Name="AccInt" ColumnName="AccInt" />
-                <ScalarProperty Name="IntType" ColumnName="IntType" />
-                <ScalarProperty Name="LastCalcInt" ColumnName="LastCalcInt" />
-                <ScalarProperty Name="FirstEffectDate" ColumnName="FirstEffectDate" />
-                <ScalarProperty Name="LastEffectDate" ColumnName="LastEffectDate" />
-                <ScalarProperty Name="Rate1" ColumnName="Rate1" />
-                <ScalarProperty Name="days" ColumnName="days" />
-                <ScalarProperty Name="IntCalc" ColumnName="IntCalc" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="PayDate" ColumnName="PayDate" />
+                <ScalarProperty Name="Receive" ColumnName="Receive" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="LoanID" ColumnName="LoanID" />
+                <ScalarProperty Name="LoanAmt" ColumnName="LoanAmt" />
+                <ScalarProperty Name="LoanInt" ColumnName="LoanInt" />
+                <ScalarProperty Name="LoanCharge" ColumnName="LoanCharge" />
+                <ScalarProperty Name="DiscInt" ColumnName="DiscInt" />
+                <ScalarProperty Name="DiscInt2" ColumnName="DiscInt2" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="BatPeriodSpecialClearTimeWDL" FunctionName="CoopWebModel.Store.BatPeriodSpecialClearTimeWDL" />
           <FunctionImportMapping FunctionImportName="BatYrDepositBal" FunctionName="CoopWebModel.Store.BatYrDepositBal" />
           <FunctionImportMapping FunctionImportName="BatYrDepositUnpayInt" FunctionName="CoopWebModel.Store.BatYrDepositUnpayInt">
             <ResultMapping>

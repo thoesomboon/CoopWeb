@@ -37,8 +37,8 @@ namespace Coop.Entities
         public Nullable<decimal> IntDueAmt { get; set; }
         public Nullable<decimal> Tax { get; set; }
         public Nullable<int> ItemNo { get; set; }
-        public string BookFlag { get; set; }
         public string ReferenceNo { get; set; }
+        public bool BookFlag { get; set; }
         public string BudgetYear { get; set; }
         public string Type { get; set; }
         public string TTxnCode { get; set; }
@@ -52,8 +52,5 @@ namespace Coop.Entities
         public string ClearingFlag { get; set; }
         public Nullable<System.DateTime> ClearingDate { get; set; }
         public string OCFlag { get; set; }
-    
-        public virtual DepositType DepositType { get; set; }
-        public virtual Deposit Deposit { get; set; }
     }
 }

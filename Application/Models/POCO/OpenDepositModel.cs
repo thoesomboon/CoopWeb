@@ -42,7 +42,7 @@ namespace Coop.Models.POCO
         public string ReferenceNo { get; set; }
         public string AbbCode { get; set; }
         public Nullable<int> ItemNo { get; set; }
-        public string BookFlag { get; set; }
+        public bool BookFlag { get; set; }
         public string InstrumentType { get; set; }
         //public Nullable<decimal> Credit { get; set; }
         //public string InstrumentType { get; set; }

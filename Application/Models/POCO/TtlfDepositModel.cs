@@ -55,7 +55,7 @@ namespace Coop.Models.POCO
         public Nullable<decimal> IntDueAmt { get; set; }
         public Nullable<decimal> Tax { get; set; }
         public Nullable<int> ItemNo { get; set; }
-        public string BookFlag { get; set; }
+        public bool BookFlag { get; set; }
         public string ReferenceNo { get; set; }
         public string BudgetYear { get; set; }
         public string Type { get; set; }

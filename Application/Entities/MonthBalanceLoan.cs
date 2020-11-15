@@ -49,9 +49,5 @@ namespace Coop.Entities
         public Nullable<decimal> DiscIntCalcInYear { get; set; }
         public Nullable<decimal> DiscIntCalcInYearCredit { get; set; }
         public Nullable<decimal> UnpayDiscInt { get; set; }
-    
-        public virtual LoanType LoanType { get; set; }
-        public virtual Loan Loan { get; set; }
-        public virtual Member Member { get; set; }
     }
 }

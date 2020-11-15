@@ -1,9 +1,20 @@
 ﻿@{
-    ViewBag.Title = @Text.ProgramName + "สัญญาเงินกู้";
+    ViewBag.Title = @Text.ProgramName + "ประเภทสัญญาเงินกู้";
     Layout = "~/Views/Shared/_Layout50x.cshtml";
 }
-@model Coop.Models.POCO.LoanModel
-@*@model IEnumerable<Coop.Models.POCO.LoanDueModel>*@
+@model Coop.Models.POCO.LoanTypeModel
+
+@*
+    Programmer : Suwan T. 01-04-2020 - 30-06-2020
+    Development : 01-04-2020
+    Last update : 30-06-2020
+    Status :
+        Read : Ok
+        Save(create) : Checking
+        Save(update) : Ok
+        Validate : Check
+        ต้องเพิ่ม field ?
+*@
 <style>
     .m-portlet--head-sm.m-portlet .m-portlet__foot, .m-portlet--head-sm.m-portlet .m-portlet__body {
         padding-top: 0.5rem;
@@ -151,7 +162,7 @@
     }
 </style>
 
-@using (Html.BeginForm("Index", "Loan", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Index", "LoanType", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     <div class="m-grid__item m-grid__item--fluid m-wrapmem">
@@ -296,7 +307,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group m-form__group row">
-                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เงินต้น</label>
+                                        <label class="control-label col-md-4 align-left" style="padding-left: 0px!important;">เริ่มคำนวณดบ.</label>
                                         @*<input class="input-medium" type="text" data-provide="datepicker" data-date-language="th" id="StartCalcIntTH" name="StartCalcIntTH" placeholder="วันที่เริ่มคำนวณ (พ.ศ. 4 หลัก)">*@
                                         @Html.TextBoxFor(m => m.StartCalcIntTH, new { @class = "form-control form-control-inline input-small col-md-4 align-right", @placeholder = "วันที่เริ่มคำนวณ (พ.ศ. 4 หลัก)" })
                                     </div>
@@ -433,8 +444,8 @@
         </div>
     </div>
     @*@Html.HiddenFor(model => model.CoopID)
-    @Html.HiddenFor(model => model.LoanID)
-    @Html.HiddenFor(model => model.PayFlag)*@
+        @Html.HiddenFor(model => model.LoanID)
+        @Html.HiddenFor(model => model.PayFlag)*@
     @*@Html.HiddenFor(model => model.FirstInstallDateTH)*@
 }
 
@@ -482,7 +493,7 @@
                         LoanID: lonID
                     };
                     //alert(aData);
-                    debugger
+                    //debugger
                     $.ajax({
                         url: '/Loan/TransferInLoan/',
                         type: 'POST',
@@ -500,22 +511,25 @@
                             if (status == 'success' && data != null && data[0] != null) {
                                 if (data[0].Result && data[0].Message == 'Successful') {
                                     if (data[1] != null) {
-                                        debugger
+                                        //debugger
                                         TransferInLoan(data[1]);
                                     }
                                 } else {
-                                    swal.fire("Warning", data[0].Message, "warning")
+                                    //swal.fire("Warning", data[0].Message, "warning")
+                                    alert(data[0].Message);
                                     clearTextBox();
                                     return false;
                                 }
                             } else {
-                                swal.fire("Warning", "พบข้อผิดพลาด บางประการ", "error")
+                                //swal.fire("Warning", "พบข้อผิดพลาด บางประการ", "error")
+                                alert("พบข้อผิดพลาด บางประการ");
                                 clearTextBox();
                                 result = false;
                             }
                         },
                         error: function (xhr, status, error) {
-                            swal.fire("Error occurred", error, "error")
+                            //swal.fire("Error occurred", error, "error")
+                            alert("Error occurred");
                             clearTextBox();
                             result = false;
                         }
@@ -607,13 +621,94 @@
                 $("#BFUnpayDiscInt").val("");
                 $("#UnpayDiscInt").val("");
             }
+            $("#LoanDateTH").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันที่กู้ไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
+            $("#StartCalcIntTH").keyup(function (e) {
+                //debugger
+                if (event.keyCode === 13) {
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันที่เริ่มคำนวณดอกเบี้ยไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
+            $("#LastCalcIntTH").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    //debugger
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันที่คำนวณดอกเบี้ยครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
+            $("#LastCalcChargeTH").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    //debugger
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันที่คำนวณค่าปรับครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
+            $("#LastContactTH").keyup(function (e) {
+                if (event.keyCode === 13) {
+                    //debugger
+                    e.preventDefault();
+                    var strDate = this.value;
+                    if (!validation.isValidDateTH(strDate)) {
+                        alert("วันที่ติดต่อครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                        this.focus();
+                    }
+                }
+            });
             $("#btnSave").click(function (e) {
                 e.preventDefault();
                 //debugger
                 var lonID = $("#LoanID").val();
                 //var lName = $("#LastNameTH").val();
                 if ((lonID == undefined || lonID == '' || lonID == null)) {
-                    swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    //swal.fire("โปรดบันทึก", "ทะเบียนสมาชิก", "warning")
+                    alert("โปรดบันทึกทะเบียนสมาชิก")
+                    return false;
+                }
+                var loanDate = $("#LoanDateTH").val();
+                if (!validation.isValidDateTH(loanDate)) {
+                    alert("วันที่ออกสัญญาไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var startCalcInt = $("#StartCalcIntTH").val();
+                if (!validation.isValidDateTH(startCalcInt)) {
+                    alert("วันที่เริ่มคำนวณดอกเบี้ยไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var lastCalcInt = $("#LastCalcIntTH").val();
+                if (!validation.isValidDateTH(lastCalcInt)) {
+                    alert("วันที่คำนวณดอกเบี้ยครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var lastCalcCharge = $("#LastCalcChargeTH").val();
+                if (!validation.isValidDateTH(lastCalcCharge)) {
+                    alert("วันที่คำนวณค่าปรับครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
+                    return false;
+                }
+                var lastContact = $("#LastContactTH").val();
+                if (!validation.isValidDateTH(lastContact)) {
+                    alert("วันที่ติดต่อครั้งสุดท้ายไม่ถูกต้อง โปรดตรวจสอบ");
                     return false;
                 }
                 //debugger
@@ -661,7 +756,7 @@
                     BFUnpayDiscInt: numeric.txt2DBL($("#BFUnpayDiscInt").val()),
                     UnpayDiscInt: numeric.txt2DBL($("#UnpayDiscInt").val())
                 };
-                debugger
+                //debugger
                 $.ajax({
                     url: '/Loan/TransferOutLoan/',
                     type: 'POST',
@@ -678,24 +773,28 @@
                     success: function (data, status, xhr) {
                         if (status == 'success' && data != null && data[0] != null) {
                             if (data[0].Result && data[0].Message == 'Successful') {
-                                debugger
+                                //debugger
                                 if (data[1] != null) {
                                     $("#LoanID").val(data[1].LoanID);
-                                    swal.fire("ข้อมูลสัญญาเงินกู้", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    //swal.fire("ข้อมูลสัญญาเงินกู้", "บันทึกข้อมูลสำเร็จแล้ว", "success");
+                                    alert("บันทึกข้อมูลสำเร็จแล้ว")
                                     result = true;
                                 }
                             }
                             else {
-                                swal.fire("Warning", data[0].Message, "warning");
+                                //swal.fire("Warning", data[0].Message, "warning");
+                                alert(data[0].Message);
                                 result = false;
                             }
                         } else {
-                            swal.fire("สัญญาเงินกู้", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            //swal.fire("สัญญาเงินกู้", "ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ", "error");
+                            alert("ข้อมูลผิดพลาด บันทีกข้อมูลไม่สำเร็จ");
                             result = false;
                         }
                     },
                     error: function (xhr, status, error) {
-                        swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        //swal.fire("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)", error, "error");
+                        alert("มีข้อมูลผิดพลาด (ก่อนส่งปรับปรุงข้อมูล)");
                         result = false;
                     }
                 });

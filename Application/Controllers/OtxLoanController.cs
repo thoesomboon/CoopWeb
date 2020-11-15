@@ -232,6 +232,7 @@ namespace Coop.Controllers
                     UserID = AuthorizeHelper.Current.UserAccount().UserID,
                     //WorkstationID = AuthorizeHelper.Current.CoopControls().WorkStationID,
                     //BranchID = AuthorizeHelper.Current.CoopControls().BranchID,
+                    //BudgetYear = AuthorizeHelper.Current.CoopControls().BudgetYear,
                     OriginalProcess = "OtxLoan",
                     MemberID = otxLonModel.MemberID,
                     LoanID = otxLonModel.LoanID,

@@ -11,7 +11,7 @@
     Status :
         "GetParam", "BatYrDeposit" : Testing
         "ProcessBatYrDepositBal", "BatYrDeposit" : Testing
-        BatYrDepositBal : Passed Testing
+        BatYrDeposit : Passed Testing
     สิ่งที่ต้องปรับปรุง
     2020-9-18
     1. None
@@ -224,7 +224,7 @@
                                 <br />
                                 @*<label class="control-label col-md-12 align-content-center" style="padding-left: 0px!important;">โปรแกรมจะคำนวณยอดรวมเงินฝากประจำเดือน</label>*@
                                 <br />
-                                <label>           โปรแกรมจะคำนวณยอดรวมเงินฝากประจำเดือน             </label>
+                                <label>           โปรแกรมจะคำนวณยอดรวมเงินฝากประจำปี             </label>
                                 <br />
                                 <label>         โปรดตรวจสอบ ปีงบประมาณ และเดือนที่จะคำนวณ            </label>
                                 <br />
@@ -372,7 +372,7 @@
             //$("#EndDate").val(conversion.DateInBE(data.EndDate));
         }
         //$("#StartDate").keyup(function (e) {
-        //    debugger
+        //    //debugger
         //    if (event.keyCode === 13) {
         //        e.preventDefault();
         //        var strDate = this.value;
@@ -383,7 +383,7 @@
         //    }
         //});
         //$("#EndDate").keyup(function (e) {
-        //    debugger
+        //    //debugger
         //    if (event.keyCode === 13) {
         //        e.preventDefault();
         //        var strDate = this.value;
@@ -397,6 +397,7 @@
             e.preventDefault();
             if (confirm("กรูณายืนยันการบันทึกข้อมูล")) {
                 //debugger
+                $("#btnProcess").prop("disabled", true);
                 var copID = $("#CoopID").val();
                 var DepTypeID = $("#DepositTypeName").val();
                 var budgetYear = $("#BudgetYear").val();
@@ -421,6 +422,7 @@
                 //    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
                 //    msg = "วันที่เริมต้น";
                 //}
+
                 //if (endDate == undefined || endDate == '' || endDate == null) {
                 //    //swal.fire("โปรดบันทึก", "สัญญาเงินกู้", "warning")
                 //    msg = "วันที่สิ้นสุด";
@@ -434,7 +436,7 @@
                     { CoopID: copID, DepositTypeID: DepTypeID, BudgetYear: budgetYear, Period1: Period1, Period2: Period2 }, function (data) {
                         if (data != null) {
                             $("#btnProcess").show();
-                            alert("ประมวลผลเสร็จแล้ว");
+                            alert("--- ประมวลผลเสร็จแล้ว ---");
                             //pb.value(100);
                             //clearInterval(interval);
                         }
